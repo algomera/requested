@@ -7,8 +7,22 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
+    safelist: [
+        {
+            pattern: /max-w-(sm|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl)/,
+            variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+        },
+    ],
 
     theme: {
+        container: {
+            center: true,
+            padding: {
+                DEFAULT: '1.5rem',
+                sm: '1.5rem',
+                lg: '2rem'
+            },
+        },
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
