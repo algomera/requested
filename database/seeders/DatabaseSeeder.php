@@ -11,6 +11,7 @@
 		 */
 		public function run(): void {
 			$this->call([
+				RolesPermissionsSeeder::class,
 				UserSeeder::class
 			]);
 		}
