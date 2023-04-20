@@ -18,7 +18,7 @@
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ruolo</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
-							<span class="sr-only">Modifica</span>
+							<span class="sr-only">Azioni</span>
 						</th>
 					</tr>
 					</thead>
@@ -32,12 +32,27 @@
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->email }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->role->label }}</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-								<a href="#" class="text-indigo-600 hover:text-indigo-900">Modifica<span class="sr-only">, {{ $user->fullName }}</span></a>
+								<div class="inline-flex items-center justify-end space-x-3">
+									<button type="button"
+									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"></x-heroicon-o-pencil>
+									</button>
+									<button type="button"
+									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+										<x-heroicon-o-eye class="w-4 stroke-zinc-900"></x-heroicon-o-eye>
+									</button>
+									<button type="button"
+									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+										<x-heroicon-o-trash class="w-4 stroke-zinc-900"></x-heroicon-o-trash>
+									</button>
+								</div>
 							</td>
 						</tr>
 					@empty
 						<tr>
-							<td colspan="100%" class="py-4 px-3 text-sm text-center text-zinc-500">Nessun elemento trovato</td>
+							<td colspan="100%" class="py-4 px-3 text-sm text-center text-zinc-500">Nessun elemento
+								trovato
+							</td>
 						</tr>
 					@endforelse
 					</tbody>

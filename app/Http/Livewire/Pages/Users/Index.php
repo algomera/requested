@@ -3,7 +3,6 @@
 	namespace App\Http\Livewire\Pages\Users;
 
 	use App\Models\User;
-	use App\Traits\Searchable;
 	use Livewire\Component;
 	use Livewire\WithPagination;
 
