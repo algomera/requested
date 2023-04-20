@@ -113,7 +113,14 @@
 			</header>
 
 			<div class="relative px-4 pt-14 sm:px-6 lg:px-8">
-				<main class="py-8">
+				@if (isset($header))
+					<header>
+						<div class="py-4 text-xl font-bold">
+							{{ $header }}
+						</div>
+					</header>
+				@endif
+				<main class="py-4">
 					{{ $slot }}
 				</main>
 			</div>
