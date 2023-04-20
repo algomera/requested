@@ -44,57 +44,67 @@
 							<button x-on:click="sidebarOpen = !sidebarOpen" type="button"
 							        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5"
 							        aria-label="Toggle navigation">
-								<x-heroicon-o-bars-3 x-cloak x-show="!sidebarOpen"
-								                     class="w-4 stroke-zinc-900"></x-heroicon-o-bars-3>
-								<x-heroicon-o-x-mark x-cloak x-show="sidebarOpen"
-								                     class="w-4 stroke-zinc-900"></x-heroicon-o-x-mark>
+								<x-heroicon-o-bars-3 x-cloak x-show="!sidebarOpen" class="w-4 stroke-zinc-900"/>
+								<x-heroicon-o-x-mark x-cloak x-show="sidebarOpen" class="w-4 stroke-zinc-900"/>
 							</button>
 							<a class="text-lg" aria-label="Home" href="/">
 								<x-application-logo></x-application-logo>
 							</a>
 						</div>
 						<div class="flex items-center gap-5">
-							<nav class="hidden md:block">
-								<ul role="list" class="flex items-center gap-8">
-									<li>
-										<a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900"
-										   href="/">
-											API
-										</a>
-									</li>
-									<li>
-										<a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900"
-										   href="#">
-											Documentation
-										</a>
-									</li>
-									<li>
-										<a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900"
-										   href="#">
-											Support
-										</a>
-									</li>
-								</ul>
-							</nav>
-							<div class="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10"></div>
+							{{--							<nav class="hidden md:block">--}}
+							{{--								<ul role="list" class="flex items-center gap-8">--}}
+							{{--									<li>--}}
+							{{--										<a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900"--}}
+							{{--										   href="/">--}}
+							{{--											API--}}
+							{{--										</a>--}}
+							{{--									</li>--}}
+							{{--									<li>--}}
+							{{--										<a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900"--}}
+							{{--										   href="#">--}}
+							{{--											Documentation--}}
+							{{--										</a>--}}
+							{{--									</li>--}}
+							{{--									<li>--}}
+							{{--										<a class="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900"--}}
+							{{--										   href="#">--}}
+							{{--											Support--}}
+							{{--										</a>--}}
+							{{--									</li>--}}
+							{{--								</ul>--}}
+							{{--							</nav>--}}
+							{{--							<div class="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10"></div>--}}
 							<div class="flex gap-4 lg:hidden">
 								<div class="contents">
 									<button type="button"
 									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 lg:hidden focus:[&amp;:not(:focus-visible)]:outline-none"
 									        aria-label="Find something...">
-										<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"
-										     class="h-5 w-5 stroke-zinc-900">
-											<path stroke-linecap="round" stroke-linejoin="round"
-											      d="M12.01 12a4.25 4.25 0 1 0-6.02-6 4.25 4.25 0 0 0 6.02 6Zm0 0 3.24 3.25"></path>
-										</svg>
+										<x-heroicon-o-magnifying-glass class="h-4 w-4 stroke-zinc-900"/>
 									</button>
 								</div>
 							</div>
 							<div class="hidden min-[416px]:contents">
-								<a class="inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700"
-								   href="#">
-									Sign in
-								</a>
+								<x-dropdown>
+									<x-slot:trigger>
+										<div class="inline-flex gap-0.5 items-center justify-center space-x-2 overflow-hidden text-xs transition rounded-full bg-zinc-900 py-1.5 px-3 text-white hover:cursor-pointer hover:bg-zinc-700">
+											<span>{{ auth()->user()->fullName }}</span>
+											<x-heroicon-o-chevron-down class="w-3 h-3"></x-heroicon-o-chevron-down>
+										</div>
+									</x-slot:trigger>
+									<x-slot:content>
+										<x-dropdown-link href="{{ route('profile.edit') }}">Profilo</x-dropdown-link>
+										<form method="POST" action="{{ route('logout') }}">
+											@csrf
+
+											<x-dropdown-link :href="route('logout')"
+											                       onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+												{{ __('Log Out') }}
+											</x-dropdown-link>
+										</form>
+									</x-slot:content>
+								</x-dropdown>
 							</div>
 						</div>
 					</div>

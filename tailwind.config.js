@@ -24,6 +24,9 @@ module.exports = {
             },
         },
         extend: {
+            zIndex: {
+                '9999': '9999'
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },

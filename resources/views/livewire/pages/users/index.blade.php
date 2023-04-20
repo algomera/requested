@@ -4,7 +4,8 @@
 <div>
 	<div class="flow-root space-y-5">
 		<div class="max-w-sm">
-			<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.." append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
+			<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."
+			         append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 		</div>
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
@@ -35,23 +36,24 @@
 								<div class="inline-flex items-center justify-end space-x-3">
 									<button type="button"
 									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"></x-heroicon-o-pencil>
+										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
+									</button>
+									<button wire:click="$emit('openModal', 'pages.users.show', {{ json_encode(['user' => $user->id]) }})"
+									        type="button"
+									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</button>
 									<button type="button"
 									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-										<x-heroicon-o-eye class="w-4 stroke-zinc-900"></x-heroicon-o-eye>
-									</button>
-									<button type="button"
-									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-										<x-heroicon-o-trash class="w-4 stroke-zinc-900"></x-heroicon-o-trash>
+										<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>
 									</button>
 								</div>
 							</td>
 						</tr>
 					@empty
 						<tr>
-							<td colspan="100%" class="py-4 px-3 text-sm text-center text-zinc-500">Nessun elemento
-								trovato
+							<td colspan="100%" class="py-4 px-3 text-sm text-center text-zinc-500">
+								Nessun elemento trovato
 							</td>
 						</tr>
 					@endforelse
