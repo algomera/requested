@@ -18,9 +18,9 @@
 		@livewireStyles
 	</head>
 	<body x-data="{sidebarOpen: false}" class="font-sans antialiased">
-		<div class="lg:ml-72 xl:ml-80">
+		<div class="lg:ml-72">
 			<header class="contents lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
-				<div class="contents lg:pointer-events-auto lg:block lg:w-72 lg:overflow-y-auto lg:border-r lg:border-zinc-900/10 lg:px-6 lg:pb-8 lg:pt-4 xl:w-80">
+				<div class="contents lg:pointer-events-auto lg:block lg:w-72 lg:overflow-y-auto lg:border-r lg:border-zinc-900/10 lg:px-6 lg:pb-8 lg:pt-4">
 					{{-- LOGO DESKTOP --}}
 					<div class="hidden lg:flex">
 						<a class="text-2xl" aria-label="Home" href="/">
@@ -28,7 +28,7 @@
 						</a>
 					</div>
 					{{-- TOPBAR --}}
-					<div class="border-b fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between gap-12 px-4 transition sm:px-6 lg:left-72 lg:z-30 lg:px-8 xl:left-80 backdrop-blur-sm bg-white/[var(--bg-opacity-light)]">
+					<div class="border-b fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between gap-12 px-4 transition sm:px-6 lg:left-72 lg:z-30 lg:px-8 backdrop-blur-sm bg-white/[var(--bg-opacity-light)]">
 						<div class="absolute inset-x-0 top-full h-px transition bg-zinc-900/7.5"></div>
 						<div class="hidden lg:block lg:max-w-md lg:flex-auto">
 							<button type="button"
@@ -116,7 +116,7 @@
 					<div x-cloak x-show="sidebarOpen"
 					     class="fixed inset-0 bg-zinc-900/5 top-14 z-10 backdrop-blur-sm lg:hidden"></div>
 					<div x-cloak x-show="sidebarOpen"
-					     class="fixed top-14 bg-white px-6 pt-4 pb-8 z-20 h-full shadow-lg shadow-zinc-900/10 w-80 overflow-y-scroll lg:hidden">
+					     class="fixed top-14 bg-white px-6 pt-4 pb-8 z-20 h-full shadow-lg shadow-zinc-900/10 w-72 overflow-y-scroll lg:hidden">
 						@include('layouts.navigation')
 					</div>
 				</div>
