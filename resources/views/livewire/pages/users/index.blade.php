@@ -34,7 +34,7 @@
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->role->label }}</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
-									<button type="button"
+									<button wire:click="$emit('openModal', 'pages.users.edit', {{ json_encode(['user' => $user->id]) }})" type="button"
 									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
 									</button>

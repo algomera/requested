@@ -12,6 +12,9 @@
 
 		public $search = '';
 		public $deletingId = null;
+		protected $listeners = [
+			'user-updated' => '$refresh'
+		];
 
 		public function updatingSearch() {
 			$this->resetPage();
@@ -23,7 +26,7 @@
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Utente Eliminato'),
 				'subtitle' => __('L\'utente è stato eliminato con successo!'),
-				'type' => 'success'
+				'type'     => 'success'
 			]);
 		}
 
