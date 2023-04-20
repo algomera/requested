@@ -2,7 +2,7 @@
 @php
 	$n = $attributes->wire('model')->value() ?: $name;
 	$slug = $attributes->wire('model')->value() ?: $n;
-	$inputClass = 'h-12 appearance-none w-full rounded sm:text-sm focus:ring focus:ring-opacity-50';
+	$inputClass = 'appearance-none w-full rounded sm:text-sm focus:ring focus:ring-opacity-50';
 @endphp
 @error($slug)
 @php
@@ -38,7 +38,7 @@
 		<div class="relative @if($label || isset($action)) mt-1 @endif">
 			@if($prepend)
 				<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-					<x-icon name="{{$prepend}}" class="{{ $iconColor }} w-5 h-5"></x-icon>
+					<x-icon name="{{$prepend}}" class="{{ $iconColor }} w-4 h-4"></x-icon>
 				</div>
 			@endif
 			<input
@@ -53,13 +53,13 @@
 			<div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
 				<x-icon
 						name="heroicon-o-exclamation-circle"
-						class="w-5 h-5 text-red-500"
+						class="w-4 h-4 text-red-500"
 				></x-icon>
 			</div>
 			@else
 				@if($append)
 					<div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-						<x-icon name="{{$append}}" class="{{ $iconColor }} w-5 h-5"></x-icon>
+						<x-icon name="{{$append}}" class="{{ $iconColor }} w-4 h-4"></x-icon>
 					</div>
 				@endif
 				@enderror

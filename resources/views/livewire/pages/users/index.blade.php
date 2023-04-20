@@ -4,7 +4,7 @@
 <div>
 	<div class="flow-root space-y-5">
 		<div class="max-w-sm">
-			<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."></x-input>
+			<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.." append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 		</div>
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
