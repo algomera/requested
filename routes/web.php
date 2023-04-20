@@ -13,6 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 	Route::get('/dashboard', function () {
 		return view('dashboard');
 	})->name('dashboard');
+	Route::get('/users', \App\Http\Livewire\Pages\Users\Index::class)->name('users.index');
 });
 
 // Profile Routes

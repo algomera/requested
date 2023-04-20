@@ -1,6 +1,6 @@
 <x-app-layout>
 	<x-slot:header>
-		Dash!
+		Dashboard
 	</x-slot:header>
 	<div>
 		Dashboard

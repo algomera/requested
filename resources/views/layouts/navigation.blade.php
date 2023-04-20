@@ -1,4 +1,4 @@
-<ul role="list">
+<ul role="list" class="space-y-4">
 	{{-- Normal Item --}}
 	<li>
 		<a class="{{ request()->is('dashboard') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
@@ -7,7 +7,7 @@
 		</a>
 	</li>
 	{{-- MENU ITEMS --}}
-	<li class="relative my-4">
+	<li>
 		<h2 class="text-xs font-semibold text-zinc-900">Magazzino</h2>
 		<div class="relative mt-3 pl-2">
 			<div class="absolute inset-y-0 left-2 w-px bg-zinc-900/10"></div>
@@ -39,8 +39,8 @@
 		</div>
 	</li>
 	<li>
-		<a class="{{ request()->is('') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
-		   href="#">
+		<a class="{{ request()->is('users*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
+		   href="{{ route('users.index') }}">
 			Utenti
 		</a>
 	</li>
