@@ -13,7 +13,8 @@
 		public $search = '';
 		public $deletingId = null;
 		protected $listeners = [
-			'user-updated' => '$refresh'
+			'user-updated' => '$refresh',
+			'user-created' => '$refresh'
 		];
 
 		public function updatingSearch() {
