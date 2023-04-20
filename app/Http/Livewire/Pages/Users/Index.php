@@ -11,9 +11,15 @@
 		use WithPagination;
 
 		public $search = '';
+		public $deletingId = null;
 
 		public function updatingSearch() {
 			$this->resetPage();
+		}
+
+		public function delete(User $user) {
+			$user->delete();
+			$this->emitSelf('$refresh');
 		}
 
 		public function render() {
