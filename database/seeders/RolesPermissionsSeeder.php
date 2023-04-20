@@ -16,7 +16,7 @@
 			// Roles
 			$adminRole = Role::create([
 				'name'  => 'admin',
-				'label' => 'Admin'
+				'label' => 'Amministratore'
 			]);
 			$warehousemanRole = Role::create([
 				'name'  => 'warehouseman',

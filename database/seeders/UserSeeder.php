@@ -13,14 +13,13 @@
 		 * Run the database seeds.
 		 */
 		public function run(): void {
-
 			$admin = User::factory()->create([
-				'name'  => 'Admin',
-				'email' => 'admin@example.test',
+				'first_name' => 'Admin',
+				'last_name'  => null,
+				'email'      => 'admin@example.test',
 			]);
 			$admin->assignRole(Role::findByName('admin'));
 			$warehouseman = User::factory()->create([
-				'name'  => fake()->name,
 				'email' => fake()->safeEmail
 			]);
 			$warehouseman->assignRole(Role::findByName('warehouseman'));
