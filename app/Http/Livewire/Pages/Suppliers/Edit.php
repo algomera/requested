@@ -3,10 +3,7 @@
 	namespace App\Http\Livewire\Pages\Suppliers;
 
 	use App\Models\Supplier;
-	use App\Models\User;
 	use LivewireUI\Modal\ModalComponent;
-	use Spatie\Permission\Models\Permission;
-	use Spatie\Permission\Models\Role;
 
 	class Edit extends ModalComponent
 	{
