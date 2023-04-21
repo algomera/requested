@@ -14,6 +14,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 		return view('dashboard');
 	})->name('dashboard');
 	Route::get('/users', \App\Http\Livewire\Pages\Users\Index::class)->name('users.index');
+	Route::get('/suppliers', \App\Http\Livewire\Pages\Suppliers\Index::class)->name('suppliers.index');
 });
 
 // Profile Routes
