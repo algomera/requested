@@ -4,16 +4,24 @@
 
 	use App\Models\User;
 	use LivewireUI\Modal\ModalComponent;
+	use Spatie\Permission\Models\Permission;
+	use Spatie\Permission\Models\Role;
 
 	class Create extends ModalComponent
 	{
-		public $first_name, $last_name, $phone, $email, $password;
+		public $first_name, $last_name, $phone, $email, $password, $new_role, $new_permissions = [];
+		public $tabs = [
+			'informations' => 'Informazioni',
+			'roles'        => 'Ruoli/Permessi',
+		];
+		public $selectedTab = 'informations';
 		protected $rules = [
 			'first_name' => 'required',
 			'last_name'  => 'required',
 			'phone'      => 'required',
 			'email'      => 'required',
 			'password'   => 'required',
+			'new_role'   => 'required',
 		];
 
 		public function save() {
@@ -25,7 +33,8 @@
 				'email'      => $this->email,
 				'password'   => bcrypt($this->password)
 			]);
-			$user->assignRole('warehouseman');
+			$user->assignRole($this->new_role);
+			$user->syncPermissions($this->new_permissions);
 			$this->emitTo('pages.users.index', 'user-created');
 			$this->closeModal();
 			$this->dispatchBrowserEvent('open-notification', [
@@ -36,6 +45,9 @@
 		}
 
 		public function render() {
-			return view('livewire.pages.users.create');
+			return view('livewire.pages.users.create', [
+				'roles'       => Role::all(),
+				'permissions' => Permission::all(),
+			]);
 		}
 	}
