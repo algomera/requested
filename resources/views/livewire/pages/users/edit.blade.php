@@ -45,7 +45,7 @@
 					<dt class="text-sm font-medium text-gray-900">Password</dt>
 					<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 						<x-input wire:model.defer="password" type="password"
-						         hint="Lasciare in bianco per non modificare"></x-input>
+						         hint="Lasciare vuoto per non modificare"></x-input>
 					</dd>
 				</div>
 				{{--			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">--}}
