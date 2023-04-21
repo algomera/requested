@@ -11,12 +11,9 @@
 	{
 		public $user;
 		public $password;
+		public $password_confirmation;
 		public $new_role;
 		public $new_permissions = [];
-		public $tabs = [
-			'informations' => 'Informazioni',
-			'roles'        => 'Ruoli/Permessi',
-		];
 		public $selectedTab = 'informations';
 
 		protected function rules() {
@@ -25,7 +22,7 @@
 				'user.last_name'  => 'required',
 				'user.phone'      => 'required',
 				'user.email'      => 'required',
-				'password'        => $this->password ? 'required' : 'nullable'
+				'password'        => $this->password ? 'required|confirmed' : 'nullable'
 			];
 		}
 
@@ -44,7 +41,9 @@
 				$role = Role::findByName($this->new_role);
 				$this->user->syncRoles($role);
 			}
-			$this->user->syncPermissions($this->new_permissions);
+			if ($this->new_role === 'warehouseman') {
+				$this->user->syncPermissions($this->new_permissions);
+			}
 			$this->emitTo('pages.users.index', 'user-updated');
 			$this->closeModal();
 			$this->dispatchBrowserEvent('open-notification', [

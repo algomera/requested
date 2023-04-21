@@ -9,18 +9,14 @@
 
 	class Create extends ModalComponent
 	{
-		public $first_name, $last_name, $phone, $email, $password, $new_role, $new_permissions = [];
-		public $tabs = [
-			'informations' => 'Informazioni',
-			'roles'        => 'Ruoli/Permessi',
-		];
+		public $first_name, $last_name, $phone, $email, $password, $password_confirmation, $new_role, $new_permissions = [];
 		public $selectedTab = 'informations';
 		protected $rules = [
 			'first_name' => 'required',
 			'last_name'  => 'required',
 			'phone'      => 'required',
 			'email'      => 'required',
-			'password'   => 'required',
+			'password'   => 'required|confirmed',
 			'new_role'   => 'required',
 		];
 
@@ -34,7 +30,9 @@
 				'password'   => bcrypt($this->password)
 			]);
 			$user->assignRole($this->new_role);
-			$user->syncPermissions($this->new_permissions);
+			if ($this->new_role === 'warehouseman') {
+				$user->syncPermissions($this->new_permissions);
+			}
 			$this->emitTo('pages.users.index', 'user-created');
 			$this->closeModal();
 			$this->dispatchBrowserEvent('open-notification', [
