@@ -3,7 +3,6 @@
 	namespace App\Http\Livewire\Pages\Locations;
 
 	use App\Models\Location;
-	use App\Models\Supplier;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Edit extends ModalComponent
@@ -12,8 +11,8 @@
 
 		protected function rules() {
 			return [
-				'location.code'        => 'required|unique:locations,code,'. $this->location->id,
-				'location.description' => 'required|unique:locations,description,'. $this->location->id,
+				'location.code'        => 'required|unique:locations,code,' . $this->location->id,
+				'location.description' => 'required|unique:locations,description,' . $this->location->id,
 				'location.type'        => 'required|in:' . implode(',', array_keys(config('requested.locations.types'))),
 			];
 		}

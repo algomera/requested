@@ -31,8 +31,7 @@
 					</thead>
 					<tbody class="divide-y divide-gray-200 bg-white">
 					@forelse($locations as $location)
-						<tr wire:click="goToLocation('{{ $location->id }}')"
-						    class="hover:bg-gray-50 hover:cursor-pointer" wire:key="{{ $location->id }}">
+						<tr class="hover:bg-gray-50" wire:key="{{ $location->id }}">
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
 								{{ $location->code }}
 							</td>
@@ -44,6 +43,11 @@
 									        type="button"
 									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
+									</button>
+									<button wire:click.stop="$emit('openModal', 'pages.locations.show', {{ json_encode(['location' => $location->id]) }})"
+									        type="button"
+									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</button>
 									@if($deletingId != $location->id)
 										<button wire:key="deleting-{{ $location->id }}"
