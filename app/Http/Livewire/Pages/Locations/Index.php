@@ -22,14 +22,14 @@
 		}
 
 		public function delete(Location $location) {
-//			if($location->products()->count()) {
-//				$this->dispatchBrowserEvent('open-notification', [
-//					'title'    => __('Errore'),
-//					'subtitle' => __('L\'ubicazione non può essere cancellata perché contiene dei prodotti'),
-//					'type'     => 'error'
-//				]);
-//				return false;
-//			}
+			if($location->products()->count()) {
+				$this->dispatchBrowserEvent('open-notification', [
+					'title'    => __('Errore'),
+					'subtitle' => __('L\'ubicazione non può essere cancellata perché contiene dei prodotti'),
+					'type'     => 'error'
+				]);
+				return false;
+			}
 			$location->delete();
 			$this->emitSelf('$refresh');
 			$this->dispatchBrowserEvent('open-notification', [

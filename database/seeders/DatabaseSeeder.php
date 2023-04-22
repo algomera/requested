@@ -15,6 +15,7 @@
 				UserSeeder::class,
 				SupplierSeeder::class,
 				LocationSeeder::class,
+				ProductSeeder::class,
 			]);
 		}
 	}

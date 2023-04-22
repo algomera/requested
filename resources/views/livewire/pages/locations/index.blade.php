@@ -37,7 +37,7 @@
 								{{ $location->code }}
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $location->description }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">20</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $location->products()->count() }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ config('requested.locations.types.' . $location->type) }}</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
