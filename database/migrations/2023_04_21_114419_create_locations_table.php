@@ -13,7 +13,7 @@
 				$table->id();
 				$table->string('code');
 				$table->text('description');
-				$table->enum('type', config('requested.locations.types'));
+				$table->enum('type', array_keys(config('requested.locations.types')));
 				$table->timestamps();
 			});
 		}

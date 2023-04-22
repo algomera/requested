@@ -22,10 +22,10 @@
 		}
 
 		public function delete(Location $location) {
-			if($location->children()->count()) {
+			if($location->products()->count()) {
 				$this->dispatchBrowserEvent('open-notification', [
 					'title'    => __('Errore'),
-					'subtitle' => __('L\'ubicazione non può essere cancellata perché contiene degli scaffali'),
+					'subtitle' => __('L\'ubicazione non può essere cancellata perché contiene dei prodotti'),
 					'type'     => 'error'
 				]);
 				return false;
@@ -43,6 +43,8 @@
 			return view('livewire.pages.locations.index', [
 				'locations' => Location::search($this->search, [
 					'code',
+					'description',
+					'type'
 				])->paginate(25)
 			]);
 		}
