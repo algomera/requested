@@ -22,13 +22,13 @@
 					<ul role="list" class="divide-y divide-gray-200">
 						@forelse($location->products as $product)
 							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-center justify-between">
-								<div class="flex flex-col space-y-1">
+								<div class="flex flex-col space-y-0.5">
 									<span>{{ $product->name }}</span>
-									<span class="text-xs text-zinc-500">{{ $product->code }}</span>
+									<p class="text-xs text-zinc-500">{{ $product->code }} &middot; <span class="text-zinc-700 font-semibold">{{ $product->pivot->quantity }} pezzi</span></p>
 								</div>
 								<button wire:click="$emit('openModal', 'pages.locations.change', {{ json_encode(['product' => $product->id, 'current_location' => $location->id])}})" type="button"
 								        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-									<x-heroicon-o-arrow-path class="w-4 stroke-zinc-900"/>
+									<x-heroicon-o-arrows-right-left class="w-4 stroke-zinc-900"/>
 								</button>
 							</li>
 						@empty

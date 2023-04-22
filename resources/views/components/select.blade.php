@@ -2,7 +2,7 @@
 @php
 	$n = $attributes->wire('model')->value() ?: $name;
 	$slug = $attributes->wire('model')->value() ?: $n;
-	$inputClass = 'h-12 appearance-none w-full rounded sm:text-sm focus:ring focus:ring-opacity-50';
+	$inputClass = 'appearance-none w-full rounded sm:text-sm focus:ring focus:ring-opacity-50';
 @endphp
 @error($slug)
 @php

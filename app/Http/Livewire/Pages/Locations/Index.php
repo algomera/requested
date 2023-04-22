@@ -13,8 +13,9 @@
 		public $search = '';
 		public $deletingId = null;
 		protected $listeners = [
-			'location-updated' => '$refresh',
-			'location-created' => '$refresh'
+			'location-updated'    => '$refresh',
+			'location-created'    => '$refresh',
+			'product-transferred' => '$refresh'
 		];
 
 		public function updatingSearch() {
@@ -22,7 +23,7 @@
 		}
 
 		public function delete(Location $location) {
-			if($location->products()->count()) {
+			if ($location->products()->count()) {
 				$this->dispatchBrowserEvent('open-notification', [
 					'title'    => __('Errore'),
 					'subtitle' => __('L\'ubicazione non può essere cancellata perché contiene dei prodotti'),

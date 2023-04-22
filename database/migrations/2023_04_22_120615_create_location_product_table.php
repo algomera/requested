@@ -13,6 +13,7 @@
 				$table->id();
 				$table->foreignIdFor(\App\Models\Location::class, 'location_id');
 				$table->foreignIdFor(\App\Models\Product::class, 'product_id');
+				$table->integer('quantity');
 				$table->timestamps();
 			});
 		}

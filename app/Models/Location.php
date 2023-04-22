@@ -10,7 +10,11 @@
 	{
 		use HasFactory, Searchable;
 
+		public function productQuantity($product_id) {
+			return $this->products()->where('product_id', $product_id)->first()->pivot->quantity;
+		}
+
 		public function products() {
-			return $this->belongsToMany(Product::class)->distinct();
+			return $this->belongsToMany(Product::class)->withPivot('quantity');
 		}
 	}
