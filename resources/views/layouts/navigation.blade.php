@@ -13,9 +13,9 @@
 			<div class="absolute inset-y-0 left-2 w-px bg-zinc-900/10"></div>
 			<ul role="list" class="border-l border-transparent">
 				<li class="relative">
-					<a class="{{ request()->is('*') ? 'text-zinc-900 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} flex justify-between gap-2 py-1 pr-3 text-sm transition pl-4"
-					   href="#">
-						@if(request()->is('*'))
+					<a class="{{ request()->is('locations*') ? 'text-zinc-900 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} flex justify-between gap-2 py-1 pr-3 text-sm transition pl-4"
+					   href="{{ route('locations.index') }}">
+						@if(request()->is('locations*'))
 							<div class="absolute -left-px top-1 h-6 w-px bg-emerald-500"></div>
 						@endif
 						<span class="truncate">Ubicazioni</span>

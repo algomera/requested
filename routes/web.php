@@ -13,6 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 	Route::get('/dashboard', function () {
 		return view('dashboard');
 	})->name('dashboard');
+	Route::get('/locations', \App\Http\Livewire\Pages\Locations\Index::class)->name('locations.index');
 	Route::get('/users', \App\Http\Livewire\Pages\Users\Index::class)->name('users.index');
 	Route::get('/suppliers', \App\Http\Livewire\Pages\Suppliers\Index::class)->name('suppliers.index');
 });

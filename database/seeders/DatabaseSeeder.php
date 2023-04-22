@@ -14,6 +14,7 @@
 				RolesPermissionsSeeder::class,
 				UserSeeder::class,
 				SupplierSeeder::class,
+				LocationSeeder::class,
 			]);
 		}
 	}
