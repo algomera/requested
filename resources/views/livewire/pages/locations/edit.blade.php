@@ -7,19 +7,19 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Codice</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="code" type="text"></x-input>
+					<x-input wire:model.defer="location.code" type="text"></x-input>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Descrizione</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="description" type="text"></x-input>
+					<x-input wire:model.defer="location.description" type="text"></x-input>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Tipologia</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-select wire:model.defer="type">
+					<x-select wire:model.defer="location.type">
 						<option value="" selected>Seleziona</option>
 						@foreach(config('requested.locations.types') as $k => $type)
 							<option @if($k === 'ricevimento' && \App\Models\Location::where('type', 'ricevimento')->count()) disabled @endif value="{{ $k }}">{{ $type }}</option>
