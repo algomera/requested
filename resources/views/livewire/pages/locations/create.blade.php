@@ -19,10 +19,18 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Tipologia</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-select wire:model.defer="type">
+					<x-select wire:model.defer="location.type">
 						<option value="" selected>Seleziona</option>
 						@foreach(config('requested.locations.types') as $k => $type)
-							<option @if($k === 'ricevimento' && \App\Models\Location::where('type', 'ricevimento')->count()) disabled @endif value="{{ $k }}">{{ $type }}</option>
+							@if($k === 'ricevimento')
+								<option @if(\App\Models\Location::where('type', 'ricevimento')->count()) disabled
+								        @endif value="{{ $k }}">{{ $type }}</option>
+							@elseif($k === 'versamento')
+								<option @if(\App\Models\Location::where('type', 'versamento')->count()) disabled
+								        @endif value="{{ $k }}">{{ $type }}</option>
+							@else
+								<option value="{{ $k }}">{{ $type }}</option>
+							@endif
 						@endforeach
 					</x-select>
 				</dd>

@@ -22,7 +22,15 @@
 					<x-select wire:model.defer="location.type">
 						<option value="" selected>Seleziona</option>
 						@foreach(config('requested.locations.types') as $k => $type)
-							<option @if($k === 'ricevimento' && \App\Models\Location::where('type', 'ricevimento')->count()) disabled @endif value="{{ $k }}">{{ $type }}</option>
+							@if($k === 'ricevimento')
+								<option @if(\App\Models\Location::where('type', 'ricevimento')->count()) disabled
+								        @endif value="{{ $k }}">{{ $type }}</option>
+							@elseif($k === 'versamento')
+								<option @if(\App\Models\Location::where('type', 'versamento')->count()) disabled
+								        @endif value="{{ $k }}">{{ $type }}</option>
+							@else
+								<option value="{{ $k }}">{{ $type }}</option>
+							@endif
 						@endforeach
 					</x-select>
 				</dd>

@@ -26,7 +26,7 @@
 									<span>{{ $product->name }}</span>
 									<span class="text-xs text-zinc-500">{{ $product->code }}</span>
 								</div>
-								<button type="button"
+								<button wire:click="$emit('openModal', 'pages.locations.change', {{ json_encode(['product' => $product->id, 'current_location' => $location->id])}})" type="button"
 								        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 									<x-heroicon-o-arrow-path class="w-4 stroke-zinc-900"/>
 								</button>

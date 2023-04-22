@@ -3,6 +3,7 @@
 	namespace App\Http\Livewire\Pages\Locations;
 
 	use App\Models\Location;
+	use App\Models\Product;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Show extends ModalComponent
