@@ -9,7 +9,7 @@
 				         append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 			</div>
 			<div>
-				<x-primary-button wire:click="$emit('openModal', 'pages.locations.rows.create')">
+				<x-primary-button wire:click="$emit('openModal', 'pages.locations.create')">
 					<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
 				</x-primary-button>
 			</div>
