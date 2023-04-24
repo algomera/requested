@@ -2,7 +2,6 @@
 
 	namespace App\Http\Livewire\Pages\Products;
 
-	use App\Models\Location;
 	use App\Models\Product;
 	use LivewireUI\Modal\ModalComponent;
 
