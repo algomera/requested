@@ -12,13 +12,13 @@
 	</div>
 	<div class="border-t border-gray-100">
 		<dl class="divide-y divide-gray-100">
-			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-				<dt class="text-sm font-medium text-gray-900">
-					<p class="block">Destinazione</p>
+			<div class="px-4 py-6 grid grid-cols-1 gap-4 sm:px-6">
+				<dt class="flex items-center justify-between text-sm font-medium text-gray-900">
+					<span>Destinazione</span>
 					<span wire:click="addLocation"
 					      class="text-xs font-medium text-indigo-500 hover:text-indigo-800 hover:cursor-pointer">Aggiungi</span>
 				</dt>
-				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
 					<ul role="list" class="divide-y divide-gray-200">
 						@foreach($locations as $k => $location)
 							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-center justify-between">
