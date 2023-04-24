@@ -11,6 +11,10 @@
 		public $product, $current_location, $quantity_in_location;
 		public $locations = [];
 
+		public static function destroyOnClose(): bool {
+			return true;
+		}
+
 		protected function rules() {
 			return [
 				'locations.*.id'       => 'required',
@@ -38,7 +42,6 @@
 		}
 
 		public function save() {
-			// TODO: Fixare comportamento di trasferimento prodotti tra locations
 			$this->validate();
 			$total_quantity_to_transfer = collect($this->locations)->sum('quantity');
 			if ($total_quantity_to_transfer > $this->quantity_in_location) {
@@ -47,7 +50,7 @@
 				foreach ($this->locations as $loc) {
 					$l = Location::find($loc['id']);
 					$exists = $l->products()->where('product_id', $this->product->id)->first()?->pivot->exists();
-					if($exists) {
+					if ($exists) {
 						$this->product->locations()->syncWithoutDetaching([
 							$l->id => [
 								'quantity' => $l->products()->where('product_id', $this->product->id)->first()->pivot->quantity + $loc['quantity']
@@ -64,10 +67,10 @@
 				$this->current_location->products()->where('product_id', $this->product->id)->first()->pivot->update([
 					'quantity' => $this->quantity_in_location - $total_quantity_to_transfer
 				]);
-				if($this->current_location->products()->where('product_id', $this->product->id)->first()->pivot->quantity === 0) {
+				if ($this->current_location->products()->where('product_id', $this->product->id)->first()->pivot->quantity === 0) {
 					$this->current_location->products()->where('product_id', $this->product->id)->first()->pivot->delete();
 				}
-				$this->forceClose()->closeModal();
+				$this->closeModal();
 				$this->emit('product-transferred');
 				$this->emit('$refresh');
 				$this->dispatchBrowserEvent('open-notification', [
