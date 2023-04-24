@@ -21,15 +21,15 @@
 						<span class="truncate">Ubicazioni</span>
 					</a>
 				</li>
-{{--				<li class="relative">--}}
-{{--					<a class="{{ request()->is('*') ? 'text-zinc-900 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} flex justify-between gap-2 py-1 pr-3 text-sm transition pl-4"--}}
-{{--					   href="#">--}}
-{{--						@if(request()->is('*'))--}}
-{{--							<div class="absolute -left-px top-1 h-6 w-px bg-emerald-500"></div>--}}
-{{--						@endif--}}
-{{--						<span class="truncate">Prodotti</span>--}}
-{{--					</a>--}}
-{{--				</li>--}}
+				<li class="relative">
+					<a class="{{ request()->is('products*') ? 'text-zinc-900 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} flex justify-between gap-2 py-1 pr-3 text-sm transition pl-4"
+					   href="{{ route('products.index') }}">
+						@if(request()->is('products*'))
+							<div class="absolute -left-px top-1 h-6 w-px bg-emerald-500"></div>
+						@endif
+						<span class="truncate">Prodotti</span>
+					</a>
+				</li>
 {{--				<li class="relative">--}}
 {{--					<a class="{{ request()->is('*') ? 'text-zinc-900 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} flex justify-between gap-2 py-1 pr-3 text-sm transition pl-4"--}}
 {{--					   href="#">--}}
