@@ -28,7 +28,7 @@
 		@if($label || isset($action))
 			<div class="flex items-center justify-between">
 				@if ($label)
-					<x-input-label :for="$name" :required="$required">{{ $label }}</x-input-label>
+					<x-input-label :for="$slug" :required="$required">{{ $label }}</x-input-label>
 				@endif
 				@isset($action)
 					{{ $action }}
