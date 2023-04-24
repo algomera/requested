@@ -17,7 +17,11 @@
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ config('requested.locations.types.' . $location->type) }}</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-				<dt class="text-sm font-medium text-gray-900">Prodotti</dt>
+				<dt class="flex flex-col space-y-0.5 text-sm font-medium text-gray-900">
+					<span>Prodotti</span>
+					<span wire:click="$emit('openModal', 'pages.locations.add-product', {{ json_encode(['location' => $location->id]) }})"
+					      class="text-xs font-medium text-indigo-500 hover:text-indigo-800 hover:cursor-pointer">Aggiungi</span>
+				</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					<ul role="list" class="divide-y divide-gray-200">
 						@forelse($location->products as $product)

@@ -21,7 +21,7 @@ $this->dispatchBrowserEvent('open-notification', [
 		data = $event.detail;
 		setTimeout(() => open = false, 7000);
 	"
-		class="fixed inset-0 z-50 flex items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
+		class="fixed inset-0 z-[9999] flex items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:items-start sm:justify-end">
 	<div
 			x-show="open"
 			x-cloak

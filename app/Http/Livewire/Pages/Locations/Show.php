@@ -8,8 +8,8 @@
 	class Show extends ModalComponent
 	{
 		public $location;
-
 		protected $listeners = [
+			'product-added'       => '$refresh',
 			'product-transferred' => '$refresh'
 		];
 
