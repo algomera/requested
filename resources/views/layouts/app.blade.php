@@ -37,7 +37,7 @@
 									<path stroke-linecap="round" stroke-linejoin="round"
 									      d="M12.01 12a4.25 4.25 0 1 0-6.02-6 4.25 4.25 0 0 0 6.02 6Zm0 0 3.24 3.25"></path>
 								</svg>
-								Find something...<kbd class="ml-auto text-xs text-zinc-400"><kbd
+								Cerca...<kbd class="ml-auto text-xs text-zinc-400"><kbd
 											class="font-sans">⌘</kbd><kbd class="font-sans">K</kbd></kbd></button>
 						</div>
 						<div class="flex items-center gap-5 lg:hidden">
