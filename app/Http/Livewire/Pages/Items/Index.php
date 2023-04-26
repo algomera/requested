@@ -23,6 +23,7 @@
 
 		public function delete(Item $item) {
 			$item->delete();
+			$item->products()->detach();
 			$this->emitSelf('$refresh');
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Articolo Eliminato'),
