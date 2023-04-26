@@ -1,1 +1,1 @@
-<p class="font-bold tracking-tight"><span class="text-red-500">Request</span>ed</p>
+<img src="{{ asset('images/logo.png') }}" alt="{{ env('APP_NAME') }}">

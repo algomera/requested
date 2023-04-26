@@ -23,8 +23,8 @@
 				<div class="contents lg:pointer-events-auto lg:block lg:w-72 lg:overflow-y-auto lg:border-r lg:border-zinc-900/10 lg:px-6 lg:pb-8 lg:pt-4">
 					{{-- LOGO DESKTOP --}}
 					<div class="hidden lg:flex">
-						<a class="text-2xl" aria-label="Home" href="/">
-							<x-application-logo></x-application-logo>
+						<a class="w-24" aria-label="Home" href="/">
+							<x-application-logo/>
 						</a>
 					</div>
 					{{-- TOPBAR --}}
@@ -47,8 +47,8 @@
 								<x-heroicon-o-bars-3 x-cloak x-show="!sidebarOpen" class="w-4 stroke-zinc-900"/>
 								<x-heroicon-o-x-mark x-cloak x-show="sidebarOpen" class="w-4 stroke-zinc-900"/>
 							</button>
-							<a class="text-lg" aria-label="Home" href="/">
-								<x-application-logo></x-application-logo>
+							<a class="w-20" aria-label="Home" href="/">
+								<x-application-logo/>
 							</a>
 						</div>
 						<div class="flex items-center gap-5">
@@ -98,7 +98,7 @@
 											@csrf
 
 											<x-dropdown-link :href="route('logout')"
-											                       onclick="event.preventDefault();
+											                 onclick="event.preventDefault();
                                         this.closest('form').submit();">
 												{{ __('Log Out') }}
 											</x-dropdown-link>
