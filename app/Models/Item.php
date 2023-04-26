@@ -6,15 +6,11 @@
 	use Illuminate\Database\Eloquent\Factories\HasFactory;
 	use Illuminate\Database\Eloquent\Model;
 
-	class Product extends Model
+	class Item extends Model
 	{
 		use HasFactory, Searchable;
 
-		public function locations() {
-			return $this->belongsToMany(Location::class);
-		}
-
-		public function items() {
-			return $this->belongsToMany(Item::class);
+		public function products() {
+			return $this->belongsToMany(Product::class)->withPivot('quantity');
 		}
 	}

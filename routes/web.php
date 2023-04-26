@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 	})->name('dashboard');
 	Route::get('/locations', \App\Http\Livewire\Pages\Locations\Index::class)->name('locations.index');
 	Route::get('/products', \App\Http\Livewire\Pages\Products\Index::class)->name('products.index');
+	Route::get('/items', \App\Http\Livewire\Pages\Items\Index::class)->name('items.index');
 	Route::get('/users', \App\Http\Livewire\Pages\Users\Index::class)->name('users.index');
 	Route::get('/suppliers', \App\Http\Livewire\Pages\Suppliers\Index::class)->name('suppliers.index');
 });
