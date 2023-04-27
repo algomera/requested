@@ -40,7 +40,7 @@
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->name }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->description ?: '-'}}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ $product->units }} {{ $product->quantity }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ \Illuminate\Support\Arr::join($product->locations()->pluck('code')->toArray(), ', ', ' e ') }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ \Illuminate\Support\Arr::join($product->locations()->pluck('code')->toArray(), ', ', ' e ') ?: '-' }}</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
 									<button wire:click.stop="$emit('openModal', 'pages.products.edit', {{ json_encode(['product' => $product->id]) }})"
