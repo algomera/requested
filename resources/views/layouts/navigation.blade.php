@@ -27,7 +27,7 @@
 						@if(request()->is('products*'))
 							<div class="absolute -left-px top-1 h-6 w-px bg-emerald-500"></div>
 						@endif
-						<span class="truncate">Prodotti</span>
+						<span class="truncate">Anagrafica Prodotti</span>
 					</a>
 				</li>
 				<li class="relative">

@@ -15,7 +15,7 @@
 			return [
 				'code'                => 'required|unique:products,code',
 				'name'                => 'required',
-				'description'         => 'required',
+				'description'         => 'nullable',
 				'products.*.id'       => 'required',
 				'products.*.quantity' => 'required|min:1'
 			];

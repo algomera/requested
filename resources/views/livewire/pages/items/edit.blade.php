@@ -1,6 +1,6 @@
 <form wire:submit.prevent="save" class="overflow-hidden bg-white shadow sm:rounded-lg">
 	<div class="px-4 py-6 sm:px-6">
-		<h3 class="text-base font-semibold leading-7 text-gray-900">Nuovo prodotto</h3>
+		<h3 class="text-base font-semibold leading-7 text-gray-900">Modifica articolo</h3>
 	</div>
 	<div class="border-t border-gray-100">
 		<dl class="divide-y divide-gray-100">

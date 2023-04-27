@@ -1,5 +1,12 @@
 <?php
 	return [
+		'products'  => [
+			'units' => [
+				'l'  => 'Litri',
+				'mt' => 'Metri',
+				'pz' => 'Pezzi',
+			]
+		],
 		'locations' => [
 			'types' => [
 				'ricevimento'     => 'Ricevimento',

@@ -28,8 +28,9 @@
 					<div class="flex-1">
 						<x-select wire:model.defer="product.units" label="Unità di misura">
 							<option value="" selected>Seleziona</option>
-							<option value="NR">NR</option>
-							<option value="MT">MT</option>
+							@foreach(config('requested.products.units') as $k => $unit)
+								<option value="{{ $k }}">{{ $unit }}</option>
+							@endforeach
 						</x-select>
 					</div>
 					<x-input wire:model.defer="product.quantity" type="number" label="Quantità"></x-input>

@@ -13,7 +13,7 @@
 			return [
 				'code'        => 'required|unique:products,code',
 				'name'        => 'required',
-				'description' => 'required',
+				'description' => 'nullable',
 				'units'       => 'required',
 				'quantity'    => 'required'
 			];

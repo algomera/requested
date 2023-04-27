@@ -13,7 +13,7 @@
 			return [
 				'product.code'        => 'required|unique:products,code,' . $this->product->id,
 				'product.name'        => 'required',
-				'product.description' => 'required',
+				'product.description' => 'nullable',
 				'product.units'       => 'required',
 				'product.quantity'    => 'required',
 			];

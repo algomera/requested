@@ -1,5 +1,5 @@
 <x-slot:header>
-	Prodotti
+	Anagrafica Prodotti
 </x-slot:header>
 <div>
 	<div class="flow-root space-y-5">
@@ -25,6 +25,7 @@
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Nome</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Descrizione</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ubicazione</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
 						</th>
@@ -37,8 +38,9 @@
 								{{ $product->code }}
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->name }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->description }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->description ?: '-'}}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ $product->units }} {{ $product->quantity }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ \Illuminate\Support\Arr::join($product->locations()->pluck('code')->toArray(), ', ', ' e ') }}</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
 									<button wire:click.stop="$emit('openModal', 'pages.products.edit', {{ json_encode(['product' => $product->id]) }})"
