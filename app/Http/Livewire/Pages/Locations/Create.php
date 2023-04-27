@@ -18,7 +18,6 @@
 		}
 
 		public function save() {
-			$this->validate();
 			Location::create([
 				'code'        => $this->code,
 				'description' => $this->description,
