@@ -59,7 +59,7 @@
 			$this->closeModal();
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Articolo Creato'),
-				'subtitle' => __('L\' articolo è stato creato con successo!'),
+				'subtitle' => __('L\' articolo è stato aggiornato con successo!'),
 				'type'     => 'success'
 			]);
 		}
