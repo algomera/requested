@@ -14,7 +14,7 @@
 		protected $rules = [
 			'first_name' => 'required',
 			'last_name'  => 'required',
-			'phone'      => 'required',
+			'phone'      => 'nullable',
 			'email'      => 'required',
 			'password'   => 'required|confirmed',
 			'new_role'   => 'required',

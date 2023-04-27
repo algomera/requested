@@ -20,7 +20,7 @@
 			return [
 				'user.first_name' => 'required',
 				'user.last_name'  => 'required',
-				'user.phone'      => 'required',
+				'user.phone'      => 'nullable',
 				'user.email'      => 'required',
 				'password'        => $this->password ? 'required|confirmed' : 'nullable'
 			];
