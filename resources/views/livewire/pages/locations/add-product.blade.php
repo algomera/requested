@@ -17,7 +17,7 @@
 				                        <x-select wire:model="product">
 					                        <option value="" selected>Seleziona</option>
 					                        @foreach($all_products as $prod)
-						                        <option value="{{ $prod->id }}">{{ $prod->code }}</option>
+						                        <option value="{{ $prod->id }}">{{ $prod->code }} ({{ $prod->units }})</option>
 					                        @endforeach
 				                        </x-select>
 			                        </div>
