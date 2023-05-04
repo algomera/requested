@@ -9,13 +9,12 @@
 	class Edit extends ModalComponent
 	{
 		public $item;
+		public $ref;
 		public $products = [];
 
 		protected function rules() {
 			return [
-				'item.code'           => 'required|unique:products,code',
-				'item.name'           => 'required',
-				'item.description'    => 'nullable',
+				'item.product_id'           => 'required|exists:products,id',
 				'products.*.id'       => 'required',
 				'products.*.quantity' => 'required|min:1'
 			];
@@ -28,12 +27,18 @@
 
 		public function mount(Item $item) {
 			$this->item = $item;
+			$this->ref = $item->product;
 			foreach ($item->products as $product) {
 				$this->products[] = [
 					'id'       => $product->id,
 					'quantity' => $product->pivot->quantity
 				];
 			}
+		}
+
+		public function updatedItemProductId($value) {
+			$product = Product::find($value);
+			$this->ref = $product;
 		}
 
 		public function addProduct() {
