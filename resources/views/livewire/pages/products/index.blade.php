@@ -48,7 +48,7 @@
 								@forelse($product->locations()->select('id', 'code', 'quantity')->get() as $location)
 									<span
 											wire:click.stop="$emit('openModal', 'pages.locations.show', {{ json_encode(['location' => $location->id]) }} )"
-											x-tooltip="{{ $location->quantity }}"
+											x-tooltip="{{ $location->quantity }} {{ config('requested.products.units.' . $product->units) }}"
 											class="inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 hover:cursor-pointer hover:bg-gray-700 hover:text-white">{{ $location->code }}</span>
 								@empty
 									-
