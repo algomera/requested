@@ -12,8 +12,11 @@
 		 * Run the database seeds.
 		 */
 		public function run(): void {
-			Product::factory(10)->create([
-				'units' => fake()->randomElement(array_keys(config('requested.products.units')))
-			]);
+			$products = Product::factory(10)->create();
+			foreach ($products as $product) {
+				$product->update([
+					'units' => fake()->randomElement(array_keys(config('requested.products.units')))
+				]);
+			}
 		}
 	}
