@@ -20,10 +20,10 @@
 				'name'        => fake()->domainWord,
 				'description' => fake()->text(50),
 				'units'       => fake()->randomElement([
-					'NR',
-					'MT'
+					'l',
+					'mt',
+					'pz'
 				]),
-				'quantity'    => fake()->randomFloat(2, 0, 10),
 			];
 		}
 	}

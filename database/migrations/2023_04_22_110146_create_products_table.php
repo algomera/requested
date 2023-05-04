@@ -15,7 +15,6 @@
 				$table->string('name');
 				$table->text('description')->nullable();
 				$table->string('units');
-				$table->float('quantity');
 				$table->string('image')->nullable();
 				$table->timestamps();
 			});

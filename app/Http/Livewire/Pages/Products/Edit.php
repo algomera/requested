@@ -15,7 +15,6 @@
 				'product.name'        => 'required',
 				'product.description' => 'nullable',
 				'product.units'       => 'required',
-				'product.quantity'    => 'required',
 			];
 		}
 

@@ -23,17 +23,14 @@
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
-				<dt class="text-sm font-medium text-gray-900">Quantità</dt>
-				<dd class="flex items-center space-x-3 mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<div class="flex-1">
-						<x-select wire:model.defer="product.units" label="Unità di misura">
-							<option value="" selected>Seleziona</option>
-							@foreach(config('requested.products.units') as $k => $unit)
-								<option value="{{ $k }}">{{ $unit }}</option>
-							@endforeach
-						</x-select>
-					</div>
-					<x-input wire:model.defer="product.quantity" type="number" label="Quantità"></x-input>
+				<dt class="text-sm font-medium text-gray-900">Unità di misura</dt>
+				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+					<x-select wire:model.defer="product.units">
+						<option value="" selected>Seleziona</option>
+						@foreach(config('requested.products.units') as $k => $unit)
+							<option value="{{ $k }}">{{ $unit }}</option>
+						@endforeach
+					</x-select>
 				</dd>
 			</div>
 		</dl>

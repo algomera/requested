@@ -7,7 +7,7 @@
 
 	class Create extends ModalComponent
 	{
-		public $code, $name, $description, $units, $quantity;
+		public $code, $name, $description, $units;
 
 		protected function rules() {
 			return [
@@ -15,7 +15,6 @@
 				'name'        => 'required',
 				'description' => 'nullable',
 				'units'       => 'required',
-				'quantity'    => 'required'
 			];
 		}
 
@@ -26,7 +25,6 @@
 				'name'        => $this->name,
 				'description' => $this->description,
 				'units'       => $this->units,
-				'quantity'    => $this->quantity,
 			]);
 			$this->emitTo('pages.products.index', 'product-created');
 			$this->closeModal();
