@@ -8,14 +8,13 @@
 
 	class Create extends ModalComponent
 	{
-		public $code, $name, $description;
+		public $product_id;
+		public $ref;
 		public $products = [];
 
 		protected function rules() {
 			return [
-				'code'                => 'required|unique:products,code',
-				'name'                => 'required',
-				'description'         => 'nullable',
+				'product_id'          => 'required|exists:products,id',
 				'products.*.id'       => 'required',
 				'products.*.quantity' => 'required|min:1'
 			];
@@ -25,6 +24,11 @@
 			'products.*.id'       => 'Seleziona un prodotto',
 			'products.*.quantity' => 'Quantità richiesta',
 		];
+
+		public function updatedProductId($value) {
+			$product = Product::find($value);
+			$this->ref = $product;
+		}
 
 		public function addProduct() {
 			$this->products[] = new Product();
@@ -37,9 +41,7 @@
 		public function save() {
 			$this->validate();
 			$item = Item::create([
-				'code'        => $this->code,
-				'name'        => $this->name,
-				'description' => $this->description,
+				'product_id' => $this->ref->id,
 			]);
 			foreach ($this->products as $product) {
 				$p = Product::find($product['id']);

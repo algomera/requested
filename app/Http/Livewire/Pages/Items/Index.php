@@ -35,8 +35,8 @@
 		public function render() {
 			return view('livewire.pages.items.index', [
 				'items' => Item::search($this->search, [
-					'code',
-					'name'
+					'product.code',
+					'product.name'
 				])->paginate(25)
 			]);
 		}

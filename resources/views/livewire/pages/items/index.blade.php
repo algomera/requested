@@ -33,10 +33,10 @@
 					@forelse($items as $item)
 						<tr class="hover:bg-gray-50" wire:key="{{ $item->id }}">
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-								{{ $item->code }}
+								{{ $item->product->code }}
 							</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->name }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->description ?: '-' }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->product->name }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->product->description ?: '-' }}</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
 									<button wire:click.stop="$emit('openModal', 'pages.items.edit', {{ json_encode(['item' => $item->id]) }})"

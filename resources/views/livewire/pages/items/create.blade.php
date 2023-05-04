@@ -7,19 +7,25 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Codice</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="code" type="text"></x-input>
+{{--					<x-input wire:model.defer="code" type="text"></x-input>--}}
+					<x-select wire:model="product_id">
+						<option value="" selected>Seleziona</option>
+						@foreach($all_products as $prod)
+							<option value="{{ $prod->id }}">{{ $prod->code }}</option>
+						@endforeach
+					</x-select>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Nome</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="name" type="text"></x-input>
+					<span class="italic">{{ $ref?->name ?: '-' }}</span>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Descrizione</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="description" type="text"></x-input>
+					<span class="italic">{{ $ref?->description ?: '-' }}</span>
 				</dd>
 			</div>
 			<div class="px-4 py-6 grid grid-cols-1 gap-4 sm:px-6">
@@ -37,7 +43,7 @@
 										<x-select wire:model="products.{{$k}}.id">
 											<option value="" selected>Seleziona</option>
 											@foreach($all_products as $prod)
-												<option {{ in_array($prod->id, array_column($products, 'id')) ? 'disabled' : '' }} value="{{ $prod->id }}">{{ $prod->code }}</option>
+												<option {{ in_array($prod->id, array_column($products, 'id')) || $prod->id == $product_id ? 'disabled' : '' }} value="{{ $prod->id }}">{{ $prod->code }} ({{ $prod->units }})</option>
 											@endforeach
 										</x-select>
 									</div>

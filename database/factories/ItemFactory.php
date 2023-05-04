@@ -16,10 +16,6 @@ class ItemFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-	        'code'        => fake()->regexify('[A-Z0-9]{6}'),
-	        'name'        => fake()->domainWord,
-	        'description' => fake()->text(50),
-        ];
+        return [];
     }
 }

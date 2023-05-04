@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-	        $table->string('code');
-	        $table->string('name');
-	        $table->text('description')->nullable();
+			$table->foreignIdFor(\App\Models\Product::class, 'product_id');
 	        $table->string('image')->nullable();
             $table->timestamps();
         });
