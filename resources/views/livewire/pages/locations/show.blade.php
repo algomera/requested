@@ -28,7 +28,7 @@
 							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-center justify-between">
 								<div class="flex flex-col space-y-0.5">
 									<span>{{ $product->name }}</span>
-									<p class="text-xs text-zinc-500">{{ $product->code }} &middot; <span class="text-zinc-700 font-semibold">{{ $product->pivot->quantity }} pezzi</span></p>
+									<p class="text-xs text-zinc-500">{{ $product->code }} &middot; <span class="text-zinc-700 font-semibold">{{ $product->pivot->quantity }} {{ config('requested.products.units.' . $product->units) }}</span></p>
 								</div>
 								<button wire:click="$emit('openModal', 'pages.locations.change', {{ json_encode(['product' => $product->id, 'current_location' => $location->id])}})" type="button"
 								        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">

@@ -20,12 +20,16 @@
 					<thead>
 					<tr>
 						<th scope="col"
-						    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">Codice
+						    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
+							Codice
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Nome</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Descrizione</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità in magazzino</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ubicazione</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Descrizione
+						</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">In magazzino
+						</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ubicazione
+						</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
 						</th>
@@ -39,8 +43,17 @@
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->name }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->description ?: '-'}}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ $product->units }} {{ $product->locations()->sum('quantity') }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ \Illuminate\Support\Arr::join($product->locations()->pluck('code')->toArray(), ', ', ' e ') ?: '-' }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->locations()->sum('quantity') }} {{ config('requested.products.units.' . $product->units) }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+								@forelse($product->locations()->select('id', 'code', 'quantity')->get() as $location)
+									<span
+											wire:click.stop="$emit('openModal', 'pages.locations.show', {{ json_encode(['location' => $location->id]) }} )"
+											x-tooltip="{{ $location->quantity }}"
+											class="inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 hover:cursor-pointer hover:bg-gray-700 hover:text-white">{{ $location->code }}</span>
+								@empty
+									-
+								@endforelse
+							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
 									<button wire:click.stop="$emit('openModal', 'pages.products.edit', {{ json_encode(['product' => $product->id]) }})"
