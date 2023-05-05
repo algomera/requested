@@ -73,7 +73,7 @@
 				</li>
 				<li class="relative">
 					<a class="{{ request()->is('destinations*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition pl-4"
-					   href="#">
+					   href="{{ route('destinations.index') }}">
 						@if(request()->is('destinations*'))
 							<div class="absolute -left-px top-1 h-6 w-px bg-emerald-500"></div>
 						@endif
