@@ -12,6 +12,11 @@
 		 * Run the database seeds.
 		 */
 		public function run(): void {
-			Destination::factory(2)->create();
+			$baltur = Destination::factory()->create([
+				'name' => 'Baltur',
+			]);
+			$chimar = Destination::factory()->create([
+				'name' => 'Chimar',
+			]);
 		}
 	}

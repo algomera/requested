@@ -1,13 +1,13 @@
 <?php
 	return [
-		'products'  => [
+		'products'          => [
 			'units' => [
 				'l'  => 'Litri',
 				'mt' => 'Metri',
 				'pz' => 'Pezzi',
 			]
 		],
-		'locations' => [
+		'locations'         => [
 			'types' => [
 				'ricevimento'     => 'Ricevimento',
 				'grandi_quantita' => 'Grandi quantità',
@@ -15,6 +15,13 @@
 				'scarto'          => 'Scarto',
 				'versamento'      => 'Versamento',
 				'spedizione'      => 'Spedizione',
+			]
+		],
+		'production_orders' => [
+			'status' => [
+				'created'   => 'Creato',
+				'active'    => 'Attivo',
+				'completed' => 'Completato',
 			]
 		]
 	];
