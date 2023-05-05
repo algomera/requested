@@ -20,11 +20,17 @@
 					<thead>
 					<tr>
 						<th scope="col"
-						    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">Codice
+						    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
+							Codice
 						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Descrizione</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">N. Prodotti</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tipologia</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
+							consegna
+						</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione
+						</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
 						</th>
@@ -32,13 +38,33 @@
 					</thead>
 					<tbody class="divide-y divide-gray-200 bg-white">
 					@forelse($production_orders as $production_order)
-						<tr class="hover:bg-gray-50" wire:key="{{ $roduction_order->id }}">
+						<tr class="hover:bg-gray-50" wire:key="{{ $production_order->id }}">
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
 								{{ $production_order->code }}
 							</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->description }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->products()->count() }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ config('requested.production_orders.types.' . $roduction_order->type) }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->item->product->name }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination->name }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+								@switch($production_order->status)
+									@case('created')
+										<div class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+											{{ config('requested.production_orders.status.' . $production_order->status) }}
+										</div>
+										@break
+									@case('active')
+										<div class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
+											{{ config('requested.production_orders.status.' . $production_order->status) }}
+										</div>
+										@break
+									@case('completed')
+										<div class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+											{{ config('requested.production_orders.status.' . $production_order->status) }}
+										</div>
+										@break
+								@endswitch
+							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
 									<button wire:click.stop="$emit('openModal', 'pages.production_orders.edit', {{ json_encode(['production_order' => $production_order->id]) }})"
@@ -51,7 +77,7 @@
 									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</button>
-									@if($deletingId != $roduction_order->id)
+									@if($deletingId != $production_order->id)
 										<button wire:key="deleting-{{ $production_order->id }}"
 										        wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
 										        type="button"
@@ -81,7 +107,7 @@
 			</div>
 		</div>
 		<div>
-			{{ $roduction_orders->links() }}
+			{{ $production_orders->links() }}
 		</div>
 	</div>
 </div>

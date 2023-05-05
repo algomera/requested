@@ -43,8 +43,8 @@
 		</div>
 	</li>
 	<li>
-		<a class="{{ request()->is('order*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
-		   href="#">
+		<a class="{{ request()->is('production-orders*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
+		   href="{{ route('production-orders.index') }}">
 			Ordini di Produzione
 		</a>
 	</li>
