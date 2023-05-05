@@ -28,7 +28,8 @@
 							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-start justify-between">
 								<div class="flex flex-col space-y-0.5">
 									<span>{{ $product->code }} &middot; {{ $product->name }}</span>
-									<p class="text-xs text-zinc-500"><span class="text-zinc-400 font-semibold">In magazzino: {{ $product->locations()->sum('quantity') }}</span>
+									<p class="text-xs text-zinc-500">
+										<span class="text-zinc-400 font-semibold">In magazzino: {{ $product->locations()->sum('quantity') }}</span>
 									</p>
 								</div>
 								<div class="flex flex-col text-right space-y-0.5">
