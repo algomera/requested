@@ -13,6 +13,7 @@
 			$this->call([
 				RolesPermissionsSeeder::class,
 				UserSeeder::class,
+				DestinationSeeder::class,
 				SupplierSeeder::class,
 				LocationSeeder::class,
 				ProductSeeder::class,
