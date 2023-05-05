@@ -46,10 +46,12 @@
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->locations()->sum('quantity') }} {{ config('requested.products.units.' . $product->units) }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@forelse($product->locations()->select('id', 'code', 'quantity')->get() as $location)
-									<span
+									<div
 											wire:click.stop="$emit('openModal', 'pages.locations.show', {{ json_encode(['location' => $location->id]) }} )"
-											x-tooltip="{{ $location->quantity }} {{ config('requested.products.units.' . $product->units) }}"
-											class="inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 hover:cursor-pointer hover:bg-gray-700 hover:text-white">{{ $location->code }}</span>
+											class="inline-flex flex-col items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 hover:cursor-pointer hover:bg-gray-700 hover:text-white">
+										<span class="font-bold leading-none">{{ $location->code }}</span>
+										<span class="text-[9px] leading-none mt-0.5">({{ $location->quantity }})</span>
+									</div>
 								@empty
 									-
 								@endforelse
