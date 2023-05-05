@@ -72,11 +72,10 @@
 									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
 									</button>
-									<button wire:click.stop="$emit('openModal', 'pages.production_orders.show', {{ json_encode(['production_order' => $production_order->id]) }})"
-									        type="button"
-									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+									<a href="{{ route('production-orders.show', $production_order->id) }}"
+									   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
-									</button>
+									</a>
 									@if($deletingId != $production_order->id)
 										<button wire:key="deleting-{{ $production_order->id }}"
 										        wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
