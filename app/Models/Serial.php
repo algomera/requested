@@ -10,4 +10,8 @@ class Serial extends Model
     use HasFactory;
 
 	public $timestamps = false;
+
+	public function logs() {
+		return $this->morphMany(Log::class, 'loggable');
+	}
 }

@@ -17,4 +17,8 @@
 		public function items() {
 			return $this->belongsToMany(Item::class);
 		}
+
+		public function logs() {
+			return $this->morphMany(Log::class, 'loggable');
+		}
 	}

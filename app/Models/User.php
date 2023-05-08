@@ -50,6 +50,6 @@
 		}
 
 		public function logs() {
-			return $this->hasMany(Log::class);
+			return $this->morphMany(Log::class, 'loggable');
 		}
 	}

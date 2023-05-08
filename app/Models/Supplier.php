@@ -9,4 +9,8 @@
 	class Supplier extends Model
 	{
 		use HasFactory, Searchable;
+
+		public function logs() {
+			return $this->morphMany(Log::class, 'loggable');
+		}
 	}

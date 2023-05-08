@@ -17,4 +17,8 @@
 		public function products() {
 			return $this->belongsToMany(Product::class)->withPivot('quantity');
 		}
+
+		public function logs() {
+			return $this->morphMany(Log::class, 'loggable');
+		}
 	}
