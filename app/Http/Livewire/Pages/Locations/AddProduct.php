@@ -45,6 +45,11 @@
 			}
 			$this->closeModal();
 			$this->emit('product-added');
+			$product = Product::find($this->product);
+			$this->location->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha aggiunto il prodotto '{$product->name}' {$this->quantity} volte all'ubicazione {$this->location->code}"
+			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Prodotto Aggiunto'),
 				'subtitle' => __('Il prodotto è stato aggiunto all\'ubicazione con successo!'),
