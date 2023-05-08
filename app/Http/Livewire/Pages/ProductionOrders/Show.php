@@ -2,6 +2,7 @@
 
 	namespace App\Http\Livewire\Pages\ProductionOrders;
 
+	use App\Models\Log;
 	use App\Models\ProductionOrder;
 	use App\Models\Serial;
 	use Livewire\Component;
@@ -32,7 +33,9 @@
 				'subtitle' => __(count($this->serials_checked) . ' matricole sono state completate!'),
 				'type'     => 'success'
 			]);
-			// TODO: Log
+			Log::create([
+				'message' => auth()->user()->fullName . " ha completato " . count($this->serials_checked) . " matricola/e."
+			]);
 			$this->serials_checked = [];
 		}
 
