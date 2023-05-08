@@ -48,7 +48,7 @@
 			$product = Product::find($this->product);
 			$this->location->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha aggiunto il prodotto '{$product->name}' {$this->quantity} volte all'ubicazione {$this->location->code}"
+				'message' => "ha aggiunto {$this->quantity} '{$product->name}' all'ubicazione {$this->location->code}"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Prodotto Aggiunto'),
