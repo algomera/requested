@@ -22,19 +22,20 @@
 		}
 
 		public function setAsCompleted() {
-			foreach ($this->serials_checked as $serial) {
-				Serial::find($serial)->update([
+			foreach ($this->serials_checked as $id) {
+				$serial = Serial::find($id);
+				$serial->update([
 					'completed'    => true,
 					'completed_at' => now()
+				]);
+				Log::create([
+					'message' => auth()->user()->fullName . " ha completato la matricola " . $serial->code
 				]);
 			}
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Matricole completate'),
 				'subtitle' => __(count($this->serials_checked) . ' matricole sono state completate!'),
 				'type'     => 'success'
-			]);
-			Log::create([
-				'message' => auth()->user()->fullName . " ha completato " . count($this->serials_checked) . " matricola/e."
 			]);
 			$this->serials_checked = [];
 		}
