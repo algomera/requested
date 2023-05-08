@@ -90,7 +90,7 @@
 			<ul role="list" class="border-l border-transparent">
 				<li class="relative">
 					<a class="{{ request()->is('logs*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition pl-4"
-					   href="#">
+					   href="{{ route('logs.index') }}">
 						@if(request()->is('logs*'))
 							<div class="absolute -left-px top-1 h-6 w-px bg-emerald-500"></div>
 						@endif

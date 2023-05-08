@@ -21,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 	Route::get('/users', \App\Http\Livewire\Pages\Users\Index::class)->name('users.index');
 	Route::get('/suppliers', \App\Http\Livewire\Pages\Suppliers\Index::class)->name('suppliers.index');
 	Route::get('/destinations', \App\Http\Livewire\Pages\Destinations\Index::class)->name('destinations.index');
+	Route::get('/logs', \App\Http\Livewire\Pages\Logs\Index::class)->name('logs.index');
 });
 
 // Profile Routes
