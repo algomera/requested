@@ -17,4 +17,8 @@
 		public function destination() {
 			return $this->belongsTo(Destination::class);
 		}
+
+		public function serials() {
+			return $this->hasMany(Serial::class);
+		}
 	}

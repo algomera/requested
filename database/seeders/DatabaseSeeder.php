@@ -19,6 +19,7 @@
 				ProductSeeder::class,
 				ItemSeeder::class,
 				ProductionOrderSeeder::class,
+				SerialSeeder::class,
 			]);
 		}
 	}
