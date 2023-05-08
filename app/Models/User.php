@@ -48,4 +48,8 @@
 		public function getRoleAttribute() {
 			return $this->roles[0];
 		}
+
+		public function logs() {
+			return $this->hasMany(Log::class);
+		}
 	}

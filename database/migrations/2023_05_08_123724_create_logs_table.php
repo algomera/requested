@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
+			$table->morphs('loggable');
+	        $table->foreignIdFor(\App\Models\User::class, 'user_id')->nullable();
 			$table->text('message');
             $table->timestamps();
         });

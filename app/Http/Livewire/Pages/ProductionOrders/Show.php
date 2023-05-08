@@ -28,13 +28,13 @@
 					'completed'    => true,
 					'completed_at' => now()
 				]);
-				Log::create([
-					'message' => auth()->user()->fullName . " ha completato la matricola " . $serial->code
+				$this->production_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => " ha completato la matricola " . $serial->code
 				]);
 			}
 			$this->dispatchBrowserEvent('open-notification', [
-				'title'    => __('Matricole completate'),
-				'subtitle' => __(count($this->serials_checked) . ' matricole sono state completate!'),
+				'title'    => __('Matricola/e completate'),
 				'type'     => 'success'
 			]);
 			$this->serials_checked = [];
@@ -42,8 +42,10 @@
 
 		public function render() {
 			$serials = $this->production_order->serials()->where('completed', $this->currentTab)->paginate(25);
+			$logs = $this->production_order->logs()->with('user')->latest()->get();
 			return view('livewire.pages.production-orders.show', [
-				'serials' => $serials
+				'serials' => $serials,
+				'logs' => $logs
 			]);
 		}
 	}

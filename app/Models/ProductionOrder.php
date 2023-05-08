@@ -21,4 +21,8 @@
 		public function serials() {
 			return $this->hasMany(Serial::class);
 		}
+
+		public function logs() {
+			return $this->morphMany(Log::class, 'loggable');
+		}
 	}
