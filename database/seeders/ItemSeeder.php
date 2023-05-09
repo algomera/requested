@@ -13,10 +13,10 @@
 		 * Run the database seeds.
 		 */
 		public function run(): void {
-			$items = Item::factory(5)->create([
-				'product_id' => Product::all()->shuffle()->first()->id
-			]);
-			foreach ($items as $item) {
+			foreach (range(1, 5) as $n) {
+				$item = Item::create([
+					'product_id' => Product::all()->shuffle()->first()->id
+				]);
 				$item->products()->attach(Product::all()->shuffle()->first(), [
 					'quantity' => fake()->numberBetween(1, 5)
 				]);
