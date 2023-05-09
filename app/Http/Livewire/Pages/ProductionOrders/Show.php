@@ -30,7 +30,7 @@
 				]);
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
-					'message' => "ha completato la matricola " . $serial->code
+					'message' => "ha completato la matricola '{$serial->code}'"
 				]);
 			}
 			$this->dispatchBrowserEvent('open-notification', [
