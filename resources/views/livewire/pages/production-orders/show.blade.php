@@ -1,7 +1,8 @@
 <x-slot:header>
 	<div class="flex items-center space-x-3">
 		<span>Ordine: {{ $production_order->code }}</span>
-		<button x-on:click="Livewire.emit('openModal', 'components.logs', {{ json_encode(['model' => 'App\Models\ProductionOrder', 'id' => $production_order->id]) }})" type="button"
+		<button x-on:click="Livewire.emit('openModal', 'components.logs', {{ json_encode(['model' => 'App\Models\ProductionOrder', 'id' => $production_order->id]) }})"
+		        type="button"
 		        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 2xl:hidden"
 		        aria-label="Toggle logs">
 			<x-heroicon-o-queue-list class="w-4 stroke-zinc-900"/>
@@ -32,64 +33,115 @@
 				@endforeach
 			</nav>
 		</div>
-		@if($serials->count())
-			<div class="overflow-x-auto">
-				<div class="inline-block min-w-full py-2 align-middle">
-					<table class="min-w-full divide-y divide-gray-300">
-						<thead>
-						<tr>
-							@if($currentTab == 0)
-								<th scope="col"
-								    class="w-[50px] py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
-									<span class="sr-only">Check</span>
-								</th>
-							@endif
-							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-								Matricola
-							</th>
-							@if($currentTab == 1)
-								<th scope="col"
-								    class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-right text-sm font-semibold text-gray-900">
-									Data completamento
-								</th>
-							@endif
-							{{--						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">--}}
-							{{--							<span class="sr-only">Azioni</span>--}}
-							{{--						</th>--}}
-						</tr>
-						</thead>
-						<tbody class="divide-y divide-gray-200 bg-white">
-						@forelse($serials as $serial_number)
-							<tr class="hover:bg-gray-50" wire:key="{{ $serial_number->id }}">
-								@if($currentTab == 0)
-									<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-										<input wire:model="serials_checked" type="checkbox"
-										       value="{{ $serial_number->id }}"
-										       class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-600">
-									</td>
-								@endif
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial_number->code }}</td>
-								@if($currentTab == 1)
-									<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">{{ $serial_number->completed_at }}</td>
-								@endif
-							</tr>
-						@empty
-							<tr>
-								<td colspan="100%" class="py-4 px-3 text-sm text-center text-zinc-500">
-									Nessun elemento trovato
-								</td>
-							</tr>
-						@endforelse
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div>
-				{{ $serials->links() }}
-			</div>
-		@else
-			<p class="text-sm text-gray-400">Nessuna matricola da produrre</p>
-		@endif
+		@switch($currentTab)
+			@case(0)
+				@if($incompleted_serials->count())
+					<div class="overflow-x-auto" wire:key="incompleted">
+						<div class="inline-block min-w-full py-2 align-middle">
+							<table class="min-w-full divide-y divide-gray-300">
+								<thead>
+								<tr>
+									<th scope="col"
+									    class="w-[50px] py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
+										<span class="sr-only">Check</span>
+									</th>
+									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+										Matricola
+									</th>
+									@if($currentTab == 1)
+										<th scope="col"
+										    class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-right text-sm font-semibold text-gray-900">
+											Data completamento
+										</th>
+									@endif
+								</tr>
+								</thead>
+								<tbody class="divide-y divide-gray-200 bg-white">
+								@forelse($incompleted_serials as $incompleted)
+									<tr class="hover:bg-gray-50" wire:key="{{ $incompleted->id }}">
+										@if($currentTab == 0)
+											<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+												<input wire:model="serials_checked" type="checkbox"
+												       value="{{ $incompleted->id }}"
+												       class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-600">
+											</td>
+										@endif
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $incompleted->code }}</td>
+										@if($currentTab == 1)
+											<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">{{ $incompleted->completed_at }}</td>
+										@endif
+									</tr>
+								@empty
+									<tr>
+										<td colspan="100%" class="py-4 px-3 text-sm text-center text-zinc-500">
+											Nessun elemento trovato
+										</td>
+									</tr>
+								@endforelse
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div>
+						{{ $incompleted_serials->links() }}
+					</div>
+				@else
+					<p class="text-sm text-gray-400">Nessuna matricola da produrre.</p>
+					@if($incompleted_serials->count() === 0 && $production_order->status !== 'completed')
+						<x-primary-button wire:click="changeState">Completa l'Ordine</x-primary-button>
+					@endif
+				@endif
+				@break
+			@case(1)
+				@if($completed_serials->count())
+					<div class="overflow-x-auto" wire:key="completed">
+						<div class="inline-block min-w-full py-2 align-middle">
+							<table class="min-w-full divide-y divide-gray-300">
+								<thead>
+								<tr>
+									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+										Matricola
+									</th>
+									<th scope="col"
+									    class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8 text-right text-sm font-semibold text-gray-900">
+										Data completamento
+									</th>
+								</tr>
+								</thead>
+								<tbody class="divide-y divide-gray-200 bg-white">
+								@forelse($completed_serials as $completed)
+									<tr class="hover:bg-gray-50" wire:key="{{ $completed->id }}">
+										@if($currentTab == 0)
+											<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+												<input wire:model="serials_checked" type="checkbox"
+												       value="{{ $completed->id }}"
+												       class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-600">
+											</td>
+										@endif
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $completed->code }}</td>
+										@if($currentTab == 1)
+											<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">{{ $completed->completed_at }}</td>
+										@endif
+									</tr>
+								@empty
+									<tr>
+										<td colspan="100%" class="py-4 px-3 text-sm text-center text-zinc-500">
+											Nessun elemento trovato
+										</td>
+									</tr>
+								@endforelse
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div>
+						{{ $completed_serials->links() }}
+					</div>
+				@else
+					<p class="text-sm text-gray-400">Nessuna matricola completata.</p>
+				@endif
+				@break
+		@endswitch
 	</div>
 	<div class="hidden 2xl:block">
 		<h3 class="mb-2 text-sm text-center">Timeline</h3>

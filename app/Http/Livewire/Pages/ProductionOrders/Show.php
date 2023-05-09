@@ -40,11 +40,26 @@
 			$this->serials_checked = [];
 		}
 
+		public function changeState() {
+			$this->production_order->update([
+				'status' => 'completed'
+			]);
+			$this->production_order->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha completato l'ordine di produzione '{$this->production_order->code}'"
+			]);
+			$this->dispatchBrowserEvent('open-notification', [
+				'title'    => __('Ordine di produzione completato'),
+				'subtitle' => __('L\'ordine di produzione è stato completato con successo.'),
+				'type'     => 'success'
+			]);
+		}
+
 		public function render() {
-			$serials = $this->production_order->serials()->where('completed', $this->currentTab)->paginate(25);
 			$logs = $this->production_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 			return view('livewire.pages.production-orders.show', [
-				'serials' => $serials,
+				'incompleted_serials' => $this->production_order->serials()->where('completed', 0)->paginate(25),
+				'completed_serials' => $this->production_order->serials()->where('completed', 1)->paginate(25),
 				'logs' => $logs
 			]);
 		}
