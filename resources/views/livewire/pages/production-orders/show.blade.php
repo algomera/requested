@@ -1,8 +1,15 @@
 <x-slot:header>
-	Ordine: {{ $production_order->code }}
+	<div class="flex items-center space-x-3">
+		<span>Ordine: {{ $production_order->code }}</span>
+		<button x-on:click="Livewire.emit('openModal', 'components.logs', {{ json_encode(['model' => 'App\Models\ProductionOrder', 'id' => $production_order->id]) }})" type="button"
+		        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 2xl:hidden"
+		        aria-label="Toggle logs">
+			<x-heroicon-o-queue-list class="w-4 stroke-zinc-900"/>
+		</button>
+	</div>
 </x-slot:header>
-<div class="grid grid-cols-3 gap-1">
-	<div class="col-span-2 flow-root space-y-5 pr-4 border-r">
+<div class="grid grid-cols-1 2xl:grid-cols-3 gap-1">
+	<div class="col-span-2 flow-root space-y-5 2xl:pr-4 2xl:border-r">
 		<div class="flex items-center justify-between">
 			<x-primary-button
 					wire:click="$emit('openModal', 'pages.production-orders.materials', {{ json_encode(['production_order' => $production_order->id]) }})">
@@ -84,7 +91,7 @@
 			<p class="text-sm text-gray-400">Nessuna matricola da produrre</p>
 		@endif
 	</div>
-	<div>
+	<div class="hidden 2xl:block">
 		<h3 class="mb-2 text-sm text-center">Timeline</h3>
 		<ul role="list" class="space-y-6">
 			@forelse($logs as $log)

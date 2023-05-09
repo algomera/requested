@@ -9,7 +9,7 @@
 				         append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 			</div>
 			<div>
-				<x-primary-button wire:click="$emit('openModal', 'pages.production_orders.create')">
+				<x-primary-button wire:click="$emit('openModal', 'pages.production-orders.create')">
 					<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
 				</x-primary-button>
 			</div>
@@ -67,7 +67,7 @@
 							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
-									<button wire:click.stop="$emit('openModal', 'pages.production_orders.edit', {{ json_encode(['production_order' => $production_order->id]) }})"
+									<button wire:click.stop="$emit('openModal', 'pages.production-orders.edit', {{ json_encode(['production_order' => $production_order->id]) }})"
 									        type="button"
 									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
