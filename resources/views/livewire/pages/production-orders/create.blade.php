@@ -11,7 +11,7 @@
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
-				<dt class="text-sm font-medium text-gray-900">Articolo</dt>
+				<dt class="text-sm font-medium text-gray-900">Articolo da produrre</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					<x-select wire:model.defer="item_id">
 						<option value="" selected>Seleziona</option>
@@ -24,7 +24,7 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Quantità da produrre</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="quantity" type="number"></x-input>
+					<x-input wire:model.defer="quantity" type="number" step="1"></x-input>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
@@ -80,6 +80,6 @@
 	</div>
 	<div class="py-4 px-4 flex justify-end space-x-3 sm:px-6">
 		<x-secondary-button type="button" wire:click="$emit('closeModal')">Annulla</x-secondary-button>
-		<x-primary-button>Salva</x-primary-button>
+		<x-primary-button>Continua</x-primary-button>
 	</div>
 </form>

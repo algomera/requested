@@ -42,7 +42,7 @@
 
 		public function render() {
 			$serials = $this->production_order->serials()->where('completed', $this->currentTab)->paginate(25);
-			$logs = $this->production_order->logs()->with('user')->latest()->get();
+			$logs = $this->production_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 			return view('livewire.pages.production-orders.show', [
 				'serials' => $serials,
 				'logs' => $logs

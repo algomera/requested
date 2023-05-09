@@ -10,7 +10,7 @@
 
 		public function mount($model, $id) {
 			$object = $model::find($id);
-			$this->logs = $object->logs()->with('user')->latest()->get();
+			$this->logs = $object->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 		}
 
 		public function render() {
