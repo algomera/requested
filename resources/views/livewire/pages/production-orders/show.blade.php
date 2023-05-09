@@ -18,10 +18,13 @@
 			</x-primary-button>
 			@if($serials_checked)
 				<x-primary-button
-						class="bg-green-400 hover:bg-green-500 focus:bg-green-600 active:bg-green-600"
+						class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
 						wire:click="setAsCompleted">
 					Completa {{ count($serials_checked) }}
 				</x-primary-button>
+			@endif
+			@if($incompleted_serials->count() === 0 && $production_order->status !== 'completed')
+				<x-primary-button wire:click="changeState" class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700">Completa l'Ordine</x-primary-button>
 			@endif
 		</div>
 
@@ -87,9 +90,6 @@
 					</div>
 				@else
 					<p class="text-sm text-gray-400">Nessuna matricola da produrre.</p>
-					@if($incompleted_serials->count() === 0 && $production_order->status !== 'completed')
-						<x-primary-button wire:click="changeState">Completa l'Ordine</x-primary-button>
-					@endif
 				@endif
 				@break
 			@case(1)
