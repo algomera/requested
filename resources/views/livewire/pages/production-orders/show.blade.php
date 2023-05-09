@@ -1,8 +1,8 @@
 <x-slot:header>
 	Ordine: {{ $production_order->code }}
 </x-slot:header>
-<div class="grid grid-cols-3 gap-4">
-	<div class="col-span-2 flow-root space-y-5">
+<div class="grid grid-cols-3 gap-1">
+	<div class="col-span-2 flow-root space-y-5 pr-4 border-r">
 		<div class="flex items-center justify-between">
 			<x-primary-button
 					wire:click="$emit('openModal', 'pages.production-orders.materials', {{ json_encode(['production_order' => $production_order->id]) }})">
@@ -87,7 +87,7 @@
 	<div>
 		<h3 class="mb-2 text-sm text-center">Timeline</h3>
 		<ul role="list" class="space-y-6">
-			@foreach($logs as $log)
+			@forelse($logs as $log)
 				<li class="relative flex gap-x-4">
 					@if(!$loop->last)
 						<div class="absolute left-0 top-0 flex w-6 justify-center -bottom-6">
@@ -106,7 +106,9 @@
 						{{ $log->created_at->diffForHumans() }}
 					</span>
 				</li>
-			@endforeach
+			@empty
+				<p class="text-center mt-3 text-gray-500 text-xs">Al momento non c'è nessuna operazione.</p>
+			@endforelse
 		</ul>
 	</div>
 </div>
