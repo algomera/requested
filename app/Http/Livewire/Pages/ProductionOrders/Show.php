@@ -15,10 +15,19 @@
 			1 => 'Completati'
 		];
 		public $currentTab = 0;
+		public $selectAll = false;
 		public $serials_checked = [];
 
 		public function mount(ProductionOrder $productionOrder) {
 			$this->production_order = $productionOrder;
+		}
+
+		public function updatedSelectAll($value) {
+			if ($value) {
+				$this->serials_checked = $this->production_order->serials()->where('completed', 0)->pluck('id');
+			} else {
+				$this->serials_checked = [];
+			}
 		}
 
 		public function setAsCompleted() {
@@ -28,14 +37,19 @@
 					'completed'    => true,
 					'completed_at' => now()
 				]);
+				if($this->production_order->status === 'created') {
+					$this->production_order->update([
+						'status' => 'active'
+					]);
+				}
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
 					'message' => "ha completato la matricola '{$serial->code}'"
 				]);
 			}
 			$this->dispatchBrowserEvent('open-notification', [
-				'title'    => __('Matricola/e completate'),
-				'type'     => 'success'
+				'title' => __('Matricola/e completate'),
+				'type'  => 'success'
 			]);
 			$this->serials_checked = [];
 		}
@@ -59,8 +73,8 @@
 			$logs = $this->production_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 			return view('livewire.pages.production-orders.show', [
 				'incompleted_serials' => $this->production_order->serials()->where('completed', 0)->paginate(25),
-				'completed_serials' => $this->production_order->serials()->where('completed', 1)->paginate(25),
-				'logs' => $logs
+				'completed_serials'   => $this->production_order->serials()->where('completed', 1)->paginate(25),
+				'logs'                => $logs
 			]);
 		}
 	}
