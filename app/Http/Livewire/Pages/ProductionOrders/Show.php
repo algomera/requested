@@ -37,14 +37,14 @@
 					'completed'    => true,
 					'completed_at' => now()
 				]);
-				if($this->production_order->status === 'created') {
-					$this->production_order->update([
-						'status' => 'active'
-					]);
-				}
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
 					'message' => "ha completato la matricola '{$serial->code}'"
+				]);
+			}
+			if($this->production_order->status === 'created') {
+				$this->production_order->update([
+					'status' => 'active'
 				]);
 			}
 			$this->dispatchBrowserEvent('open-notification', [
