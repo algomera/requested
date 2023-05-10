@@ -1,5 +1,5 @@
 <x-slot:header>
-	Ubicazioni
+	Destinazioni
 </x-slot:header>
 <div>
 	<div class="flow-root space-y-5">

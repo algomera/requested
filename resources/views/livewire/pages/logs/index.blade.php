@@ -1,5 +1,5 @@
 <x-slot:header>
-	Articoli
+	Log di sistema
 </x-slot:header>
 <div>
 	<div class="flow-root space-y-5">

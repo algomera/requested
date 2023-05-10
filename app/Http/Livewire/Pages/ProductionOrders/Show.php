@@ -2,6 +2,7 @@
 
 	namespace App\Http\Livewire\Pages\ProductionOrders;
 
+	use App\Models\Location;
 	use App\Models\Log;
 	use App\Models\ProductionOrder;
 	use App\Models\Serial;
@@ -37,6 +38,21 @@
 					'completed'    => true,
 					'completed_at' => now()
 				]);
+				// Aggiungo l'articolo prodotto nell'ubicazione di versamento
+				$versamento = Location::where('type', 'versamento')->first();
+				if($versamento->products()->where('product_id', $this->production_order->item->product->id)->exists()) {
+					$existing_quantity = $versamento->products()->where('product_id', $this->production_order->item->product->id)->first()->pivot->quantity;
+					$versamento->products()->syncWithoutDetaching([
+						$this->production_order->item->product->id => [
+							'quantity' => $existing_quantity + 1
+						]
+					]);
+				} else {
+					$versamento->products()->attach($this->production_order->item->product->id, [
+						'quantity' => 1
+					]);
+				}
+				// Decremento quantità dei prodotti utilizzati per la produzione dell'articolo
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
 					'message' => "ha completato la matricola '{$serial->code}'"
