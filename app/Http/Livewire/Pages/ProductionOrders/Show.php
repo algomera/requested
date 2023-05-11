@@ -52,7 +52,14 @@
 						'quantity' => 1
 					]);
 				}
-				// Decremento quantità dei prodotti utilizzati per la produzione dell'articolo
+				// TODO: Decremento quantità dei prodotti utilizzati per la produzione dell'articolo
+				// Capire se nella location Produzione c'è il prodotto da decrementare
+                $produzione = Location::with('products')->where('type', 'produzione')->first();
+                dd($produzione);
+                foreach ($this->production_order->item->products as $product) {
+                    dd($product->pivot->quantity);
+                }
+
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
 					'message' => "ha completato la matricola '{$serial->code}'"

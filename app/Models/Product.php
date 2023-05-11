@@ -11,7 +11,7 @@
 		use HasFactory, Searchable;
 
 		public function locations() {
-			return $this->belongsToMany(Location::class);
+			return $this->belongsToMany(Location::class)->withPivot('quantity');
 		}
 
 		public function items() {

@@ -11,6 +11,10 @@ class Serial extends Model
 
 	public $timestamps = false;
 
+	public function production_order() {
+		return $this->belongsTo(ProductionOrder::class);
+	}
+
 	public function logs() {
 		return $this->morphMany(Log::class, 'loggable');
 	}

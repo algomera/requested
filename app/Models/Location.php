@@ -10,15 +10,18 @@
 	{
 		use HasFactory, Searchable;
 
-		public function productQuantity($product_id) {
+		public function productQuantity($product_id)
+		{
 			return $this->products()->where('product_id', $product_id)->first()->pivot->quantity;
 		}
 
-		public function products() {
+		public function products()
+		{
 			return $this->belongsToMany(Product::class)->withPivot('quantity');
 		}
 
-		public function logs() {
+		public function logs()
+		{
 			return $this->morphMany(Log::class, 'loggable');
 		}
 	}
