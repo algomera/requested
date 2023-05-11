@@ -39,7 +39,11 @@
 		@switch($currentTab)
 			@case(0)
 				@if($incompleted_serials->count())
-					<p class="text-sm text-gray-600">In base ai prodotti in Produzione, si riescono a produrre <span class="font-bold">{{ $production_order->maxItemsProducibles }}</span> matricole</p>
+					@if($production_order->maxItemsProducibles === 0)
+						<p class="text-sm text-red-500">Non è possibile produrre alcuna matricola per mancanza di prodotti necessari nell'ubicazione di Produzione</p>
+					@else
+						<p class="text-sm text-gray-600">In base ai prodotti in Produzione, è possibile produrre <span class="font-bold">{{ $production_order->maxItemsProducibles }}</span> matricola/e</p>
+					@endif
 					<div class="overflow-x-auto" wire:key="incompleted">
 						<div class="inline-block min-w-full py-2 align-middle">
 							<table class="min-w-full divide-y divide-gray-300">
