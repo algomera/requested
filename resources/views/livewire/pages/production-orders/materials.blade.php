@@ -9,8 +9,8 @@
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					@foreach($production_order->item->products as $product)
 						<div class="flex items-center mb-0.5">
-							@php($count = $product->locations()->where('type', 'produzione')->get()->sum('pivot.quantity')) {{-- 3 --}}
-							@php($need = $production_order->serials()->where('completed', 0)->count()) {{-- 4 --}}
+							@php($count = $product->locations()->where('type', 'produzione')->get()->sum('pivot.quantity'))
+							@php($need = $production_order->serials()->where('completed', 0)->count())
 							@switch($count)
 								@case(0)
 									<div class="w-3 h-3 rounded-full bg-red-500"></div>
@@ -22,7 +22,7 @@
 									<div class="w-3 h-3 rounded-full bg-green-500"></div>
 									@break
 							@endswitch
-							<p class="ml-1 mr-2">
+							<p class="ml-1.5 mr-2">
 								{{ $product->pivot->quantity * $production_order->serials()->where('completed', 0)->count() }} &times; {{ $product->name }}
 							</p>
 							<div class="inline-flex items-center space-x-1 rounded-md bg-gray-50 px-2 py-1 mr-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
