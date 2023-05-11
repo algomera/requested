@@ -39,6 +39,7 @@
 		@switch($currentTab)
 			@case(0)
 				@if($incompleted_serials->count())
+					<p class="text-sm text-gray-600">In base ai prodotti in Produzione, si riescono a produrre <span class="font-bold">{{ $production_order->maxItemsProducibles }}</span> matricole</p>
 					<div class="overflow-x-auto" wire:key="incompleted">
 						<div class="inline-block min-w-full py-2 align-middle">
 							<table class="min-w-full divide-y divide-gray-300">

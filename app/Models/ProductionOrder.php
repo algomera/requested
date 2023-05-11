@@ -10,6 +10,23 @@
 	{
 		use HasFactory, Searchable;
 
+		public function getMaxItemsProduciblesAttribute() {
+			$quantities = $this->item->products->map(function ($product) {
+				return $product->locations()
+					->where('type', 'produzione')
+					->pluck('quantity');
+			});
+
+			$total = [];
+			foreach ($quantities as $item) {
+				$total[] = $item->sum();
+			}
+
+			$minQuantity = min($total);
+
+			return $minQuantity;
+		}
+
 		public function item() {
 			return $this->belongsTo(Item::class);
 		}
