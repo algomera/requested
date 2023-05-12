@@ -68,11 +68,12 @@
 								</thead>
 								<tbody class="divide-y divide-gray-200 bg-white">
 								@forelse($incompleted_serials as $incompleted)
-									<tr class="hover:bg-gray-50" wire:key="{{ $incompleted->id }}">
+									<tr class="hover:bg-gray-50 {{ count($serials_checked) === $production_order->maxItemsProducibles && !in_array($incompleted->id, $serials_checked) ? 'opacity-25' : '' }}" wire:key="{{ $incompleted->id }}">
 										@if($currentTab == 0)
 											<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
 												<input wire:model="serials_checked" type="checkbox"
 												       value="{{ $incompleted->id }}"
+													   {{ count($serials_checked) === $production_order->maxItemsProducibles && !in_array($incompleted->id, $serials_checked) ? 'disabled' : '' }}
 												       class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-600">
 											</td>
 										@endif

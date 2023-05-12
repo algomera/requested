@@ -25,13 +25,21 @@
 
 		public function updatedSelectAll($value) {
 			if ($value) {
-				$this->serials_checked = $this->production_order->serials()->where('completed', 0)->pluck('id');
+				$this->serials_checked = $this->production_order->serials()->where('completed', 0)->take($this->production_order->maxItemsProducibles)->pluck('id')->toArray();
 			} else {
 				$this->serials_checked = [];
 			}
 		}
 
 		public function setAsCompleted() {
+			if(count($this->serials_checked) > $this->production_order->maxItemsProducibles) {
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('ATTENZIONE!'),
+					'subtitle' => __("Puoi produrre {$this->production_order->maxItemsProducibles} matricola/e, ma stai cercando di produrne " . count($this->serials_checked) . "!"),
+					'type'  => 'error'
+				]);
+				return;
+			}
 			foreach ($this->serials_checked as $id) {
 				$serial = Serial::find($id);
 				$serial->update([
@@ -52,13 +60,10 @@
 						'quantity' => 1
 					]);
 				}
-				// TODO: Decremento quantità dei prodotti utilizzati per la produzione dell'articolo
-				// Capire se nella location Produzione c'è il prodotto da decrementare
                 $produzione = Location::with('products')->where('type', 'produzione')->first();
-                dd($produzione);
-                foreach ($this->production_order->item->products as $product) {
-                    dd($product->pivot->quantity);
-                }
+				foreach ($produzione->products as $product) {
+					$product->pivot->decrement('quantity', $this->production_order->item->products()->where('product_id', $product->id)->first()->pivot->quantity);
+				}
 
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
@@ -75,6 +80,7 @@
 				'type'  => 'success'
 			]);
 			$this->serials_checked = [];
+			$this->selectAll = false;
 		}
 
 		public function changeState() {
