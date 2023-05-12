@@ -11,20 +11,19 @@
 		use HasFactory, Searchable;
 
 		public function getMaxItemsProduciblesAttribute() {
-			$quantities = $this->item->products->map(function ($product) {
-				return $product->locations()
-					->where('type', 'produzione')
-					->pluck('quantity');
-			});
-
+			$products = $this->item->products;
 			$total = [];
-			foreach ($quantities as $item) {
-				$total[] = $item->sum();
+			foreach ($products as $product) {
+				$quantities = $product->locations()
+					->where('type', 'produzione')
+					->sum('quantity');
+
+				$total[] = $quantities / $product->pivot->quantity;
 			}
 
 			$minQuantity = min($total);
 
-			return $minQuantity;
+			return (int) floor($minQuantity);
 		}
 
 		public function item() {
