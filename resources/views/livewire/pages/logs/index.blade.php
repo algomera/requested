@@ -4,9 +4,14 @@
 <div>
 	<div class="flow-root space-y-5">
 		<div class="flex items-center justify-between">
-			<div class="flex-1 max-w-sm">
-				<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."
-				         append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
+			<div class="flex flex-1 space-x-3 items-center">
+				<div class="flex-1 max-w-sm">
+					<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."
+							 append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
+				</div>
+				<div class="w-full sm:w-56">
+					<x-flatpickr wire:model="selectedDateRange" for="selectedDate"/>
+				</div>
 			</div>
 		</div>
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
