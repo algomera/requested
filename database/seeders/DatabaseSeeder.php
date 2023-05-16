@@ -18,8 +18,8 @@
 				LocationSeeder::class,
 				ProductSeeder::class,
 				ItemSeeder::class,
-				ProductionOrderSeeder::class,
-				SerialSeeder::class,
+//				ProductionOrderSeeder::class,
+//				SerialSeeder::class,
 			]);
 		}
 	}

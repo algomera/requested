@@ -12,14 +12,25 @@
 		/**
 		 * Run the database seeds.
 		 */
-		public function run(): void {
-			foreach (range(1, 5) as $n) {
-				$item = Item::create([
-					'product_id' => Product::all()->shuffle()->first()->id
-				]);
-				$item->products()->attach(Product::all()->shuffle()->first(), [
-					'quantity' => fake()->numberBetween(1, 5)
-				]);
-			}
+		public function run(): void
+		{
+//			foreach (range(1, 5) as $n) {
+//				$item = Item::create([
+//					'product_id' => Product::all()->shuffle()->first()->id
+//				]);
+//				$item->products()->attach(Product::all()->shuffle()->first(), [
+//					'quantity' => fake()->numberBetween(1, 5)
+//				]);
+//
+//			}
+			$penna = Item::create([
+				'product_id' => Product::where('code', 'PENNA')->first()->id
+			]);
+			$penna->products()->attach(Product::where('code', 'TAPPO')->first(), [
+				'quantity' => 1
+			]);
+			$penna->products()->attach(Product::where('code', 'TUBO')->first(), [
+				'quantity' => 1
+			]);
 		}
 	}
