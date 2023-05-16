@@ -1,5 +1,12 @@
 <x-slot:header>
-	Fornitori
+	<div class="flex items-center justify-between">
+		Fornitori
+		<div>
+			<x-primary-button x-on:click="Livewire.emit('openModal', 'pages.suppliers.create')">
+				<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
+			</x-primary-button>
+		</div>
+	</div>
 </x-slot:header>
 <div>
 	<div class="flow-root space-y-5">
@@ -7,11 +14,6 @@
 			<div class="flex-1 max-w-sm">
 				<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."
 				         append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
-			</div>
-			<div>
-				<x-primary-button wire:click="$emit('openModal', 'pages.suppliers.create')">
-					<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
-				</x-primary-button>
 			</div>
 		</div>
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

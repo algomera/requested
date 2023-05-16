@@ -1,5 +1,12 @@
 <x-slot:header>
-	Ordini di produzione
+	<div class="flex items-center justify-between">
+		Ordini di produzione
+		<div>
+			<x-primary-button x-on:click="Livewire.emit('openModal', 'pages.production-orders.create')">
+				<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
+			</x-primary-button>
+		</div>
+	</div>
 </x-slot:header>
 <div>
 	<div class="flow-root space-y-5">
@@ -18,11 +25,6 @@
 					</x-select>
 				</div>
 			</div>
-			<div>
-				<x-primary-button wire:click="$emit('openModal', 'pages.production-orders.create')">
-					<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
-				</x-primary-button>
-			</div>
 		</div>
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
@@ -30,12 +32,16 @@
 					<thead>
 					<tr>
 						<th scope="col"
-						    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
+							class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
 							Codice
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità totale</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità completata</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità
+							totale
+						</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità
+							completata
+						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
 							creazione
 						</th>
@@ -65,17 +71,20 @@
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@switch($production_order->status)
 									@case('created')
-										<div class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+										<div
+											class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
 											{{ config('requested.production_orders.status.' . $production_order->status) }}
 										</div>
 										@break
 									@case('active')
-										<div class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
+										<div
+											class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
 											{{ config('requested.production_orders.status.' . $production_order->status) }}
 										</div>
 										@break
 									@case('completed')
-										<div class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+										<div
+											class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
 											{{ config('requested.production_orders.status.' . $production_order->status) }}
 										</div>
 										@break
@@ -83,9 +92,10 @@
 							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
-									<button wire:click.stop="$emit('openModal', 'pages.production-orders.edit', {{ json_encode(['production_order' => $production_order->id]) }})"
-									        type="button"
-									        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+									<button
+										wire:click.stop="$emit('openModal', 'pages.production-orders.edit', {{ json_encode(['production_order' => $production_order->id]) }})"
+										type="button"
+										class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
 									</button>
 									<a href="{{ route('production-orders.show', $production_order->id) }}"
@@ -94,16 +104,16 @@
 									</a>
 									@if($deletingId != $production_order->id)
 										<button wire:key="deleting-{{ $production_order->id }}"
-										        wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
-										        type="button"
-										        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+												wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
+												type="button"
+												class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 											<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>
 										</button>
 									@else
 										<button wire:key="confirm-{{ $production_order->id }}"
-										        x-init="setTimeout(() => $wire.deletingId = null, 5000)"
-										        wire:click.stop="delete({{ $production_order->id }})" type="button"
-										        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+												x-init="setTimeout(() => $wire.deletingId = null, 5000)"
+												wire:click.stop="delete({{ $production_order->id }})" type="button"
+												class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 											<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>
 										</button>
 									@endif
