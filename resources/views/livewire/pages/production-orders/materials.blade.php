@@ -23,7 +23,7 @@
 									@break
 							@endswitch
 							<p class="ml-1.5 mr-2">
-								{{ $product->pivot->quantity * $production_order->serials()->where('completed', 0)->count() }} &times; {{ $product->name }}
+								<span class="font-bold">{{ $product->pivot->quantity * $production_order->serials()->where('completed', 0)->count() }}{{ $product->units }}</span> &times; {{ $product->name }}
 							</p>
 							<div class="inline-flex items-center space-x-1 rounded-md bg-gray-50 px-2 py-1 mr-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
 								<span class="font-bold leading-none">{{ $product->locations()->where('type', 'produzione')->get()->sum('pivot.quantity') }}</span>
