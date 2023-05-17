@@ -96,7 +96,7 @@
 									   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</a>
-									@if($production_order->status !== 'completed')
+									@if(!in_array($production_order->status, ['active', 'completed']))
 										@if($deletingId != $production_order->id)
 											<button wire:key="deleting-{{ $production_order->id }}"
 													wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
