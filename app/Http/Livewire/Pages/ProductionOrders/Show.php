@@ -81,6 +81,7 @@
                 $produzione = Location::with('products')->where('type', 'produzione')->first();
 				foreach ($produzione->products as $product) {
 					$product->pivot->decrement('quantity', $this->production_order->item->products()->where('product_id', $product->id)->first()->pivot->quantity);
+					//TODO: eliminare record pivot se quantità è 0
 				}
 
 				$this->production_order->logs()->create([
