@@ -23,9 +23,6 @@
 					Completa {{ count($serials_checked) }}
 				</x-primary-button>
 			@endif
-			@if($incompleted_serials->count() === 0 && $production_order->status !== 'completed')
-				<x-primary-button wire:click="changeState" class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700">Completa l'Ordine</x-primary-button>
-			@endif
 		</div>
 
 		<div class="block">

@@ -32,6 +32,7 @@
 		}
 
 		public function setAsCompleted() {
+			// Verifica matricole
 			if(count($this->serials_checked) > $this->production_order->maxItemsProducibles) {
 				$this->dispatchBrowserEvent('open-notification', [
 					'title' => __('ATTENZIONE!'),
@@ -40,6 +41,23 @@
 				]);
 				return;
 			}
+
+			// Cambio status da "Creato" ad "Attivo"
+			if($this->production_order->status === 'created') {
+				$this->production_order->update([
+					'status' => 'active'
+				]);
+				$this->production_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha iniziato l'ordine di produzione"
+				]);
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Modifica Stato'),
+					'subtitle' => __('Lo stato dell\'ordine di produzione è passato ad "Attivo".'),
+					'type'  => 'success'
+				]);
+			}
+
 			foreach ($this->serials_checked as $id) {
 				$serial = Serial::find($id);
 				$serial->update([
@@ -70,15 +88,25 @@
 					'message' => "ha completato la matricola '{$serial->code}'"
 				]);
 			}
-			if($this->production_order->status === 'created') {
-				$this->production_order->update([
-					'status' => 'active'
-				]);
-			}
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Matricola/e completate'),
 				'type'  => 'success'
 			]);
+			// Cambio status da "Attivo" a "Completato"
+			if($this->production_order->status === 'active' && $this->production_order->serials()->where('completed', 0)->count() === 0) {
+				$this->production_order->update([
+					'status' => 'completed'
+				]);
+				$this->production_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha completato l'ordine di produzione"
+				]);
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Modifica Stato'),
+					'subtitle' => __('Lo stato dell\'ordine di produzione è passato a "Completato".'),
+					'type'  => 'success'
+				]);
+			}
 			$this->serials_checked = [];
 			$this->selectAll = false;
 		}
