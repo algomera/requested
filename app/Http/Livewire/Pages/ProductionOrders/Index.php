@@ -25,6 +25,10 @@
 		public function delete(ProductionOrder $production_order) {
 			$production_order->delete();
 			$this->emitSelf('$refresh');
+			$production_order->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha eliminato l'ordine di produzione '{$production_order->code}'"
+			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Ordine Eliminato'),
 				'subtitle' => __('L\'ordine di produzione è stato eliminato con successo!'),

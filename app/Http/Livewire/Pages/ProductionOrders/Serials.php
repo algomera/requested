@@ -29,7 +29,7 @@
 			$production_order = ProductionOrder::create($this->production_order);
 			$production_order->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha creato l'ordine di produzione n. " . $production_order->code
+				'message' => "ha creato l'ordine di produzione '{$production_order->code}'"
 			]);
 			foreach ($this->serials as $k => $serial) {
 				$production_order->serials()->create([
@@ -41,7 +41,7 @@
 			$this->forceClose()->closeModal();
 			$production_order->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha aggiunto {$production_order->quantity} matricole all'ordine di produzione n. " . $production_order->code
+				'message' => "ha aggiunto {$production_order->quantity} matricole all'ordine di produzione '{$production_order->code}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Ordine di produzione Creato'),
