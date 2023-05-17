@@ -18,7 +18,7 @@
 
 		protected function rules() {
 			return [
-				'code'           => 'required',
+				'code'           => 'required|unique:production_orders,code',
 				'item_id'        => 'required|exists:items,id',
 				'quantity'       => 'required|numeric|min:1',
 				'delivery_date'  => 'required|date|after:today',

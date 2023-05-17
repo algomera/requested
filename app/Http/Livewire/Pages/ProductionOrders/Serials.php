@@ -13,7 +13,7 @@
 
 		protected function rules() {
 			return [
-				'serials.*' => 'required',
+				'serials.*' => 'required|distinct',
 			];
 		}
 
