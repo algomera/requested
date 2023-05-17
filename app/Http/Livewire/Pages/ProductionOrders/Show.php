@@ -49,7 +49,7 @@
 				]);
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
-					'message' => "ha iniziato l'ordine di produzione"
+					'message' => "ha iniziato l'ordine di produzione '{$this->production_order->code}'"
 				]);
 				$this->dispatchBrowserEvent('open-notification', [
 					'title' => __('Modifica Stato'),
@@ -85,7 +85,7 @@
 
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
-					'message' => "ha completato la matricola '{$serial->code}'"
+					'message' => "ha completato la matricola '{$serial->code}' nell'ordine di produzione '{$this->production_order->code}'"
 				]);
 			}
 			$this->dispatchBrowserEvent('open-notification', [
@@ -99,7 +99,7 @@
 				]);
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
-					'message' => "ha completato l'ordine di produzione"
+					'message' => "ha completato l'ordine di produzione '{$this->production_order->code}'"
 				]);
 				$this->dispatchBrowserEvent('open-notification', [
 					'title' => __('Modifica Stato'),
