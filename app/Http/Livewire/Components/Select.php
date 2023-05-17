@@ -33,7 +33,14 @@
 				$this->searchFields[] = $subtitle;
 			}
 			if ($this->selected) {
-				$this->oldTitle = $this->model::where($this->return, $this->selected)->first()->{$this->titleToShow[0]}?->{$this->titleToShow[1]};
+				if (count($this->titleToShow) == 1) {
+					$relationName = $this->titleToShow[0];
+					$this->oldTitle = $this->model::where($this->return, $this->selected)->first()->{$relationName};
+				} elseif (count($this->titleToShow) == 2) {
+					$relationName = $this->titleToShow[0];
+					$relationAttribute = $this->titleToShow[0];
+					$this->oldTitle = $this->model::where($this->return, $this->selected)->first()->{$relationName}->{$relationAttribute};
+				}
 			}
 		}
 
