@@ -28,6 +28,10 @@ class Index extends Component
     public function delete(Location $location)
     {
         if ($location->products()->count()) {
+	        $location->logs()->create([
+		        'user_id' => auth()->id(),
+		        'message' => "ha provato ad eliminare l'ubicazione '{$location->code}', ma non è stato possibile perché contiene dei prodotti al suo interno"
+	        ]);
             $this->dispatchBrowserEvent('open-notification', [
                 'title' => __('Errore'),
                 'subtitle' => __('L\'ubicazione non può essere cancellata perché contiene dei prodotti'),
@@ -37,6 +41,10 @@ class Index extends Component
         }
         $location->delete();
         $this->emitSelf('$refresh');
+	    $location->logs()->create([
+		    'user_id' => auth()->id(),
+		    'message' => "ha eliminato l'ubicazione '{$location->code}'"
+	    ]);
         $this->dispatchBrowserEvent('open-notification', [
             'title' => __('Ubicazione Eliminata'),
             'subtitle' => __('L\'ubicazione è stata eliminata con successo!'),
