@@ -13,12 +13,7 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Articolo da produrre</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-select wire:model.defer="item_id">
-						<option value="" selected>Seleziona</option>
-						@foreach($all_items as $item)
-							<option value="{{ $item->id }}">{{ $item->product->code }}</option>
-						@endforeach
-					</x-select>
+					<livewire:components.select return="id" model="App\\Models\\Item" title="product.name" subtitle="product.code" />
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">

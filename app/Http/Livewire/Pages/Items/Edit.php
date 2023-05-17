@@ -12,6 +12,10 @@
 		public $ref;
 		public $products = [];
 
+		protected $listeners = [
+			'itemSelected',
+		];
+
 		protected function rules() {
 			return [
 				'item.product_id'           => 'required|exists:products,id',
@@ -24,6 +28,13 @@
 			'products.*.id'       => 'Seleziona un prodotto',
 			'products.*.quantity' => 'Quantità richiesta',
 		];
+
+		public function itemSelected($value)
+		{
+			$this->item->product_id = $value;
+			$product = Product::find($value);
+			$this->ref = $product;
+		}
 
 		public function mount(Item $item) {
 			$this->item = $item;

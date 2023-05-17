@@ -92,30 +92,32 @@
 							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
-									<button
-										wire:click.stop="$emit('openModal', 'pages.production-orders.edit', {{ json_encode(['production_order' => $production_order->id]) }})"
-										type="button"
-										class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
-									</button>
+{{--									<button--}}
+{{--										wire:click.stop="$emit('openModal', 'pages.production-orders.edit', {{ json_encode(['production_order' => $production_order->id]) }})"--}}
+{{--										type="button"--}}
+{{--										class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
+{{--										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>--}}
+{{--									</button>--}}
 									<a href="{{ route('production-orders.show', $production_order->id) }}"
 									   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</a>
-									@if($deletingId != $production_order->id)
-										<button wire:key="deleting-{{ $production_order->id }}"
-												wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
-												type="button"
-												class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-											<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>
-										</button>
-									@else
-										<button wire:key="confirm-{{ $production_order->id }}"
-												x-init="setTimeout(() => $wire.deletingId = null, 5000)"
-												wire:click.stop="delete({{ $production_order->id }})" type="button"
-												class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-											<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>
-										</button>
+									@if($production_order->status !== 'completed')
+										@if($deletingId != $production_order->id)
+											<button wire:key="deleting-{{ $production_order->id }}"
+													wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
+													type="button"
+													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+												<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>
+											</button>
+										@else
+											<button wire:key="confirm-{{ $production_order->id }}"
+													x-init="setTimeout(() => $wire.deletingId = null, 5000)"
+													wire:click.stop="delete({{ $production_order->id }})" type="button"
+													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+												<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>
+											</button>
+										@endif
 									@endif
 								</div>
 							</td>

@@ -13,7 +13,7 @@
 		public $products = [];
 
 		protected $listeners = [
-			'item-selected' => 'updatedProductId',
+			'itemSelected',
 		];
 
 		protected function rules()
@@ -30,7 +30,7 @@
 			'products.*.quantity' => 'Quantità richiesta',
 		];
 
-		public function updatedProductId($value)
+		public function itemSelected($value)
 		{
 			$this->product_id = $value;
 			$product = Product::find($value);

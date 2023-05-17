@@ -4,12 +4,17 @@
 
 	use App\Models\Destination;
 	use App\Models\Item;
+	use App\Models\Product;
 	use App\Models\ProductionOrder;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Create extends ModalComponent
 	{
 		public $code, $item_id, $quantity, $delivery_date, $destination_id;
+
+		protected $listeners = [
+			'itemSelected',
+		];
 
 		protected function rules() {
 			return [
@@ -19,6 +24,11 @@
 				'delivery_date'  => 'required|date|after:today',
 				'destination_id' => 'required|exists:destinations,id'
 			];
+		}
+
+		public function itemSelected($value)
+		{
+			$this->item_id = $value;
 		}
 
 		public function save() {
