@@ -20,7 +20,7 @@
 
 		public function save() {
 			$this->validate();
-			Product::create([
+			$product = Product::create([
 				'code'        => $this->code,
 				'name'        => $this->name,
 				'description' => $this->description,
@@ -28,6 +28,10 @@
 			]);
 			$this->emitTo('pages.products.index', 'product-created');
 			$this->closeModal();
+			$product->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha creato il prodotto '{$product->name}'"
+			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Prodotto Creato'),
 				'subtitle' => __('Il prodotto è stato creato con successo!'),

@@ -25,6 +25,10 @@
 		public function delete(Product $product) {
 			$product->delete();
 			$this->emitSelf('$refresh');
+			$product->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha eliminato il prodotto '{$product->name}'"
+			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Prodotto Eliminato'),
 				'subtitle' => __('Il prodotto è stato eliminato con successo!'),
