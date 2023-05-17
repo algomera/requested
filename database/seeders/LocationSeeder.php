@@ -13,45 +13,35 @@ class LocationSeeder extends Seeder
      */
     public function run(): void
     {
-        $location_1 = Location::create([
-			'code' => 'A0101',
-			'description' => 'A 01 01',
-			'type' => fake()->randomElement(array_keys(config('requested.locations.types'))),
+	    $ricevimento = Location::create([
+		    'code' => 'RICEVIM',
+		    'description' => 'Ricevimento',
+		    'type' => 'ricevimento',
+	    ]);
+	    $grandi_quantita = Location::create([
+		    'code' => 'GRANDI',
+		    'description' => 'Grandi quantità',
+		    'type' => 'grandi_quantita',
+	    ]);
+        $produzione = Location::create([
+			'code' => 'PRODUZ',
+			'description' => 'Produzione',
+			'type' => 'produzione',
         ]);
-	    $location_2 = Location::create([
-		    'code' => 'A0102',
-		    'description' => 'A 01 02',
-		    'type' => fake()->randomElement(array_keys(config('requested.locations.types'))),
+	    $scarto = Location::create([
+		    'code' => 'SCARTO',
+		    'description' => 'Scarto',
+		    'type' => 'scarto',
 	    ]);
-	    $location_3 = Location::create([
-		    'code' => 'A0103',
-		    'description' => 'A 01 03',
-		    'type' => fake()->randomElement(array_keys(config('requested.locations.types'))),
+	    $versamento = Location::create([
+		    'code' => 'VERSAM',
+		    'description' => 'Versamento',
+		    'type' => 'versamento',
 	    ]);
-	    $location_4 = Location::create([
-		    'code' => 'A0201',
-		    'description' => 'A 02 01',
-		    'type' => fake()->randomElement(array_keys(config('requested.locations.types'))),
-	    ]);
-	    $location_5 = Location::create([
-		    'code' => 'A0205',
-		    'description' => 'A 02 05',
-		    'type' => fake()->randomElement(array_keys(config('requested.locations.types'))),
-	    ]);
-	    $location_6 = Location::create([
-		    'code' => 'A0203',
-		    'description' => 'A 02 03',
-		    'type' => fake()->randomElement(array_keys(config('requested.locations.types'))),
-	    ]);
-	    $location_7 = Location::create([
-		    'code' => 'B0101',
-		    'description' => 'B 01 01',
-		    'type' => fake()->randomElement(array_keys(config('requested.locations.types'))),
-	    ]);
-	    $location_8 = Location::create([
-		    'code' => 'B0102',
-		    'description' => 'B 01 02',
-		    'type' => fake()->randomElement(array_keys(config('requested.locations.types'))),
+	    $spedizione = Location::create([
+		    'code' => 'SPEDIZ',
+		    'description' => 'Spedizione',
+		    'type' => 'spedizione',
 	    ]);
     }
 }
