@@ -49,7 +49,7 @@
 			$this->selected = $item[$this->return];
 			$this->title2 = $title;
 			$this->oldTitle = $title;
-			$this->emit('itemSelected', $item[$this->return]);
+			$this->emitUp('itemSelected', $item[$this->return]);
 		}
 
 		public function render()
