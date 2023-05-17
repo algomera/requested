@@ -25,6 +25,10 @@
 			$item->delete();
 			$item->products()->detach();
 			$this->emitSelf('$refresh');
+			$item->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha eliminato l'articolo '{$item->product->name}'"
+			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Articolo Eliminato'),
 				'subtitle' => __('L\' articolo è stato eliminato con successo!'),

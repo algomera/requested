@@ -63,6 +63,10 @@
 			}
 			$this->emitTo('pages.items.index', 'item-created');
 			$this->closeModal();
+			$item->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha creato l'articolo '{$item->product->name}'"
+			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Articolo Creato'),
 				'subtitle' => __('L\' articolo è stato creato con successo!'),
