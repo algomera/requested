@@ -2,6 +2,7 @@
 
 	namespace App\Http\Livewire\Components;
 
+	use Illuminate\Support\Arr;
 	use Livewire\Component;
 
 	class Select extends Component
@@ -16,7 +17,7 @@
 		public $titleToShow;
 		public $subtitleToShow;
 		public $searchFields = [];
-		public $data, $disabled, $required, $name, $label, $hint, $append = 'heroicon-o-chevron-up-down', $prepend, $iconColor;
+		public $return, $disabled, $required, $name, $label, $hint, $append = 'heroicon-o-chevron-down', $prepend, $iconColor;
 
 		public function mount($model, $title, $subtitle = null)
 		{
@@ -31,14 +32,17 @@
 			if ($subtitle) {
 				$this->searchFields[] = $subtitle;
 			}
+			if ($this->selected) {
+				$this->oldTitle = $this->model::where($this->return, $this->selected)->first()->{$this->titleToShow[0]}?->{$this->titleToShow[1]};
+			}
 		}
 
 		public function selectItem($title, $item)
 		{
-			$this->selected = $item[$this->data];
+			$this->selected = $item[$this->return];
 			$this->title2 = $title;
 			$this->oldTitle = $title;
-			$this->emit('item-selected', $item[$this->data]);
+			$this->emit('itemSelected', $item[$this->return]);
 		}
 
 		public function render()

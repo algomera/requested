@@ -73,7 +73,8 @@
 			<input x-on:focus="active = true" x-on:click.outside="active = false" :value="value"
 				   type="text"
 				   tabindex="-1"
-				   wire:model="query"
+				   wire:ignore.self
+				   wire:model.debounce.500ms="query"
 				   {{ $attributes->merge(['class' => $inputClass]) }}
 				   {{ $disabled ? 'disabled' : '' }}
 				   {{ $required ? 'required' : '' }}
@@ -101,9 +102,9 @@
 						@foreach($items as $item)
 							<li wire:click="selectItem('{{ getTitle($titleToShow, $item) }}', {{ $item }})"
 								class="text-gray-900 relative cursor-default select-none py-2 pl-3 pr-9 hover:cursor-pointer hover:bg-gray-200">
-								<p class="{{ $selected === $item->id ? 'font-semibold' : 'font-normal' }} truncate">{{ getTitle($titleToShow, $item) }}</p>
+								<p class="{{ $selected && $selected == $item->$return ? 'font-semibold' : 'font-normal' }} truncate">{{ getTitle($titleToShow, $item) }}</p>
 								<p class="text-xs text-gray-500">{{ getSubtitle($subtitleToShow, $item) }}</p>
-								@if($selected === $item->id)
+								@if($selected && $selected == $item->$return)
 									<div class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4">
 										<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
 											<path fill-rule="evenodd"
