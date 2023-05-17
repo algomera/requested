@@ -63,6 +63,10 @@
 							]
 						]);
 					}
+					$this->current_location->logs()->create([
+						'user_id' => auth()->id(),
+						'message' => "ha trasferito {$loc['quantity']} '{$this->product->name}' dall'ubicazione '{$this->current_location->code}' all'ubicazione '{$l->code}'"
+					]);
 				}
 				$this->current_location->products()->where('product_id', $this->product->id)->first()->pivot->update([
 					'quantity' => $this->quantity_in_location - $total_quantity_to_transfer
