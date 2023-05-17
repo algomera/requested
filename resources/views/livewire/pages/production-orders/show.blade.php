@@ -48,9 +48,10 @@
 								<tr>
 									<th scope="col"
 									    class="w-[50px] py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
-										<span class="sr-only">Check</span>
+										@if($production_order->maxItemsProducibles !== 0)
 										<input wire:model="selectAll" type="checkbox"
 										       class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-600">
+										@endif
 									</th>
 									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
 										Matricola

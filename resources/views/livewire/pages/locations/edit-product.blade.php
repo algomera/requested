@@ -13,7 +13,7 @@
 				<dt class="text-sm font-medium text-gray-900">Nuova quantità</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					<div class="w-[120px]">
-						<x-input wire:model="quantity" type="number" step="1" min="1"/>
+						<x-input wire:model="quantity" type="number" step="1" min="0"/>
 					</div>
 				</dd>
 			</div>
