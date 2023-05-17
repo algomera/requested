@@ -9,15 +9,18 @@
 	{
 		public $location;
 		protected $listeners = [
-			'product-added'       => '$refresh',
+			'product-added' => '$refresh',
+			'product-updated' => '$refresh',
 			'product-transferred' => '$refresh'
 		];
 
-		public function mount(Location $location) {
+		public function mount(Location $location)
+		{
 			$this->location = $location;
 		}
 
-		public function render() {
+		public function render()
+		{
 			return view('livewire.pages.locations.show');
 		}
 	}

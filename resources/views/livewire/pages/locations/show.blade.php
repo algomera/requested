@@ -30,10 +30,17 @@
 									<span>{{ $product->name }}</span>
 									<p class="text-xs text-zinc-500">{{ $product->code }} &middot; <span class="text-zinc-700 font-semibold">{{ $product->pivot->quantity }} {{ config('requested.products.units.' . $product->units) }}</span></p>
 								</div>
-								<button wire:click="$emit('openModal', 'pages.locations.change', {{ json_encode(['product' => $product->id, 'current_location' => $location->id])}})" type="button"
-								        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-									<x-heroicon-o-arrows-right-left class="w-4 stroke-zinc-900"/>
-								</button>
+								<div class="inline-flex items-center justify-end space-x-3">
+									<button wire:click.stop="$emit('openModal', 'pages.locations.edit-product', {{ json_encode(['product' => $product->id, 'location' => $location->id])}})"
+											type="button"
+											class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
+									</button>
+									<button wire:click="$emit('openModal', 'pages.locations.change', {{ json_encode(['product' => $product->id, 'current_location' => $location->id])}})" type="button"
+											class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+										<x-heroicon-o-arrows-right-left class="w-4 stroke-zinc-900"/>
+									</button>
+								</div>
 							</li>
 						@empty
 							<li>

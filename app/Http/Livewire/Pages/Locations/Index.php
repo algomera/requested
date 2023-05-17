@@ -16,7 +16,8 @@ class Index extends Component
         'location-updated' => '$refresh',
         'location-created' => '$refresh',
         'product-transferred' => '$refresh',
-        'product-added' => '$refresh'
+        'product-added' => '$refresh',
+	    'product-updated' => '$refresh',
     ];
 
     public function updatingSearch()
