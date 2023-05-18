@@ -10,7 +10,8 @@
 	{
 		use HasFactory, Searchable;
 
-		public function getMaxItemsProduciblesAttribute() {
+		public function getMaxItemsProduciblesAttribute()
+		{
 			$products = $this->item->products;
 			$total = [];
 			foreach ($products as $product) {
@@ -23,22 +24,46 @@
 
 			$minQuantity = min($total);
 
-			return (int) floor($minQuantity);
+			return (int)floor($minQuantity);
 		}
 
-		public function item() {
+		public function getWarehouseOrderStatus()
+		{
+			$products = $this->warehouse_order_products;
+			$statuses = $products->pluck('pivot.status')->unique();
+
+			if ($statuses->count() === 1 && $statuses->first() === 'to_transfer') {
+				return 'to_transfer';
+			} elseif ($statuses->contains('partially_transferred') || $statuses->contains('to_transfer')) {
+				return 'partially_transferred';
+			} elseif ($statuses->contains('transferred')) {
+				return 'transferred';
+			}
+		}
+
+
+		public function item()
+		{
 			return $this->belongsTo(Item::class);
 		}
 
-		public function destination() {
+		public function destination()
+		{
 			return $this->belongsTo(Destination::class);
 		}
 
-		public function serials() {
+		public function serials()
+		{
 			return $this->hasMany(Serial::class);
 		}
 
-		public function logs() {
+		public function logs()
+		{
 			return $this->morphMany(Log::class, 'loggable');
+		}
+
+		public function warehouse_order_products()
+		{
+			return $this->belongsToMany(Product::class, 'production_orders_products')->withPivot(['quantity_needed', 'quantity_transferred', 'status']);
 		}
 	}

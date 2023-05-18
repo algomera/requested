@@ -19,9 +19,9 @@
 				<div>
 					<x-select wire:model="status">
 						<option value="">Tutti</option>
-						<option value="completed">Completati</option>
-						<option value="active">Attivi</option>
-						<option value="created">Creati</option>
+						<option value="to_transfer">Da trasferire</option>
+						<option value="partially_transferred">Parzialmente trasferiti</option>
+						<option value="transferred">Trasferiti</option>
 					</x-select>
 				</div>
 			</div>
@@ -36,20 +36,20 @@
 							Codice
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità
-							totale
-						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità
-							completata
-						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
-							creazione
-						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
-							consegna
-						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione
-						</th>
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità--}}
+{{--							totale--}}
+{{--						</th>--}}
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità--}}
+{{--							completata--}}
+{{--						</th>--}}
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
+{{--							creazione--}}
+{{--						</th>--}}
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
+{{--							consegna--}}
+{{--						</th>--}}
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione--}}
+{{--						</th>--}}
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
@@ -63,29 +63,29 @@
 								{{ $production_order->code }}
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->item->product->name }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->serials()->where('completed', 1)->count() }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination->name }}</td>
+							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>--}}
+							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->serials()->where('completed', 1)->count() }}</td>--}}
+							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>--}}
+							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>--}}
+							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination->name }}</td>--}}
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-								@switch($production_order->status)
-									@case('created')
+								@switch($production_order->getWarehouseOrderStatus())
+									@case('to_transfer')
 										<div
 											class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-											{{ config('requested.production_orders.status.' . $production_order->status) }}
+											{{ config('requested.warehouse_orders.status.to_transfer') }}
 										</div>
 										@break
-									@case('active')
+									@case('partially_transferred')
 										<div
 											class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
-											{{ config('requested.production_orders.status.' . $production_order->status) }}
+											{{ config('requested.warehouse_orders.status.partially_transferred') }}
 										</div>
 										@break
-									@case('completed')
+									@case('transferred')
 										<div
 											class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-											{{ config('requested.production_orders.status.' . $production_order->status) }}
+											{{ config('requested.warehouse_orders.status.transferred') }}
 										</div>
 										@break
 								@endswitch

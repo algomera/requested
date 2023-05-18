@@ -1,27 +1,34 @@
 <?php
 	return [
-		'products'          => [
+		'products' => [
 			'units' => [
-				'l'  => 'Litri',
+				'l' => 'Litri',
 				'mt' => 'Metri',
 				'pz' => 'Pezzi',
 			]
 		],
-		'locations'         => [
+		'locations' => [
 			'types' => [
-				'ricevimento'     => 'Ricevimento',
+				'ricevimento' => 'Ricevimento',
 				'grandi_quantita' => 'Grandi quantità',
-				'produzione'      => 'Produzione',
-				'scarto'          => 'Scarto',
-				'versamento'      => 'Versamento',
-				'spedizione'      => 'Spedizione',
+				'produzione' => 'Produzione',
+				'scarto' => 'Scarto',
+				'versamento' => 'Versamento',
+				'spedizione' => 'Spedizione',
 			]
 		],
 		'production_orders' => [
 			'status' => [
-				'created'   => 'Creato',
-				'active'    => 'Attivo',
+				'created' => 'Creato',
+				'active' => 'Attivo',
 				'completed' => 'Completato',
+			]
+		],
+		'warehouse_orders' => [
+			'status' => [
+				'to_transfer' => 'Da trasferire',
+				'partially_transferred' => 'Parzialmente trasferito',
+				'transferred' => 'Trasferito',
 			]
 		]
 	];

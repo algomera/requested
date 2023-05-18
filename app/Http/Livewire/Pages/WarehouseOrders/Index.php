@@ -14,15 +14,17 @@
 		public $status = null;
 		public $deletingId = null;
 		protected $listeners = [
-			'production_order-updated'    => '$refresh',
-			'production_order-created'    => '$refresh',
+			'production_order-updated' => '$refresh',
+			'production_order-created' => '$refresh',
 		];
 
-		public function updatingSearch() {
+		public function updatingSearch()
+		{
 			$this->resetPage();
 		}
 
-		public function delete(ProductionOrder $production_order) {
+		public function delete(ProductionOrder $production_order)
+		{
 			$production_order->delete();
 			$this->emitSelf('$refresh');
 			$production_order->logs()->create([
@@ -30,21 +32,27 @@
 				'message' => "ha eliminato l'ordine di produzione '{$production_order->code}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
-				'title'    => __('Ordine Eliminato'),
+				'title' => __('Ordine Eliminato'),
 				'subtitle' => __('L\'ordine di produzione è stato eliminato con successo!'),
-				'type'     => 'success'
+				'type' => 'success'
 			]);
 		}
 
-		public function render() {
-			$production_orders = ProductionOrder::query();
-			if ($this->status) {
-				$production_orders->where('status', $this->status);
+		public function render()
+		{
+			if ($this->status === null || $this->status === '') {
+				$production_orders = ProductionOrder::search($this->search, [
+					'code',
+				])->with('warehouse_order_products');
+			} else {
+				$production_orders = ProductionOrder::search($this->search, [
+					'code',
+				])->with('warehouse_order_products')->get()->filter(function ($order) {
+					return $order->getWarehouseOrderStatus() === $this->status;
+				});
 			}
 			return view('livewire.pages.warehouse-orders.index', [
-				'production_orders' => $production_orders->search($this->search, [
-					'code',
-				])->with('destination', 'item')->paginate(25)
+				'production_orders' => $production_orders->paginate(25)
 			]);
 		}
 	}
