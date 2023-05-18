@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 	Route::get('/items', \App\Http\Livewire\Pages\Items\Index::class)->name('items.index');
 	Route::get('/production-orders', \App\Http\Livewire\Pages\ProductionOrders\Index::class)->name('production-orders.index');
 	Route::get('/production-orders/{productionOrder}', \App\Http\Livewire\Pages\ProductionOrders\Show::class)->name('production-orders.show');
+	Route::get('/warehouse-orders', \App\Http\Livewire\Pages\WarehouseOrders\Index::class)->name('warehouse-orders.index');
 	Route::get('/users', \App\Http\Livewire\Pages\Users\Index::class)->name('users.index');
 	Route::get('/suppliers', \App\Http\Livewire\Pages\Suppliers\Index::class)->name('suppliers.index');
 	Route::get('/destinations', \App\Http\Livewire\Pages\Destinations\Index::class)->name('destinations.index');

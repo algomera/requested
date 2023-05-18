@@ -43,6 +43,12 @@
 		</a>
 	</li>
 	<li>
+		<a class="{{ request()->is('warehouse-orders*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
+		   href="{{ route('warehouse-orders.index') }}">
+			Ordini di Magazzino
+		</a>
+	</li>
+	<li>
 		<h2 class="text-xs font-semibold text-zinc-900">Anagrafiche</h2>
 		<div class="relative mt-3 pl-2">
 			<div class="absolute inset-y-0 left-2 w-px bg-zinc-900/10"></div>
