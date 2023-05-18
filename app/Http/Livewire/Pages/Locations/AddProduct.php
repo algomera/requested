@@ -16,6 +16,14 @@
 			return true;
 		}
 
+		protected $listeners = [
+			'itemSelected',
+		];
+
+		public function itemSelected($value) {
+			$this->product = $value;
+		}
+
 		protected function rules() {
 			return [
 				'product'  => 'required',

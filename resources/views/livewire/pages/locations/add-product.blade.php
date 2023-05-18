@@ -1,4 +1,4 @@
-<form wire:submit.prevent="save" class="overflow-hidden bg-white shadow sm:rounded-lg">
+<form wire:submit.prevent="save" class="bg-white shadow sm:rounded-lg">
     <div class="px-4 py-6 sm:px-6">
         <h3 class="text-base font-semibold leading-7 text-gray-900">
             Aggiungi prodotto in: {{ $location->code }}
@@ -14,12 +14,7 @@
 	                        <li class="py-3 flex items-center justify-between">
 		                        <div class="flex items-center w-full space-x-3">
 			                        <div class="flex-1">
-				                        <x-select wire:model="product">
-					                        <option value="" selected>Seleziona</option>
-					                        @foreach($all_products as $prod)
-						                        <option value="{{ $prod->id }}">{{ $prod->code }} ({{ $prod->units }})</option>
-					                        @endforeach
-				                        </x-select>
+										<livewire:components.select return="id" model="App\\Models\\Product" title="name" subtitle="code" />
 			                        </div>
 			                        <div class="w-[120px]">
 				                        <x-input wire:model="quantity" type="number" step="1" min="1"/>
