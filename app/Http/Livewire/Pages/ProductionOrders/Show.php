@@ -3,13 +3,15 @@
 	namespace App\Http\Livewire\Pages\ProductionOrders;
 
 	use App\Models\Location;
-	use App\Models\Log;
 	use App\Models\ProductionOrder;
 	use App\Models\Serial;
 	use Livewire\Component;
+	use Livewire\WithPagination;
 
 	class Show extends Component
 	{
+		use WithPagination;
+
 		public $production_order;
 		public $tabs = [
 			0 => 'Da produrre',
@@ -129,9 +131,10 @@
 
 		public function render() {
 			$logs = $this->production_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
+			$serials = $this->production_order->serials();
 			return view('livewire.pages.production-orders.show', [
-				'incompleted_serials' => $this->production_order->serials()->where('completed', 0)->paginate(25),
-				'completed_serials'   => $this->production_order->serials()->where('completed', 1)->paginate(25),
+				'incompleted_serials' => $serials->where('completed', 0)->paginate(25),
+				'completed_serials'   => $serials->where('completed', 1)->paginate(25),
 				'logs'                => $logs
 			]);
 		}
