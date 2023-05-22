@@ -20,8 +20,8 @@
 				'email'      => 'admin@example.test',
 			])->assignRole(Role::findByName('admin'));
 			// Magazzinieri
-			User::factory(5)->create()->each(function ($u) {
-				$u->assignRole(Role::findByName('warehouseman'));
-			});
+//			User::factory(5)->create()->each(function ($u) {
+//				$u->assignRole(Role::findByName('warehouseman'));
+//			});
 		}
 	}

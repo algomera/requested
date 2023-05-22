@@ -3,6 +3,7 @@
 	namespace Database\Seeders;
 	// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 	use Illuminate\Database\Seeder;
+	use Illuminate\Support\Facades\DB;
 
 	class DatabaseSeeder extends Seeder
 	{
@@ -13,13 +14,15 @@
 			$this->call([
 				RolesPermissionsSeeder::class,
 				UserSeeder::class,
-				DestinationSeeder::class,
-				SupplierSeeder::class,
-				LocationSeeder::class,
-				ProductSeeder::class,
-				ItemSeeder::class,
-				ProductionOrderSeeder::class,
-				SerialSeeder::class,
+//				DestinationSeeder::class,
+//				SupplierSeeder::class,
+//				LocationSeeder::class,
+//				ProductSeeder::class,
+//				ItemSeeder::class,
+//				ProductionOrderSeeder::class,
+//				SerialSeeder::class,
 			]);
+			$sql = 'app/database/test_data.sql';
+			DB::unprepared(file_get_contents($sql));
 		}
 	}

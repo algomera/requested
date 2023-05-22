@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
 			$table->foreignIdFor(\App\Models\ProductionOrder::class, 'production_order_id');
 			$table->foreignIdFor(\App\Models\Product::class, 'product_id');
-			$table->integer('quantity_needed');
-			$table->integer('quantity_transferred');
+			$table->float('quantity_needed');
+			$table->float('quantity_transferred');
 	        $table->enum('status', array_keys(config('requested.warehouse_orders.status')));
             $table->timestamps();
         });

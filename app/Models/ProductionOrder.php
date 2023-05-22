@@ -12,10 +12,10 @@
 
 		public function getMaxItemsProduciblesAttribute()
 		{
-			$products = $this->item->products;
+			$products = $this->item->products()->with('locations')->get();
 			$total = [];
 			foreach ($products as $product) {
-				$quantities = $product->locations()
+				$quantities = $product->locations
 					->where('type', 'produzione')
 					->sum('quantity');
 

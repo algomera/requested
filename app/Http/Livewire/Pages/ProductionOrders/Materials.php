@@ -9,6 +9,11 @@
 	{
 		public $production_order;
 
+		public static function modalMaxWidth(): string
+		{
+			return '4xl';
+		}
+
 		public function mount(ProductionOrder $production_order) {
 			$this->production_order = $production_order;
 		}
