@@ -27,9 +27,11 @@
 				'product_id' => Product::where('code', 'PENNA')->first()->id
 			]);
 			$penna->products()->attach(Product::where('code', 'TAPPO')->first(), [
+				'position' => 0,
 				'quantity' => 1
 			]);
 			$penna->products()->attach(Product::where('code', 'TUBO')->first(), [
+				'position' => 1,
 				'quantity' => 1
 			]);
 		}

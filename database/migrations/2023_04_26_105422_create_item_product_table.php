@@ -12,7 +12,8 @@
 			Schema::create('item_product', function (Blueprint $table) {
 				$table->foreignIdFor(\App\Models\Item::class, 'item_id');
 				$table->foreignIdFor(\App\Models\Product::class, 'product_id');
-				$table->integer('quantity');
+				$table->integer('position')->nullable();
+				$table->double('quantity');
 			});
 		}
 

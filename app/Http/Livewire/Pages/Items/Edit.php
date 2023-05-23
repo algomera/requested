@@ -36,10 +36,18 @@
 			$this->ref = $product;
 		}
 
+		public function sortItemProductsOrder($sortOrder, $previousSortOrder, $name, $from, $to) {
+			$old_products = $this->products;
+			foreach ($sortOrder as $index => $prev_index) {
+				$old_products[$index] = $this->products[$prev_index];
+			}
+			$this->products = $old_products;
+		}
+
 		public function mount(Item $item) {
 			$this->item = $item;
 			$this->ref = $item->product;
-			foreach ($item->products as $product) {
+			foreach ($item->products()->orderBy('position')->get() as $product) {
 				$this->products[] = [
 					'id'       => $product->id,
 					'quantity' => $product->pivot->quantity
@@ -64,9 +72,10 @@
 			$this->validate();
 			$this->item->update();
 			$this->item->products()->detach();
-			foreach ($this->products as $product) {
+			foreach ($this->products as $k => $product) {
 				$this->item->products()->attach([
 					$product['id'] => [
+						'position' => $k,
 						'quantity' => $product['quantity']
 					]
 				]);

@@ -9,15 +9,9 @@
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $item->product->code }}</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-				<dt class="text-sm font-medium text-gray-900">Nome</dt>
-				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<span class="italic">{{ $item->product->name ?: '-' }}</span>
-				</dd>
-			</div>
-			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Descrizione</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<span class="italic">{{ $item->product->description ?: '-' }}</span>
+					<span class="italic">{{ $item->product->description }}</span>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -27,13 +21,13 @@
 						@forelse($item->products as $product)
 							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-start justify-between">
 								<div class="flex flex-col space-y-0.5">
-									<span>{{ $product->code }} &middot; {{ $product->name }}</span>
+									<span>{{ $product->code }} &middot; {{ $product->description }}</span>
 									<p class="text-xs text-zinc-500">
 										<span class="text-zinc-400 font-semibold">In magazzino: {{ $product->locations()->sum('quantity') }}</span>
 									</p>
 								</div>
 								<div class="flex flex-col text-right space-y-0.5">
-									<p class="text-xs text-zinc-700 font-semibold leading-7">{{ $product->pivot->quantity }} {{ config('requested.products.units.' . $product->units) }}</span></p>
+									<p class="text-xs text-zinc-700 font-semibold leading-7">{{ $product->pivot->quantity }} {{ $product->unit->description }}</span></p>
 								</div>
 							</li>
 						@empty

@@ -37,6 +37,15 @@
 			$this->ref = $product;
 		}
 
+		public function sortItemProductsOrder($sortOrder, $previousSortOrder, $name, $from, $to)
+		{
+			$old_products = $this->products;
+			foreach ($sortOrder as $index => $prev_index) {
+				$old_products[$index] = $this->products[$prev_index];
+			}
+			$this->products = $old_products;
+		}
+
 		public function addProduct()
 		{
 			$this->products[] = new Product();
@@ -53,10 +62,11 @@
 			$item = Item::create([
 				'product_id' => $this->ref->id,
 			]);
-			foreach ($this->products as $product) {
+			foreach ($this->products as $k => $product) {
 				$p = Product::find($product['id']);
 				$item->products()->attach([
 					$p->id => [
+						'position' => $k,
 						'quantity' => $product['quantity']
 					]
 				]);

@@ -12,7 +12,7 @@
 			Schema::create('location_product', function (Blueprint $table) {
 				$table->foreignIdFor(\App\Models\Location::class, 'location_id');
 				$table->foreignIdFor(\App\Models\Product::class, 'product_id');
-				$table->float('quantity');
+				$table->double('quantity');
 			});
 		}
 

@@ -17,6 +17,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/it.min.js"></script>
 
 		<!-- Scripts -->
+		<x-laravel-blade-sortable::scripts/>
 		@vite(['resources/css/app.css', 'resources/js/app.js'])
 
 		@stack('styles')
