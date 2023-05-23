@@ -1,4 +1,4 @@
-@props(['disabled' => false, 'required' => false, 'name', 'label' => false, 'hint' => false, 'append' => false, 'prepend' => false, 'iconColor' => 'text-gray-800'])
+@props(['event' => null, 'to' => null, 'disabled' => false, 'required' => false, 'name', 'label' => false, 'hint' => false, 'append' => false, 'prepend' => false, 'iconColor' => 'text-gray-800'])
 @php
 	$n = $attributes->wire('model')->value() ?: $name;
 	$slug = $attributes->wire('model')->value() ?: $n;
@@ -100,7 +100,7 @@
 					tabindex="-1">
 					@if($items->count() > 0)
 						@foreach($items as $item)
-							<li wire:click="selectItem('{{ getTitle($titleToShow, $item) }}', {{ $item }})"
+							<li wire:click="selectItem('{{ getTitle($titleToShow, $item) }}', {{ $item }}, '{{ $event }}', {{ $to }})"
 								wire:key="{{ $item->id }}"
 								class="text-gray-900 relative cursor-default select-none py-2 pl-3 pr-9 hover:cursor-pointer hover:bg-gray-200">
 								<p class="{{ $selected && $selected == $item->$return ? 'font-semibold' : 'font-normal' }} truncate">{{ getTitle($titleToShow, $item) }}</p>

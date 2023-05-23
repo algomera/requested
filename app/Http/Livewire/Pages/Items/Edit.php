@@ -14,7 +14,12 @@
 
 		protected $listeners = [
 			'itemSelected',
+			'setProductToItem'
 		];
+
+		public function setProductToItem($val, $to) {
+			$this->products[$to]['id'] = $val;
+		}
 
 		protected function rules() {
 			return [

@@ -39,14 +39,8 @@
 									</div>
 									<div class="flex items-center w-full space-x-3">
 										<div class="flex-1">
-											<x-select wire:model="products.{{$k}}.id">
-												<option value="" selected>Seleziona</option>
-												@foreach($all_products as $prod)
-													<option value="{{ $prod->id }}">{{ $prod->code }}
-														({{ $prod->unit->abbreviation }})
-													</option>
-												@endforeach
-											</x-select>
+											<livewire:components.select selected="{{ $product['id'] }}" wire:key="select-{{$k}}" return="id" model="App\\Models\\Product" title="description"
+																		subtitle="code" event="setProductToItem" to="{{ $k }}"/>
 										</div>
 										<div class="w-[120px]">
 											<x-input wire:model="products.{{$k}}.quantity" type="number" step="1"

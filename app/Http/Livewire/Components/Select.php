@@ -10,6 +10,7 @@
 		public $query = null;
 		public $selected = null;
 		public $model = null;
+		public $event, $to;
 		public $title;
 		public $title2;
 		public $oldTitle;
@@ -44,12 +45,12 @@
 			}
 		}
 
-		public function selectItem($title, $item)
+		public function selectItem($title, $item, $event, $to = null)
 		{
 			$this->selected = $item[$this->return];
 			$this->title2 = $title;
 			$this->oldTitle = $title;
-			$this->emitUp('itemSelected', $item[$this->return]);
+			$this->emitUp($event, $item[$this->return], $to);
 		}
 
 		public function render()

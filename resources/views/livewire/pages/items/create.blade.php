@@ -1,4 +1,4 @@
-<form wire:submit.prevent="save" class="overflow-hidden bg-white shadow sm:rounded-lg">
+<form wire:submit.prevent="save" class="bg-white shadow sm:rounded-lg">
 	<div class="px-4 py-6 sm:px-6">
 		<h3 class="text-base font-semibold leading-7 text-gray-900">Nuovo articolo</h3>
 	</div>
@@ -8,7 +8,7 @@
 				<dt class="text-sm font-medium text-gray-900">Codice</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					<livewire:components.select return="id" model="App\\Models\\Product" title="description"
-												subtitle="code"/>
+												subtitle="code" event="itemSelected"/>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
@@ -39,14 +39,8 @@
 									</div>
 									<div class="flex items-center w-full space-x-3">
 										<div class="flex-1">
-											<x-select wire:model="products.{{$k}}.id">
-												<option value="" selected>Seleziona</option>
-												@foreach($all_products as $prod)
-													<option value="{{ $prod->id }}">{{ $prod->code }}
-														({{ $prod->unit->abbreviation }})
-													</option>
-												@endforeach
-											</x-select>
+											<livewire:components.select wire:key="select-{{$k}}" return="id" model="App\\Models\\Product" title="description"
+																		subtitle="code" event="setProductToItem" to="{{ $k }}"/>
 										</div>
 										<div class="w-[120px]">
 											<x-input wire:model="products.{{$k}}.quantity" type="number" step="1"
