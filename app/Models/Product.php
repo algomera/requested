@@ -10,6 +10,10 @@
 	{
 		use HasFactory, Searchable;
 
+		public function unit() {
+			return $this->belongsTo(Unit::class);
+		}
+
 		public function locations() {
 			return $this->belongsToMany(Location::class)->withPivot('quantity');
 		}

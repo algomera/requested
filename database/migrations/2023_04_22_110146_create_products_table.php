@@ -12,10 +12,9 @@
 			Schema::create('products', function (Blueprint $table) {
 				$table->id();
 				$table->string('code');
-				$table->string('name');
-				$table->text('description')->nullable();
-				$table->string('units');
-				$table->string('image')->nullable();
+				$table->string('description');
+				$table->foreignIdFor(\App\Models\Unit::class, 'unit_id');
+				$table->boolean('serial_management')->default(0);
 				$table->timestamps();
 			});
 		}

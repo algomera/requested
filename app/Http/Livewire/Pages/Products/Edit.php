@@ -3,6 +3,7 @@
 	namespace App\Http\Livewire\Pages\Products;
 
 	use App\Models\Product;
+	use App\Models\Unit;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Edit extends ModalComponent
@@ -12,9 +13,9 @@
 		protected function rules() {
 			return [
 				'product.code'        => 'required|unique:products,code,' . $this->product->id,
-				'product.name'        => 'required',
 				'product.description' => 'nullable',
-				'product.units'       => 'required',
+				'product.unit_id'       => 'required|exists:units,id',
+				'product.serial_management' => 'boolean'
 			];
 		}
 
@@ -35,6 +36,8 @@
 		}
 
 		public function render() {
-			return view('livewire.pages.products.edit');
+			return view('livewire.pages.products.edit', [
+				'units' => Unit::all()
+			]);
 		}
 	}

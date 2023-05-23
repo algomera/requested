@@ -11,24 +11,27 @@
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
-				<dt class="text-sm font-medium text-gray-900">Nome</dt>
-				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="name" type="text"></x-input>
-				</dd>
-			</div>
-			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Descrizione</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					<x-input wire:model.defer="description" type="text"></x-input>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
+				<dt class="text-sm font-medium text-gray-900">Matricolare</dt>
+				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+					<input wire:model.defer="serial_management" value="1"
+						   id="serial_management" name="serial_management"
+						   type="checkbox"
+						   class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+				</dd>
+			</div>
+			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Unità di misura</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-select wire:model.defer="units">
+					<x-select wire:model.defer="unit_id">
 						<option value="" selected>Seleziona</option>
-						@foreach(config('requested.products.units') as $k => $unit)
-							<option value="{{ $k }}">{{ $unit }}</option>
+						@foreach($units as $unit)
+							<option value="{{ $unit->id }}">{{ $unit->description }}</option>
 						@endforeach
 					</x-select>
 				</dd>
