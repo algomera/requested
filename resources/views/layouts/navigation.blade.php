@@ -47,7 +47,7 @@
 	</li>
 	<li>
 		<span x-on:click="Livewire.emit('openModal', 'components.internal-transfer')"
-			  class="{{ request()->is('production-orders*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition">
+			  class="block py-1 text-sm text-zinc-600 hover:text-zinc-900 hover:cursor-pointer transition">
 			Trasferimento interno
 		</span>
 	</li>
