@@ -12,7 +12,7 @@
 
 		public function productQuantity($product_id)
 		{
-			return $this->products()->where('product_id', $product_id)->first()->pivot->quantity;
+			return $this->products()->where('product_id', $product_id)->first()?->pivot->quantity;
 		}
 
 		public function products()

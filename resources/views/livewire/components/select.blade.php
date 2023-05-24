@@ -1,4 +1,4 @@
-@props(['event' => null, 'to' => null, 'disabled' => false, 'required' => false, 'name', 'label' => false, 'hint' => false, 'append' => false, 'prepend' => false, 'iconColor' => 'text-gray-800'])
+@props(['event' => 'itemSelected', 'to' => null, 'disabled' => false, 'required' => false, 'name', 'label' => false, 'hint' => false, 'append' => false, 'prepend' => false, 'iconColor' => 'text-gray-800'])
 @php
 	$n = $attributes->wire('model')->value() ?: $name;
 	$slug = $attributes->wire('model')->value() ?: $n;

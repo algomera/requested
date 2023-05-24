@@ -27,8 +27,8 @@
 						@forelse($location->products as $product)
 							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-center justify-between">
 								<div class="flex flex-col space-y-0.5">
-									<span>{{ $product->name }}</span>
-									<p class="text-xs text-zinc-500">{{ $product->code }} &middot; <span class="text-zinc-700 font-semibold">{{ $product->pivot->quantity }} {{ config('requested.products.units.' . $product->units) }}</span></p>
+									<span>{{ $product->description }}</span>
+									<p class="text-xs text-zinc-500">{{ $product->code }} &middot; <span class="text-zinc-700 font-semibold">{{ $product->pivot->quantity }} {{ $product->unit->description }}</span></p>
 								</div>
 								<div class="inline-flex items-center justify-end space-x-3">
 									<button wire:click.stop="$emit('openModal', 'pages.locations.edit-product', {{ json_encode(['product' => $product->id, 'location' => $location->id])}})"
