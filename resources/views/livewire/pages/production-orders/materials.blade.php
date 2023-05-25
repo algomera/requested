@@ -8,9 +8,9 @@
 				<dt class="text-sm font-medium text-gray-900">Totale</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					@php($products = $production_order->load('serials')->item->products()->with('locations')->get())
-					@foreach($products as $product)
+					@foreach($production_order->materials as $material)
 						<div class="flex items-center mb-0.5">
-							@php($count = $product->locations->where('type', 'produzione')->sum('pivot.quantity'))
+							@php($count = $material->product->locations->where('type', 'produzione')->sum('pivot.quantity'))
 							@php($need = $production_order->serials->where('completed', 0)->count())
 							@switch($count)
 								@case(0)
@@ -24,7 +24,7 @@
 									@break
 							@endswitch
 							<p class="ml-1.5 mr-2">
-								<span class="font-bold">{{ $product->pivot->quantity * $need }}{{ $product->units }}</span> &times; {{ $product->name }}
+								<span class="font-bold">{{ $material->quantity * $need }}{{ $material->product->unit->abbreviation }}</span> &times; {{ $material->product->description }}
 							</p>
 							<div class="inline-flex items-center space-x-1 rounded-md bg-gray-50 px-2 py-1 mr-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
 								<span class="font-bold leading-none">{{ $count }}</span>
@@ -36,8 +36,8 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-1 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Singolo</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					@foreach($products as $product)
-						<p class="flex items-center mb-0.5">{{ $product->pivot->quantity }} &times; {{ $product->name }}</p>
+					@foreach($production_order->materials as $material)
+						<p class="flex items-center mb-0.5">{{ $material->quantity }} &times; {{ $material->product->description }}</p>
 					@endforeach
 				</dd>
 			</div>

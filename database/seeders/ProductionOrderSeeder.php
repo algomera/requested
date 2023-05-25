@@ -15,10 +15,19 @@
 		 */
 		public function run(): void
 		{
-			ProductionOrder::factory()->create([
+			$production_order = ProductionOrder::factory()->create([
 				'item_id' => Item::where('product_id', Product::where('code', 'PENNA')->first()->id)->first()->id,
 				'quantity' => 7,
 				'status' => 'created'
+			]);
+
+			$production_order->materials()->create([
+				'product_id' => 1,
+				'quantity' => 1
+			]);
+			$production_order->materials()->create([
+				'product_id' => 2,
+				'quantity' => 1
 			]);
 		}
 	}

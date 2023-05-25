@@ -66,4 +66,8 @@
 		{
 			return $this->belongsToMany(Product::class, 'production_orders_products')->withPivot(['quantity_needed', 'quantity_transferred', 'status']);
 		}
+
+		public function materials() {
+			return $this->hasMany(ProductionOrderMaterial::class);
+		}
 	}
