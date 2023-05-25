@@ -21,11 +21,13 @@
 		public $selectAll = false;
 		public $serials_checked = [];
 
-		public function mount(ProductionOrder $productionOrder) {
+		public function mount(ProductionOrder $productionOrder)
+		{
 			$this->production_order = $productionOrder;
 		}
 
-		public function updatedSelectAll($value) {
+		public function updatedSelectAll($value)
+		{
 			if ($value) {
 				$this->serials_checked = $this->production_order->serials()->where('completed', 0)->take($this->production_order->maxItemsProducibles)->pluck('id')->toArray();
 			} else {
@@ -33,19 +35,20 @@
 			}
 		}
 
-		public function setAsCompleted() {
+		public function setAsCompleted()
+		{
 			// Verifica matricole
-			if(count($this->serials_checked) > $this->production_order->maxItemsProducibles) {
+			if (count($this->serials_checked) > $this->production_order->maxItemsProducibles) {
 				$this->dispatchBrowserEvent('open-notification', [
 					'title' => __('ATTENZIONE!'),
 					'subtitle' => __("Puoi produrre {$this->production_order->maxItemsProducibles} matricola/e, ma stai cercando di produrne " . count($this->serials_checked) . "!"),
-					'type'  => 'error'
+					'type' => 'error'
 				]);
 				return;
 			}
 
 			// Cambio status da "Creato" ad "Attivo"
-			if($this->production_order->status === 'created') {
+			if ($this->production_order->status === 'created') {
 				$this->production_order->update([
 					'status' => 'active'
 				]);
@@ -56,19 +59,19 @@
 				$this->dispatchBrowserEvent('open-notification', [
 					'title' => __('Modifica Stato'),
 					'subtitle' => __('Lo stato dell\'ordine di produzione è passato ad "Attivo".'),
-					'type'  => 'success'
+					'type' => 'success'
 				]);
 			}
 
 			foreach ($this->serials_checked as $id) {
 				$serial = Serial::find($id);
 				$serial->update([
-					'completed'    => true,
+					'completed' => true,
 					'completed_at' => now()
 				]);
 				// Aggiungo l'articolo prodotto nell'ubicazione di versamento
 				$versamento = Location::where('type', 'versamento')->first();
-				if($versamento->products()->where('product_id', $this->production_order->item->product->id)->exists()) {
+				if ($versamento->products()->where('product_id', $this->production_order->item->product->id)->exists()) {
 					$existing_quantity = $versamento->products()->where('product_id', $this->production_order->item->product->id)->first()->pivot->quantity;
 					$versamento->products()->syncWithoutDetaching([
 						$this->production_order->item->product->id => [
@@ -80,7 +83,7 @@
 						'quantity' => 1
 					]);
 				}
-                $produzione = Location::with('products')->where('type', 'produzione')->first();
+				$produzione = Location::with('products')->where('type', 'produzione')->first();
 				foreach ($produzione->products as $product) {
 					$product->pivot->decrement('quantity', $this->production_order->item->products()->where('product_id', $product->id)->first()->pivot->quantity);
 					//TODO: eliminare record pivot se quantità è 0
@@ -93,10 +96,10 @@
 			}
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Matricola/e completate'),
-				'type'  => 'success'
+				'type' => 'success'
 			]);
 			// Cambio status da "Attivo" a "Completato"
-			if($this->production_order->status === 'active' && $this->production_order->serials()->where('completed', 0)->count() === 0) {
+			if ($this->production_order->status === 'active' && $this->production_order->serials()->where('completed', 0)->count() === 0) {
 				$this->production_order->update([
 					'status' => 'completed'
 				]);
@@ -107,14 +110,15 @@
 				$this->dispatchBrowserEvent('open-notification', [
 					'title' => __('Modifica Stato'),
 					'subtitle' => __('Lo stato dell\'ordine di produzione è passato a "Completato".'),
-					'type'  => 'success'
+					'type' => 'success'
 				]);
 			}
 			$this->serials_checked = [];
 			$this->selectAll = false;
 		}
 
-		public function changeState() {
+		public function changeState()
+		{
 			$this->production_order->update([
 				'status' => 'completed'
 			]);
@@ -123,19 +127,19 @@
 				'message' => "ha completato l'ordine di produzione '{$this->production_order->code}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
-				'title'    => __('Ordine di produzione completato'),
+				'title' => __('Ordine di produzione completato'),
 				'subtitle' => __('L\'ordine di produzione è stato completato con successo.'),
-				'type'     => 'success'
+				'type' => 'success'
 			]);
 		}
 
-		public function render() {
+		public function render()
+		{
 			$logs = $this->production_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
-			$serials = $this->production_order->serials();
 			return view('livewire.pages.production-orders.show', [
-				'incompleted_serials' => $serials->where('completed', 0)->paginate(25),
-				'completed_serials'   => $serials->where('completed', 1)->paginate(25),
-				'logs'                => $logs
+				'incompleted_serials' =>  $this->production_order->serials()->where('completed', 0)->paginate(25),
+				'completed_serials' => $this->production_order->serials()->where('completed', 1)->paginate(25),
+				'logs' => $logs
 			]);
 		}
 	}
