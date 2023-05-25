@@ -1,6 +1,6 @@
 <div class="overflow-hidden bg-white shadow sm:rounded-lg">
 	<div class="px-4 py-6 sm:px-6">
-		<h3 class="text-base font-semibold leading-7 text-gray-900">{{ $production_order->item->product->name }}</h3>
+		<h3 class="text-base font-semibold leading-7 text-gray-900">{{ $production_order->item->product->description }}</h3>
 	</div>
 	<div class="border-t border-gray-100">
 		<dl class="divide-y divide-gray-100 grid sm:grid-cols-2 items-start sm:gap-4">
@@ -8,10 +8,11 @@
 				<dt class="text-sm font-medium text-gray-900">Totale</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					@php($products = $production_order->load('serials')->item->products()->with('locations')->get())
-					@foreach($production_order->materials as $material)
+					@php($materials = $production_order->materials->load('product.unit'))
+					@foreach($materials as $material)
 						<div class="flex items-center mb-0.5">
 							@php($count = $material->product->locations->where('type', 'produzione')->sum('pivot.quantity'))
-							@php($need = $production_order->serials->where('completed', 0)->count())
+							@php($need = $material->quantity * $production_order->serials->where('completed', 0)->count())
 							@switch($count)
 								@case(0)
 									<div class="w-3 h-3 rounded-full bg-red-500"></div>
@@ -24,7 +25,7 @@
 									@break
 							@endswitch
 							<p class="ml-1.5 mr-2">
-								<span class="font-bold">{{ $material->quantity * $need }}{{ $material->product->unit->abbreviation }}</span> &times; {{ $material->product->description }}
+								<span class="font-bold">{{ $need }}{{ $material->product->unit->abbreviation }}</span> &times; {{ $material->product->description }}
 							</p>
 							<div class="inline-flex items-center space-x-1 rounded-md bg-gray-50 px-2 py-1 mr-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
 								<span class="font-bold leading-none">{{ $count }}</span>
@@ -36,7 +37,7 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-1 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Singolo</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					@foreach($production_order->materials as $material)
+					@foreach($materials as $material)
 						<p class="flex items-center mb-0.5">{{ $material->quantity }} &times; {{ $material->product->description }}</p>
 					@endforeach
 				</dd>

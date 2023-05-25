@@ -62,7 +62,7 @@
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
 								{{ $production_order->code }}
 							</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->item->product->name }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->item->product->description }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->serials()->where('completed', 1)->count() }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>
