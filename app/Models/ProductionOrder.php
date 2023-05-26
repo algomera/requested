@@ -27,20 +27,6 @@
 			return (int)floor($minQuantity);
 		}
 
-		public function getWarehouseOrderStatus()
-		{
-			$products = $this->warehouse_order_products;
-			$statuses = $products->pluck('pivot.status')->unique();
-
-			if ($statuses->count() === 1 && $statuses->first() === 'to_transfer') {
-				return 'to_transfer';
-			} elseif ($statuses->contains('partially_transferred') || $statuses->contains('to_transfer')) {
-				return 'partially_transferred';
-			} elseif ($statuses->contains('transferred')) {
-				return 'transferred';
-			}
-		}
-
 
 		public function item()
 		{

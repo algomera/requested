@@ -3,6 +3,7 @@
 	namespace App\Http\Livewire\Pages\WarehouseOrders;
 
 	use App\Models\ProductionOrder;
+	use App\Models\WarehouseOrder;
 	use Livewire\Component;
 	use Livewire\WithPagination;
 
@@ -14,8 +15,8 @@
 		public $status = null;
 		public $deletingId = null;
 		protected $listeners = [
-			'production_order-updated' => '$refresh',
-			'production_order-created' => '$refresh',
+			'warehouse_order-updated' => '$refresh',
+			'warehouse_order-created' => '$refresh',
 		];
 
 		public function updatingSearch()
@@ -23,17 +24,17 @@
 			$this->resetPage();
 		}
 
-		public function delete(ProductionOrder $production_order)
+		public function delete(WarehouseOrder $warehouse_order)
 		{
-			$production_order->delete();
+			$warehouse_order->delete();
 			$this->emitSelf('$refresh');
-			$production_order->logs()->create([
+			$warehouse_order->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha eliminato l'ordine di produzione '{$production_order->code}'"
+				'message' => "ha eliminato l'ordine di magazzino '{$warehouse_order->production_order->code}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Ordine Eliminato'),
-				'subtitle' => __('L\'ordine di produzione è stato eliminato con successo!'),
+				'subtitle' => __('L\'ordine di magazzino è stato eliminato con successo!'),
 				'type' => 'success'
 			]);
 		}
@@ -41,18 +42,18 @@
 		public function render()
 		{
 			if ($this->status === null || $this->status === '') {
-				$production_orders = ProductionOrder::with('item')->search($this->search, [
+				$warehouse_orders = WarehouseOrder::with('production_order.item')->search($this->search, [
 					'code',
-				])->with('warehouse_order_products');
+				])->with('rows');
 			} else {
-				$production_orders = ProductionOrder::with('item')->search($this->search, [
+				$warehouse_orders = WarehouseOrder::with('production_order.item')->search($this->search, [
 					'code',
-				])->with('warehouse_order_products')->get()->filter(function ($order) {
-					return $order->getWarehouseOrderStatus() === $this->status;
+				])->with('rows')->get()->filter(function ($order) {
+					return $order->getStatus() === $this->status;
 				});
 			}
 			return view('livewire.pages.warehouse-orders.index', [
-				'production_orders' => $production_orders->paginate(25)
+				'warehouse_orders' => $warehouse_orders->paginate(25)
 			]);
 		}
 	}

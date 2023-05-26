@@ -36,20 +36,20 @@
 							Codice
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
-{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità--}}
-{{--							totale--}}
-{{--						</th>--}}
-{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità--}}
-{{--							completata--}}
-{{--						</th>--}}
-{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
-{{--							creazione--}}
-{{--						</th>--}}
-{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
-{{--							consegna--}}
-{{--						</th>--}}
-{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione--}}
-{{--						</th>--}}
+						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità--}}
+						{{--							totale--}}
+						{{--						</th>--}}
+						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità--}}
+						{{--							completata--}}
+						{{--						</th>--}}
+						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
+						{{--							creazione--}}
+						{{--						</th>--}}
+						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
+						{{--							consegna--}}
+						{{--						</th>--}}
+						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione--}}
+						{{--						</th>--}}
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
@@ -57,19 +57,19 @@
 					</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200 bg-white">
-					@forelse($production_orders as $production_order)
-						<tr class="hover:bg-gray-50" wire:key="{{ $production_order->id }}">
+					@forelse($warehouse_orders as $warehouse_order)
+						<tr class="hover:bg-gray-50" wire:key="{{ $warehouse_order->id }}">
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-								{{ $production_order->code }}
+								{{ $warehouse_order->production_order->code }}
 							</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->item->product->name }}</td>
-							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>--}}
-							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->serials()->where('completed', 1)->count() }}</td>--}}
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->production_order->item->product->description }}</td>
+							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->rows->sum('quantity_total') }}</td>--}}
+							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->rows->sum('quantity_processed') }}</td>--}}
 							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>--}}
 							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>--}}
 							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination->name }}</td>--}}
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-								@switch($production_order->getWarehouseOrderStatus())
+								@switch($warehouse_order->getStatus())
 									@case('to_transfer')
 										<div
 											class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
@@ -92,22 +92,22 @@
 							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
-									<a href="{{ route('production-orders.show', $production_order->id) }}"
+									<a href="{{ route('production-orders.show', $warehouse_order->id) }}"
 									   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</a>
-									@if(!in_array($production_order->status, ['active', 'completed']))
-										@if($deletingId != $production_order->id)
-											<button wire:key="deleting-{{ $production_order->id }}"
-													wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
+									@if(!$warehouse_order->system)
+										@if($deletingId != $warehouse_order->id)
+											<button wire:key="deleting-{{ $warehouse_order->id }}"
+													wire:click.stop="$set('deletingId', '{{ $warehouse_order->id }}')"
 													type="button"
 													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 												<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>
 											</button>
 										@else
-											<button wire:key="confirm-{{ $production_order->id }}"
+											<button wire:key="confirm-{{ $warehouse_order->id }}"
 													x-init="setTimeout(() => $wire.deletingId = null, 5000)"
-													wire:click.stop="delete({{ $production_order->id }})" type="button"
+													wire:click.stop="delete({{ $warehouse_order->id }})" type="button"
 													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 												<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>
 											</button>
@@ -128,7 +128,7 @@
 			</div>
 		</div>
 		<div>
-			{{ $production_orders->links() }}
+			{{ $warehouse_orders->links() }}
 		</div>
 	</div>
 </div>

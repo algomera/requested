@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('production_orders_products', function (Blueprint $table) {
+        Schema::create('warehouse_order_rows', function (Blueprint $table) {
             $table->id();
-			$table->foreignIdFor(\App\Models\ProductionOrder::class, 'production_order_id');
-			$table->foreignIdFor(\App\Models\Product::class, 'product_id');
-			$table->double('quantity_needed');
-			$table->double('quantity_transferred');
+	        $table->foreignIdFor(\App\Models\WarehouseOrder::class, 'warehouse_order_id');
+			$table->integer('position');
+	        $table->foreignIdFor(\App\Models\Location::class, 'pickup_id')->nullable();
+			$table->double('quantity_total');
+			$table->double('quantity_processed');
 	        $table->enum('status', array_keys(config('requested.warehouse_orders.status')));
             $table->timestamps();
         });
