@@ -18,7 +18,7 @@
 				</div>
 				<div>
 					<x-select wire:model="status">
-						<option value="">Tutti</option>
+						<option value="">Non completati</option>
 						<option value="completed">Completati</option>
 						<option value="active">Attivi</option>
 						<option value="created">Creati</option>

@@ -20,7 +20,7 @@
 			$production_order = ProductionOrder::factory()->create([
 				'item_id' => Item::where('product_id', Product::where('code', 'PENNA')->first()->id)->first()->id,
 				'quantity' => 7,
-				'status' => 'created'
+				'status' => 'created',
 			]);
 
 			$production_order->materials()->create([
@@ -31,6 +31,11 @@
 				'product_id' => 2,
 				'quantity' => 1
 			]);
+
+			// Ordine di Magazzino (versamento): quando checko matricole e le completo, avanzo il processato
+
+			// Ordine di Magazzino (scarico): quando clicco su "scarica materiale" devo avanzare il processato per ogni riga
+			// del prodotto utilizzato e togliere giacenza dal magazzino (dall'ubicazione di produzione che viene segnata nella tabella della distinta base)
 
 			$warehouse_order = WarehouseOrder::factory()->create([
 				'production_order_id' => $production_order->id,

@@ -25,8 +25,8 @@
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					<div class="flex items-center w-full space-x-3">
 						<div class="flex-1">
-							<livewire:components.select return="id" model="App\\Models\\Item"
-														title="product.description" subtitle="product.code"/>
+							<livewire:components.select return="id" model="App\\Models\\Product"
+														title="description" subtitle="code"/>
 						</div>
 					</div>
 				</dd>
@@ -56,6 +56,6 @@
 	</div>
 	<div class="py-4 px-4 flex justify-end space-x-3 sm:px-6">
 		<x-secondary-button type="button" wire:click="$emit('closeModal')">Annulla</x-secondary-button>
-		<x-primary-button :disabled="!$startLocation || !$endLocation || !$item || !$quantity">Trasferisci</x-primary-button>
+		<x-primary-button :disabled="!$startLocation || !$endLocation || !$product || !$quantity">Trasferisci</x-primary-button>
 	</div>
 </form>

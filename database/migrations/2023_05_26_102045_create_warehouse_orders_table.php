@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('warehouse_orders', function (Blueprint $table) {
             $table->id();
 			$table->foreignIdFor(\App\Models\ProductionOrder::class, 'production_order_id');
-			$table->foreignIdFor(\App\Models\Location::class, 'destination_id');
+			$table->foreignIdFor(\App\Models\Location::class, 'destination_id')->nullable();
 			$table->string('reason');
 			$table->foreignIdFor(\App\Models\User::class, 'user_id')->nullable();
 			$table->boolean('system')->default(1);
