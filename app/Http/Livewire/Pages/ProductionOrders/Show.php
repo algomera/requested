@@ -29,7 +29,7 @@
 		public function updatedSelectAll($value)
 		{
 			if ($value) {
-				$this->serials_checked = $this->production_order->serials()->where('completed', 0)->take($this->production_order->maxItemsProducibles)->pluck('id')->toArray();
+				$this->serials_checked = $this->production_order->serials()->where('completed', 0)->pluck('id')->toArray();
 			} else {
 				$this->serials_checked = [];
 			}
@@ -38,14 +38,14 @@
 		public function setAsCompleted()
 		{
 			// Verifica matricole
-			if (count($this->serials_checked) > $this->production_order->maxItemsProducibles) {
-				$this->dispatchBrowserEvent('open-notification', [
-					'title' => __('ATTENZIONE!'),
-					'subtitle' => __("Puoi produrre {$this->production_order->maxItemsProducibles} matricola/e, ma stai cercando di produrne " . count($this->serials_checked) . "!"),
-					'type' => 'error'
-				]);
-				return;
-			}
+//			if (count($this->serials_checked) > $this->production_order->maxItemsProducibles) {
+//				$this->dispatchBrowserEvent('open-notification', [
+//					'title' => __('ATTENZIONE!'),
+//					'subtitle' => __("Puoi produrre {$this->production_order->maxItemsProducibles} matricola/e, ma stai cercando di produrne " . count($this->serials_checked) . "!"),
+//					'type' => 'error'
+//				]);
+//				return;
+//			}
 
 			// Cambio status da "Creato" ad "Attivo"
 			if ($this->production_order->status === 'created') {
@@ -84,6 +84,34 @@
 						'quantity' => 1
 					]);
 				}
+				// Avanzo processo in Versamento
+				$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first();
+				// Prendo l'unica riga dell'ordine di magazzino
+				$row = $warehouse_order_versamento->rows->first();
+				// Avanzo quantity_processed
+				$row->increment('quantity_processed');
+				// Cambio stato della riga
+				if ($row->status === 'to_transfer' && $row->quantity_processed > 0) {
+					$row->update([
+						'status' => 'partially_transferred'
+					]);
+				} elseif ($row->status === 'partially_transferred' && $row->quantity_processed === $row->quantity_total) {
+					$row->update([
+						'status' => 'transferred'
+					]);
+				}
+
+				// Avanzo processo in Scarico
+				$warehouse_order_scarico = $this->production_order->warehouse_order()->where('type', 'scarico')->first();
+				// Prendo l'unica riga dell'ordine di magazzino
+				$rows = $warehouse_order_scarico->rows;
+				// Avanzo quantity_processed
+
+				// Cambio stato della riga
+
+
+
+				// Scarico prodotto dall'ubicazione di ...
 				$produzione = Location::with('products')->where('type', 'produzione')->first();
 				foreach ($produzione->products as $product) {
 					$product->pivot->decrement('quantity', $this->production_order->item->products()->where('product_id', $product->id)->first()->pivot->quantity);
@@ -135,11 +163,16 @@
 			]);
 		}
 
+		public function unloadMaterials()
+		{
+			dd("Scarico materiale");
+		}
+
 		public function render()
 		{
 			$logs = $this->production_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 			return view('livewire.pages.production-orders.show', [
-				'incompleted_serials' =>  $this->production_order->serials()->where('completed', 0)->paginate(25),
+				'incompleted_serials' => $this->production_order->serials()->where('completed', 0)->paginate(25),
 				'completed_serials' => $this->production_order->serials()->where('completed', 1)->paginate(25),
 				'logs' => $logs
 			]);

@@ -36,24 +36,42 @@
 			]);
 
 			// Ordine di Magazzino (versamento): quando checko matricole e le completo, avanzo il processato
-
-			// Ordine di Magazzino (scarico): quando clicco su "scarica materiale" devo avanzare il processato per ogni riga
-			// del prodotto utilizzato e togliere giacenza dal magazzino (dall'ubicazione di produzione che viene segnata nella tabella della distinta base)
-
-			$warehouse_order = WarehouseOrder::factory()->create([
+			$warehouse_order_versamento = WarehouseOrder::factory()->create([
 				'production_order_id' => $production_order->id,
-				'destination_id' => Location::where('type', 'versamento')->first()->id, // ubicazione di destinazione
-				'reason' => 'versamento di produzione',
-				'user_id' => null, // se system è a 0 (creato ordine da utente), user_id avrà l'ID di chi ha creato l'ordine di magazzino
-				'system' => 1, // BOOL
+				'destination_id' => Location::where('type', 'versamento')->first()->id,
+				'type' => 'versamento',
+				'reason' => 'Versamento di Produzione',
+				'user_id' => null,
+				'system' => 1,
 			]);
 
-			$warehouse_order->rows()->create([
-				'position' => 1, // incrementale
-				'pickup_id' => null, // ubicazione di prelievo NULLABLE
+			$warehouse_order_versamento->rows()->create([
+				'position' => 0,
+				'pickup_id' => null,
 				'quantity_total' => $production_order->quantity,
 				'quantity_processed' => 0,
 				'status' => 'to_transfer'
 			]);
+
+			// Ordine di Magazzino (scarico): quando clicco su "scarica materiale" devo avanzare il processato per ogni riga
+			// del prodotto utilizzato e togliere giacenza dal magazzino (dall'ubicazione di produzione che viene segnata nella tabella della distinta base)
+			$warehouse_order_scarico = WarehouseOrder::factory()->create([
+				'production_order_id' => $production_order->id,
+				'destination_id' => null,
+				'type' => 'scarico',
+				'reason' => 'Scarico del materiale',
+				'user_id' => null,
+				'system' => 1,
+			]);
+
+			foreach ($production_order->materials as $k => $material) {
+				$warehouse_order_scarico->rows()->create([
+					'position' => $k,
+					'pickup_id' => $material->location_id,
+					'quantity_total' => $material->quantity * $production_order->quantity,
+					'quantity_processed' => 0,
+					'status' => 'to_transfer'
+				]);
+			}
 		}
 	}

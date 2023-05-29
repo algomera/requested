@@ -48,6 +48,11 @@
 			return $this->morphMany(Log::class, 'loggable');
 		}
 
+		public function warehouse_order()
+		{
+			return $this->hasMany(WarehouseOrder::class);
+		}
+
 		public function warehouse_order_products()
 		{
 			return $this->belongsToMany(Product::class, 'production_orders_products')->withPivot(['quantity_needed', 'quantity_transferred', 'status']);

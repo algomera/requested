@@ -12,10 +12,16 @@
 <div class="grid grid-cols-1 2xl:grid-cols-3 gap-1">
 	<div class="col-span-2 flow-root space-y-5 2xl:pr-4 2xl:border-r">
 		<div class="flex items-center justify-between">
-			<x-primary-button
+			<div class="space-x-3">
+				<x-primary-button
 					wire:click="$emit('openModal', 'pages.production-orders.materials', {{ json_encode(['production_order' => $production_order->id]) }})">
-				Distinta base
-			</x-primary-button>
+					Distinta base
+				</x-primary-button>
+				<x-primary-button
+					wire:click="unloadMaterials">
+					Scarica materiale
+				</x-primary-button>
+			</div>
 			@if($serials_checked)
 				<x-primary-button
 						class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
@@ -36,11 +42,11 @@
 		@switch($currentTab)
 			@case(0)
 				@if($incompleted_serials->count())
-					@if($production_order->maxItemsProducibles === 0)
-						<p class="text-sm text-red-500">Non è possibile produrre alcuna matricola per mancanza di prodotti necessari nell'ubicazione di Produzione</p>
-					@else
-						<p class="text-sm text-gray-600">In base ai prodotti in Produzione, è possibile produrre <span class="font-bold">{{ $production_order->maxItemsProducibles }}</span> matricola/e</p>
-					@endif
+{{--					@if($production_order->maxItemsProducibles === 0)--}}
+{{--						<p class="text-sm text-red-500">Non è possibile produrre alcuna matricola per mancanza di prodotti necessari nell'ubicazione di Produzione</p>--}}
+{{--					@else--}}
+{{--						<p class="text-sm text-gray-600">In base ai prodotti in Produzione, è possibile produrre <span class="font-bold">{{ $production_order->maxItemsProducibles }}</span> matricola/e</p>--}}
+{{--					@endif--}}
 					<div class="overflow-x-auto" wire:key="incompleted">
 						<div class="inline-block min-w-full py-2 align-middle">
 							<table class="min-w-full divide-y divide-gray-300">
@@ -48,10 +54,10 @@
 								<tr>
 									<th scope="col"
 									    class="w-[50px] py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
-										@if($production_order->maxItemsProducibles !== 0)
+{{--										@if($production_order->maxItemsProducibles !== 0)--}}
 										<input wire:model="selectAll" type="checkbox"
 										       class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-600">
-										@endif
+{{--										@endif--}}
 									</th>
 									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
 										Matricola
@@ -65,15 +71,14 @@
 								</tr>
 								</thead>
 								<tbody class="divide-y divide-gray-200 bg-white">
-								@php($check = count($serials_checked) === $production_order->maxItemsProducibles)
+{{--								@php($check = count($serials_checked) === $production_order->maxItemsProducibles)--}}
 								@forelse($incompleted_serials as $incompleted)
-									@php($not_producible = $check && !in_array($incompleted->id, $serials_checked))
-									<tr class="hover:bg-gray-50 {{ $not_producible ? 'opacity-25' : '' }}" wire:key="{{ $incompleted->id }}">
+{{--									@php($not_producible = $check && !in_array($incompleted->id, $serials_checked))--}}
+									<tr class="hover:bg-gray-50" wire:key="{{ $incompleted->id }}">
 										@if($currentTab == 0)
 											<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
 												<input wire:model="serials_checked" type="checkbox"
 												       value="{{ $incompleted->id }}"
-													   {{ $not_producible ? 'disabled' : '' }}
 												       class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-600">
 											</td>
 										@endif
