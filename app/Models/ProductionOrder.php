@@ -35,7 +35,7 @@
 
 		public function destination()
 		{
-			return $this->belongsTo(Destination::class);
+			return $this->belongsTo(Location::class);
 		}
 
 		public function serials()
