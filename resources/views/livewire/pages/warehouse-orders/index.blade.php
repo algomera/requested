@@ -1,11 +1,11 @@
 <x-slot:header>
 	<div class="flex items-center justify-between">
 		Ordini di magazzino
-		<div>
-			<x-primary-button x-on:click="Livewire.emit('openModal', 'pages.production-orders.create')">
-				<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
-			</x-primary-button>
-		</div>
+{{--		<div>--}}
+{{--			<x-primary-button x-on:click="Livewire.emit('openModal', 'pages.production-orders.create')">--}}
+{{--				<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>--}}
+{{--			</x-primary-button>--}}
+{{--		</div>--}}
 	</div>
 </x-slot:header>
 <div>
