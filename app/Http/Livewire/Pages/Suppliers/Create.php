@@ -2,24 +2,27 @@
 
 	namespace App\Http\Livewire\Pages\Suppliers;
 
-	use App\Models\Supplier;
+	use App\Models\Location;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Create extends ModalComponent
 	{
-		public $code, $name;
-		protected $rules = [
-			'code' => 'required',
-			'name' => 'required',
-		];
+		public $code, $description;
+
+		protected function rules() {
+			return [
+				'code'    => 'required',
+				'description' => 'required',
+			];
+		}
 
 		public function save() {
-			$this->validate();
-			Supplier::create([
-				'code' => $this->code,
-				'name'  => $this->name,
+			Location::create([
+				'code'    => $this->code,
+				'description' => $this->description,
+				'type' => 'fornitore'
 			]);
-			$this->emitTo('pages.suppliers.index', 'supplier-created');
+			$this->emitTo('pages.suppliers.index', 'location-created');
 			$this->closeModal();
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Fornitore Creato'),

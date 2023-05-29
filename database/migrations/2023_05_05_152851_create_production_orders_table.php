@@ -14,7 +14,11 @@
 				$table->string('code');
 				$table->foreignIdFor(\App\Models\Item::class, 'item_id');
 				$table->integer('quantity');
-				$table->date('delivery_date');
+				$table->date('start_planned_date')->nullable();
+				$table->date('start_date')->nullable();
+				$table->date('finish_planned_date')->nullable();
+				$table->date('finish_date')->nullable();
+				$table->date('delivery_date')->nullable();
 				$table->foreignIdFor(\App\Models\Destination::class, 'destination_id');
 				$table->enum('status', array_keys(config('requested.production_orders.status')));
 				$table->timestamps();

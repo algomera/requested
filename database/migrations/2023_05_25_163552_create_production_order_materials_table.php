@@ -14,6 +14,8 @@
 				$table->id();
 				$table->foreignIdFor(\App\Models\ProductionOrder::class, 'production_order_id');
 				$table->foreignIdFor(\App\Models\Product::class, 'product_id');
+				$table->foreignIdFor(\App\Models\Location::class, 'location_id');
+				$table->integer('position')->nullable();
 				$table->double('quantity');
 			});
 		}

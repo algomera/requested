@@ -55,7 +55,7 @@ class Index extends Component
     public function render()
     {
         return view('livewire.pages.locations.index', [
-            'locations' => Location::search($this->search, [
+            'locations' => Location::whereNotIn('type', ['fornitore', 'destinazione'])->search($this->search, [
                 'code',
                 'description',
                 'type'

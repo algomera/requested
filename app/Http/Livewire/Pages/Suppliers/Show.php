@@ -2,15 +2,15 @@
 
 	namespace App\Http\Livewire\Pages\Suppliers;
 
-	use App\Models\Supplier;
+	use App\Models\Location;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Show extends ModalComponent
 	{
-		public $supplier;
+		public $location;
 
-		public function mount(Supplier $supplier) {
-			$this->supplier = $supplier;
+		public function mount(Location $location) {
+			$this->location = $location;
 		}
 
 		public function render() {

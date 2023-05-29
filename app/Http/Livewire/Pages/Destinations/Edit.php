@@ -2,28 +2,28 @@
 
 	namespace App\Http\Livewire\Pages\Destinations;
 
-	use App\Models\Destination;
+	use App\Models\Location;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Edit extends ModalComponent
 	{
-		public $destination;
+		public $location;
 
 		protected function rules() {
 			return [
-				'destination.name'    => 'required',
-				'destination.address' => 'required',
+				'location.code'    => 'required',
+				'location.description' => 'required',
 			];
 		}
 
-		public function mount(Destination $destination) {
-			$this->destination = $destination;
+		public function mount(Location $location) {
+			$this->location = $location;
 		}
 
 		public function save() {
 			$this->validate();
-			$this->destination->update();
-			$this->emitTo('pages.destinations.index', 'destination-updated');
+			$this->location->update();
+			$this->emitTo('pages.destinations.index', 'location-updated');
 			$this->closeModal();
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Destinazione Aggiornata'),

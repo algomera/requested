@@ -17,7 +17,7 @@
 			foreach ($products as $product) {
 				$quantities = $product->locations
 					->where('type', 'produzione')
-					->sum('quantity');
+					->sum('pivot.quantity');
 
 				$total[] = $quantities / $product->pivot->quantity;
 			}

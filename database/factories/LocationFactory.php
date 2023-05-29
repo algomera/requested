@@ -14,9 +14,11 @@
 		 *
 		 * @return array<string, mixed>
 		 */
-		public function definition(): array {
+		public function definition(): array
+		{
 			return [
-				//
+				'code' => fake()->regexify('[A-Z]{4}[0-9]{2}'),
+				'description' => fake()->sentence,
 			];
 		}
 	}

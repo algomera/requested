@@ -9,12 +9,38 @@
 		],
 		'locations' => [
 			'types' => [
-				'ricevimento' => 'Ricevimento',
-				'grandi_quantita' => 'Grandi quantità',
-				'produzione' => 'Produzione',
-				'scarto' => 'Scarto',
-				'versamento' => 'Versamento',
-				'spedizione' => 'Spedizione',
+				'ricevimento' => [
+					'user_can_show' => true,
+					'label' => 'Ricevimento'
+				],
+				'grandi_quantita' => [
+					'user_can_show' => true,
+					'label' => 'Grandi quantità'
+				],
+				'produzione' => [
+					'user_can_show' => true,
+					'label' => 'Produzione'
+				],
+				'scarto' => [
+					'user_can_show' => true,
+					'label' => 'Scarto'
+				],
+				'versamento' => [
+					'user_can_show' => true,
+					'label' => 'Versamento'
+				],
+				'spedizione' => [
+					'user_can_show' => true,
+					'label' => 'Spedizione'
+				],
+				'fornitore' => [
+					'user_can_show' => false,
+					'label' => 'Fornitore'
+				],
+				'destinazione' => [
+					'user_can_show' => false,
+					'label' => 'Destinazione'
+				],
 			]
 		],
 		'production_orders' => [

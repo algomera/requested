@@ -6,6 +6,7 @@
 	use App\Models\Location;
 	use App\Models\Product;
 	use App\Models\ProductionOrder;
+	use App\Models\ProductionOrderMaterial;
 	use App\Models\WarehouseOrder;
 	use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 	use Illuminate\Database\Seeder;
@@ -23,11 +24,13 @@
 				'status' => 'created',
 			]);
 
-			$production_order->materials()->create([
+			ProductionOrderMaterial::factory()->create([
+				'production_order_id' => $production_order->id,
 				'product_id' => 1,
-				'quantity' => 1
+				'quantity' => 1,
 			]);
-			$production_order->materials()->create([
+			ProductionOrderMaterial::factory()->create([
+				'production_order_id' => $production_order->id,
 				'product_id' => 2,
 				'quantity' => 1
 			]);

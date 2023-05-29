@@ -5,15 +5,15 @@
 	<div class="border-t border-gray-100">
 		<dl class="divide-y divide-gray-100">
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
-				<dt class="text-sm font-medium text-gray-900">Nome</dt>
+				<dt class="text-sm font-medium text-gray-900">Codice</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="name" type="text"></x-input>
+					<x-input wire:model.defer="code" type="text"></x-input>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
-				<dt class="text-sm font-medium text-gray-900">Indirizzo</dt>
+				<dt class="text-sm font-medium text-gray-900">Descrizione</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<x-input wire:model.defer="address" type="text"></x-input>
+					<x-input wire:model.defer="description" type="text"></x-input>
 				</dd>
 			</div>
 		</dl>

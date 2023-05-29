@@ -50,7 +50,8 @@
 			// Cambio status da "Creato" ad "Attivo"
 			if ($this->production_order->status === 'created') {
 				$this->production_order->update([
-					'status' => 'active'
+					'status' => 'active',
+					'start_date' => now()
 				]);
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
@@ -101,7 +102,8 @@
 			// Cambio status da "Attivo" a "Completato"
 			if ($this->production_order->status === 'active' && $this->production_order->serials()->where('completed', 0)->count() === 0) {
 				$this->production_order->update([
-					'status' => 'completed'
+					'status' => 'completed',
+					'finish_date' => now()
 				]);
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),

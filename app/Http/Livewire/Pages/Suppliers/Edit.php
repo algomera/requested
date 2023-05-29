@@ -2,28 +2,28 @@
 
 	namespace App\Http\Livewire\Pages\Suppliers;
 
-	use App\Models\Supplier;
+	use App\Models\Location;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Edit extends ModalComponent
 	{
-		public $supplier;
+		public $location;
 
 		protected function rules() {
 			return [
-				'supplier.code' => 'required',
-				'supplier.name'  => 'required',
+				'location.code' => 'required',
+				'location.description'  => 'required',
 			];
 		}
 
-		public function mount(Supplier $supplier) {
-			$this->supplier = $supplier;
+		public function mount(Location $location) {
+			$this->location = $location;
 		}
 
 		public function save() {
 			$this->validate();
-			$this->supplier->update();
-			$this->emitTo('pages.suppliers.index', 'supplier-updated');
+			$this->location->update();
+			$this->emitTo('pages.suppliers.index', 'location-updated');
 			$this->closeModal();
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Fornitore Aggiornato'),

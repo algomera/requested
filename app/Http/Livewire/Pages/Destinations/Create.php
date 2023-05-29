@@ -2,27 +2,27 @@
 
 	namespace App\Http\Livewire\Pages\Destinations;
 
-	use App\Models\Destination;
 	use App\Models\Location;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Create extends ModalComponent
 	{
-		public $name, $address;
+		public $code, $description;
 
 		protected function rules() {
 			return [
-				'name'    => 'required',
-				'address' => 'required',
+				'code'    => 'required',
+				'description' => 'required',
 			];
 		}
 
 		public function save() {
-			Destination::create([
-				'name'    => $this->name,
-				'address' => $this->address,
+			Location::create([
+				'code'    => $this->code,
+				'description' => $this->description,
+				'type' => 'destinazione'
 			]);
-			$this->emitTo('pages.destinations.index', 'destination-created');
+			$this->emitTo('pages.destinations.index', 'location-created');
 			$this->closeModal();
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Destinazione Creata'),

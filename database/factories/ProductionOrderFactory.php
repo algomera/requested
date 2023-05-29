@@ -4,6 +4,7 @@
 
 	use App\Models\Destination;
 	use App\Models\Item;
+	use App\Models\Location;
 	use Carbon\Carbon;
 	use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +24,7 @@
 				'item_id'        => Item::all()->shuffle()->first()->id,
 				'quantity'       => fake()->numberBetween(1, 7),
 				'delivery_date'  => fake()->dateTimeBetween('now', Carbon::now()->addMonth()),
-				'destination_id' => Destination::all()->shuffle()->first()->id,
+				'destination_id' => Location::where('type', 'destinazione')->get()->shuffle()->first()->id,
 				'status'         => fake()->randomElement(array_keys(config('requested.production_orders.status')))
 			];
 		}

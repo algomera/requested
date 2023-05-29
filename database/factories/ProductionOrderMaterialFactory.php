@@ -2,6 +2,7 @@
 
 	namespace Database\Factories;
 
+	use App\Models\Location;
 	use Illuminate\Database\Eloquent\Factories\Factory;
 
 	/**
@@ -17,7 +18,8 @@
 		public function definition(): array
 		{
 			return [
-				'quantity' => fake()->randomFloat(1, 100)
+				'quantity' => fake()->randomFloat(1, 100),
+				'location_id' => Location::where('type', 'produzione')->first()->id
 			];
 		}
 	}

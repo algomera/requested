@@ -2,7 +2,7 @@
 
 	namespace App\Http\Livewire\Pages\Destinations;
 
-	use App\Models\Destination;
+	use App\Models\Location;
 	use Livewire\Component;
 	use Livewire\WithPagination;
 
@@ -13,29 +13,52 @@
 		public $search = '';
 		public $deletingId = null;
 		protected $listeners = [
-			'destination-updated'    => '$refresh',
-			'destination-created'    => '$refresh',
+			'location-updated' => '$refresh',
+			'location-created' => '$refresh',
+			'product-transferred' => '$refresh',
+			'product-added' => '$refresh',
+			'product-updated' => '$refresh',
 		];
 
-		public function updatingSearch() {
+		public function updatingSearch()
+		{
 			$this->resetPage();
 		}
 
-		public function delete(Destination $destination) {
-			$destination->delete();
+		public function delete(Location $location)
+		{
+			if ($location->products()->count()) {
+				$location->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha provato ad eliminare l'ubicazione '{$location->code}', ma non è stato possibile perché contiene dei prodotti al suo interno"
+				]);
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Errore'),
+					'subtitle' => __('L\'ubicazione non può essere cancellata perché contiene dei prodotti'),
+					'type' => 'error'
+				]);
+				return false;
+			}
+			$location->delete();
 			$this->emitSelf('$refresh');
+			$location->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha eliminato l'ubicazione '{$location->code}'"
+			]);
 			$this->dispatchBrowserEvent('open-notification', [
-				'title'    => __('Destinazione Eliminata'),
-				'subtitle' => __('La destinazione è stata eliminata con successo!'),
-				'type'     => 'success'
+				'title' => __('Ubicazione Eliminata'),
+				'subtitle' => __('L\'ubicazione è stata eliminata con successo!'),
+				'type' => 'success'
 			]);
 		}
 
-		public function render() {
+		public function render()
+		{
 			return view('livewire.pages.destinations.index', [
-				'destinations' => Destination::search($this->search, [
-					'name',
-					'address',
+				'locations' => Location::where('type', 'destinazione')->search($this->search, [
+					'code',
+					'description',
+					'type'
 				])->paginate(25)
 			]);
 		}
