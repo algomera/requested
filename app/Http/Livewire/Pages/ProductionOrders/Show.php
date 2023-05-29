@@ -101,23 +101,6 @@
 					]);
 				}
 
-				// Avanzo processo in Scarico
-				$warehouse_order_scarico = $this->production_order->warehouse_order()->where('type', 'scarico')->first();
-				// Prendo l'unica riga dell'ordine di magazzino
-				$rows = $warehouse_order_scarico->rows;
-				// Avanzo quantity_processed
-
-				// Cambio stato della riga
-
-
-
-				// Scarico prodotto dall'ubicazione di ...
-				$produzione = Location::with('products')->where('type', 'produzione')->first();
-				foreach ($produzione->products as $product) {
-					$product->pivot->decrement('quantity', $this->production_order->item->products()->where('product_id', $product->id)->first()->pivot->quantity);
-					//TODO: eliminare record pivot se quantità è 0
-				}
-
 				$this->production_order->logs()->create([
 					'user_id' => auth()->id(),
 					'message' => "ha completato la matricola '{$serial->code}' nell'ordine di produzione '{$this->production_order->code}'"
@@ -165,7 +148,35 @@
 
 		public function unloadMaterials()
 		{
-			dd("Scarico materiale");
+			// Avanzo processo in Scarico
+			$warehouse_order_scarico = $this->production_order->warehouse_order()->where('type', 'scarico')->first();
+			// Matricole completate
+			$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first()->rows()->first()->quantity_processed;
+			// Prendo le righe dell'ordine di magazzino
+			$rows = $warehouse_order_scarico->rows;
+			foreach ($rows as $row) {
+				if($row->quantity_processed < $warehouse_order_versamento) {
+					$diff = $warehouse_order_versamento - $row->quantity_processed;
+					// Scarico prodotto dall'ubicazione
+					$location = Location::with('products')->find($row->pickup_id);
+					$p = $location->products()->where('product_id', $row->product_id)->first();
+					if($p) {
+						$p->pivot->decrement('quantity', $this->production_order->materials()->where('product_id', $row->product_id)->first()->quantity * $diff);
+					}
+					// Avanzo quantity_processed
+					$row->increment('quantity_processed', $diff);
+					// Cambio stato della riga
+					if ($row->status === 'to_transfer' && $row->quantity_processed > 0) {
+						$row->update([
+							'status' => 'partially_transferred'
+						]);
+					} elseif ($row->status === 'partially_transferred' && $row->quantity_processed === $row->quantity_total) {
+						$row->update([
+							'status' => 'transferred'
+						]);
+					}
+				}
+			}
 		}
 
 		public function render()

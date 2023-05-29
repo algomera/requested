@@ -66,6 +66,7 @@
 
 			foreach ($production_order->materials as $k => $material) {
 				$warehouse_order_scarico->rows()->create([
+					'product_id' => $material->product_id,
 					'position' => $k,
 					'pickup_id' => $material->location_id,
 					'quantity_total' => $material->quantity * $production_order->quantity,

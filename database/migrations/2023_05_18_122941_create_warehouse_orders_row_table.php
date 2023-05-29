@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('warehouse_order_rows', function (Blueprint $table) {
             $table->id();
 	        $table->foreignIdFor(\App\Models\WarehouseOrder::class, 'warehouse_order_id');
+	        $table->foreignIdFor(\App\Models\Product::class, 'product_id')->nullable();
 			$table->integer('position');
 	        $table->foreignIdFor(\App\Models\Location::class, 'pickup_id')->nullable();
 			$table->double('quantity_total');
