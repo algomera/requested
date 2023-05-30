@@ -12,7 +12,7 @@
 			Schema::create('production_orders', function (Blueprint $table) {
 				$table->id();
 				$table->string('code');
-				$table->foreignIdFor(\App\Models\Item::class, 'item_id');
+				$table->foreignIdFor(\App\Models\Product::class, 'product_id');
 				$table->integer('quantity');
 				$table->date('start_planned_date')->nullable();
 				$table->date('start_date')->nullable();

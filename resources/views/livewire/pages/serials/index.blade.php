@@ -42,7 +42,7 @@
 								{{ $serial->code }}
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->production_order->code }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->production_order->item->product->description }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->production_order->product->description }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@if($serial->completed)
 										<div

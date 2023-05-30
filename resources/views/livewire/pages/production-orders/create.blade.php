@@ -13,7 +13,8 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Articolo da produrre</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<livewire:components.select return="id" model="App\\Models\\Item" title="product.description" subtitle="product.code" />
+					<livewire:components.select return="id" model="App\\Models\\Product" title="description"
+												subtitle="code"/>
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
@@ -34,7 +35,7 @@
 					<x-select wire:model.defer="destination_id">
 						<option value="" selected>Seleziona</option>
 						@foreach($all_destinations as $dest)
-							<option value="{{ $dest->id }}">{{ $dest->name }}</option>
+							<option value="{{ $dest->id }}">{{ $dest->code }}</option>
 						@endforeach
 					</x-select>
 				</dd>
@@ -43,6 +44,10 @@
 	</div>
 	<div class="py-4 px-4 flex justify-end space-x-3 sm:px-6">
 		<x-secondary-button type="button" wire:click="$emit('closeModal')">Annulla</x-secondary-button>
-		<x-primary-button>Continua</x-primary-button>
+		@if(!$product?->serial_management)
+			<x-primary-button>Salva</x-primary-button>
+		@else
+			<x-primary-button>Continua</x-primary-button>
+		@endif
 	</div>
 </form>

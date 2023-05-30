@@ -37,16 +37,6 @@
 
 		public function setAsCompleted()
 		{
-			// Verifica matricole
-//			if (count($this->serials_checked) > $this->production_order->maxItemsProducibles) {
-//				$this->dispatchBrowserEvent('open-notification', [
-//					'title' => __('ATTENZIONE!'),
-//					'subtitle' => __("Puoi produrre {$this->production_order->maxItemsProducibles} matricola/e, ma stai cercando di produrne " . count($this->serials_checked) . "!"),
-//					'type' => 'error'
-//				]);
-//				return;
-//			}
-
 			// Cambio status da "Creato" ad "Attivo"
 			if ($this->production_order->status === 'created') {
 				$this->production_order->update([
@@ -72,15 +62,15 @@
 				]);
 				// Aggiungo l'articolo prodotto nell'ubicazione di versamento
 				$versamento = Location::where('type', 'versamento')->first();
-				if ($versamento->products()->where('product_id', $this->production_order->item->product->id)->exists()) {
-					$existing_quantity = $versamento->products()->where('product_id', $this->production_order->item->product->id)->first()->pivot->quantity;
+				if ($versamento->products()->where('product_id', $this->production_order->product->id)->exists()) {
+					$existing_quantity = $versamento->products()->where('product_id', $this->production_order->product->id)->first()->pivot->quantity;
 					$versamento->products()->syncWithoutDetaching([
-						$this->production_order->item->product->id => [
+						$this->production_order->product->id => [
 							'quantity' => $existing_quantity + 1
 						]
 					]);
 				} else {
-					$versamento->products()->attach($this->production_order->item->product->id, [
+					$versamento->products()->attach($this->production_order->product->id, [
 						'quantity' => 1
 					]);
 				}
@@ -130,18 +120,44 @@
 			$this->selectAll = false;
 		}
 
-		public function changeState()
+		public function completeQuantity()
 		{
+			// Aggiungo l'articolo prodotto nell'ubicazione di versamento
+			$versamento = Location::where('type', 'versamento')->first();
+			if ($versamento->products()->where('product_id', $this->production_order->product->id)->exists()) {
+				$existing_quantity = $versamento->products()->where('product_id', $this->production_order->product->id)->first()->pivot->quantity;
+				$versamento->products()->syncWithoutDetaching([
+					$this->production_order->product->id => [
+						'quantity' => $existing_quantity + $this->production_order->quantity
+					]
+				]);
+			} else {
+				$versamento->products()->attach($this->production_order->product->id, [
+					'quantity' => $this->production_order->quantity
+				]);
+			}
+			// Avanzo processo in Versamento
+			$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first();
+			// Prendo l'unica riga dell'ordine di magazzino
+			$row = $warehouse_order_versamento->rows->first();
+			// Avanzo quantity_processed
+			$row->increment('quantity_processed', $this->production_order->quantity);
+			// Cambio stato della riga
+			$row->update([
+				'status' => 'transferred'
+			]);
+
 			$this->production_order->update([
-				'status' => 'completed'
+				'status' => 'completed',
+				'finish_date' => now()
 			]);
 			$this->production_order->logs()->create([
 				'user_id' => auth()->id(),
 				'message' => "ha completato l'ordine di produzione '{$this->production_order->code}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
-				'title' => __('Ordine di produzione completato'),
-				'subtitle' => __('L\'ordine di produzione è stato completato con successo.'),
+				'title' => __('Modifica Stato'),
+				'subtitle' => __('Lo stato dell\'ordine di produzione è passato a "Completato".'),
 				'type' => 'success'
 			]);
 		}
@@ -155,22 +171,22 @@
 			// Prendo le righe dell'ordine di magazzino
 			$rows = $warehouse_order_scarico->rows;
 			foreach ($rows as $row) {
-				if($row->quantity_processed < $warehouse_order_versamento) {
+				if ($row->quantity_processed < $warehouse_order_versamento) {
 					$diff = $warehouse_order_versamento - $row->quantity_processed;
 					// Scarico prodotto dall'ubicazione
 					$location = Location::with('products')->find($row->pickup_id);
 					$p = $location->products()->where('product_id', $row->product_id)->first();
-					if($p) {
+					if ($p) {
 						$p->pivot->decrement('quantity', $this->production_order->materials()->where('product_id', $row->product_id)->first()->quantity * $diff);
 					}
 					// Avanzo quantity_processed
 					$row->increment('quantity_processed', $diff);
 					// Cambio stato della riga
-					if ($row->status === 'to_transfer' && $row->quantity_processed > 0) {
+					if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
 						$row->update([
 							'status' => 'partially_transferred'
 						]);
-					} elseif ($row->status === 'partially_transferred' && $row->quantity_processed === $row->quantity_total) {
+					} elseif ($row->quantity_processed === $row->quantity_total) {
 						$row->update([
 							'status' => 'transferred'
 						]);

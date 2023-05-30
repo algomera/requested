@@ -10,27 +10,27 @@
 	{
 		use HasFactory, Searchable;
 
-		public function getMaxItemsProduciblesAttribute()
+//		public function getMaxItemsProduciblesAttribute()
+//		{
+//			$products = $this->item->products()->with('locations')->get();
+//			$total = [];
+//			foreach ($products as $product) {
+//				$quantities = $product->locations
+//					->where('type', 'produzione')
+//					->sum('pivot.quantity');
+//
+//				$total[] = $quantities / $product->pivot->quantity;
+//			}
+//
+//			$minQuantity = min($total);
+//
+//			return (int)floor($minQuantity);
+//		}
+
+
+		public function product()
 		{
-			$products = $this->item->products()->with('locations')->get();
-			$total = [];
-			foreach ($products as $product) {
-				$quantities = $product->locations
-					->where('type', 'produzione')
-					->sum('pivot.quantity');
-
-				$total[] = $quantities / $product->pivot->quantity;
-			}
-
-			$minQuantity = min($total);
-
-			return (int)floor($minQuantity);
-		}
-
-
-		public function item()
-		{
-			return $this->belongsTo(Item::class);
+			return $this->belongsTo(Product::class);
 		}
 
 		public function destination()

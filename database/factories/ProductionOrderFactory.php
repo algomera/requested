@@ -2,9 +2,8 @@
 
 	namespace Database\Factories;
 
-	use App\Models\Destination;
-	use App\Models\Item;
 	use App\Models\Location;
+	use App\Models\Product;
 	use Carbon\Carbon;
 	use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,7 +20,7 @@
 		public function definition(): array {
 			return [
 				'code'           => fake()->regexify('[A-Z0-9]{10}'),
-				'item_id'        => Item::all()->shuffle()->first()->id,
+				'product_id'        => Product::all()->shuffle()->first()->id,
 				'quantity'       => fake()->numberBetween(1, 7),
 				'delivery_date'  => fake()->dateTimeBetween('now', Carbon::now()->addMonth()),
 				'destination_id' => Location::where('type', 'destinazione')->get()->shuffle()->first()->id,

@@ -46,7 +46,7 @@
 			return view('livewire.pages.production-orders.index', [
 				'production_orders' => $production_orders->search($this->search, [
 					'code',
-				])->with('destination', 'item')->paginate(25)
+				])->with('destination', 'product')->paginate(25)
 			]);
 		}
 	}

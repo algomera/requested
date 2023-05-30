@@ -42,11 +42,11 @@
 		public function render()
 		{
 			if ($this->status === null || $this->status === '') {
-				$warehouse_orders = WarehouseOrder::with('production_order.item')->search($this->search, [
+				$warehouse_orders = WarehouseOrder::with('production_order.product')->search($this->search, [
 					'code',
 				])->with('rows');
 			} else {
-				$warehouse_orders = WarehouseOrder::with('production_order.item')->search($this->search, [
+				$warehouse_orders = WarehouseOrder::with('production_order.product')->search($this->search, [
 					'code',
 				])->with('rows')->get()->filter(function ($order) {
 					return $order->getStatus() === $this->status;

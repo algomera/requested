@@ -1,13 +1,13 @@
 <div class="overflow-hidden bg-white shadow sm:rounded-lg">
 	<div class="px-4 py-6 sm:px-6">
-		<h3 class="text-base font-semibold leading-7 text-gray-900">{{ $production_order->item->product->description }}</h3>
+		<h3 class="text-base font-semibold leading-7 text-gray-900">{{ $production_order->product->description }}</h3>
 	</div>
 	<div class="border-t border-gray-100">
 		<dl class="divide-y divide-gray-100 grid sm:grid-cols-2 items-start sm:gap-4">
 			<div class="px-4 py-6 sm:grid sm:grid-cols-1 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Totale</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					@php($products = $production_order->load('serials')->item->products()->with('locations')->get())
+					@php($products = $production_order->load('serials')->product()->with('locations')->get())
 					@php($materials = $production_order->materials->load('product.unit'))
 					@foreach($materials as $material)
 						<div class="flex items-center mb-0.5">

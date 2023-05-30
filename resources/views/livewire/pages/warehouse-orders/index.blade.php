@@ -64,7 +64,7 @@
 								{{ $warehouse_order->production_order->code }}
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->reason }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->production_order->item->product->description }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->production_order->product->description }}</td>
 							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->rows->sum('quantity_total') }}</td>--}}
 							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->rows->sum('quantity_processed') }}</td>--}}
 							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>--}}
