@@ -8,19 +8,19 @@
 	</li>
 	{{-- MENU ITEMS --}}
 	<li>
-		<a class="{{ request()->is('locations*') ? 'text-zinc-900 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
+		<a class="{{ request()->is('locations*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
 		   href="{{ route('locations.index') }}">
 			<span class="truncate">Ubicazioni</span>
 		</a>
 	</li>
 	<li>
-		<a class="{{ request()->is('products*') ? 'text-zinc-900 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
+		<a class="{{ request()->is('products*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
 		   href="{{ route('products.index') }}">
 			<span class="truncate">Anagrafica Prodotti</span>
 		</a>
 	</li>
 	<li>
-		<a class="{{ request()->is('items*') ? 'text-zinc-900 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
+		<a class="{{ request()->is('items*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
 		   href="{{ route('items.index') }}">
 			<span class="truncate">Articoli</span>
 		</a>
