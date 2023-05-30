@@ -1,17 +1,28 @@
-<x-slot:header>
-	<div class="flex items-center space-x-3">
-		<span>Ordine: {{ $production_order->code }}</span>
-		<button
-			x-on:click="Livewire.emit('openModal', 'components.logs', {{ json_encode(['model' => 'App\Models\ProductionOrder', 'id' => $production_order->id]) }})"
-			type="button"
-			class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 2xl:hidden"
-			aria-label="Toggle logs">
-			<x-heroicon-o-queue-list class="w-4 stroke-zinc-900"/>
-		</button>
-	</div>
-</x-slot:header>
 <div class="grid grid-cols-1 2xl:grid-cols-3 gap-1">
 	<div class="col-span-2 flow-root space-y-5 2xl:pr-4 2xl:border-r">
+		<div class="flex items-center space-x-3">
+			<div>
+				<div class="flex items-center space-x-4">
+					<span class="py-4 text-xl font-bold">Ordine: {{ $production_order->code }}</span>
+					<button
+						x-on:click="Livewire.emit('openModal', 'components.logs', {{ json_encode(['model' => 'App\Models\ProductionOrder', 'id' => $production_order->id]) }})"
+						type="button"
+						class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 2xl:hidden"
+						aria-label="Toggle logs">
+						<x-heroicon-o-queue-list class="w-4 stroke-zinc-900"/>
+					</button>
+				</div>
+				<div class="text-xs">
+					<p class="font-bold">Articolo: <span class="font-light">{{ $production_order->product->description }}</span></p>
+					<p class="font-bold">Quantità totale: <span class="font-light">{{ $production_order->quantity }}</span></p>
+					<p class="font-bold">Quantità totale: <span class="font-light">{{ $production_order->product->serial_management ? $production_order->serials()->where('completed', 1)->count() : 'Non Matricolare' }}</span></p>
+					<p class="font-bold">Data di creazione: <span class="font-light">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</span></p>
+					<p class="font-bold">Data di consegna: <span class="font-light">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</span></p>
+					<p class="font-bold">Destinazione: <span class="font-light">{{ $production_order->destination?->code }}</span></p>
+					<p class="font-bold">Stato: <span class="font-light">{{ config('requested.production_orders.status.' . $production_order->status) }}</span></p>
+				</div>
+			</div>
+		</div>
 		<div class="flex items-center justify-between">
 			<div class="space-x-3">
 				<x-primary-button
