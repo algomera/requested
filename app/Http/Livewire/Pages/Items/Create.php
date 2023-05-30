@@ -17,10 +17,6 @@
 			'setProductToItem'
 		];
 
-		public function setProductToItem($val, $to) {
-			$this->products[$to]['id'] = $val;
-		}
-
 		protected function rules()
 		{
 			return [
@@ -40,6 +36,11 @@
 			$this->product_id = $value;
 			$product = Product::find($value);
 			$this->ref = $product;
+		}
+
+		public function setProductToItem($value, $to) {
+			// TODO: non funziona molto bene
+			$this->products[$to]['id'] = $value;
 		}
 
 		public function sortItemProductsOrder($sortOrder, $previousSortOrder, $name, $from, $to)
