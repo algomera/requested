@@ -44,18 +44,18 @@
 
 		public function createWarehouseOrderTrasferimento($id)
 		{
-//			dd("Genero Ordine di Magazzino trasferimento per l'ordine {$id}");
 			$production_order = ProductionOrder::find($id);
 
-//			$warehouse_order_trasferimento = WarehouseOrder::factory()->create([
-//				'production_order_id' => $production_order->id,
-//				'destination_id' => Location::where('type', 'produzione')->first()->id,
-//				'type' => 'trasferimento',
-//				'reason' => 'Trasferimento del materiale',
-//				'user_id' => auth()->user()->id,
-//				'system' => 0,
-//			]);
+			$warehouse_order_trasferimento = WarehouseOrder::factory()->create([
+				'production_order_id' => $production_order->id,
+				'destination_id' => Location::where('type', 'produzione')->first()->id,
+				'type' => 'trasferimento',
+				'reason' => 'Trasferimento del materiale',
+				'user_id' => auth()->user()->id,
+				'system' => 0,
+			]);
 
+			// Controllo in quali locations ci sono i materiali necessari
 			$result = DB::table('products')
 				->join('location_product', 'location_product.product_id', '=', 'products.id')
 				->join('locations', 'locations.id', '=', 'location_product.location_id')
@@ -64,6 +64,7 @@
 				->whereNotIn('locations.type', ['produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])
 				->get();
 
+			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
 			if ($result->count()) {
 				foreach ($result as $item) {
 					if ($item->quantity > 0) {
@@ -76,6 +77,7 @@
 
 			$materialLocations = [];
 
+			// Per ogni materiale, creo la lista di quale materiale, da dove e quanto devo trasferire
 			foreach ($production_order->materials as $k => $material) {
 				$productId = $material->product_id;
 				$requiredQuantity = $material->quantity * $production_order->quantity; // Quantità richiesta per ogni materiale
@@ -106,18 +108,19 @@
 						$materialLocations[$productId] = []; // Azzeriamo l'array delle location per il materiale se la quantità richiesta non è stata soddisfatta
 					}
 				}
-
-
-//				$warehouse_order_trasferimento->rows()->create([
-//					'product_id' => $material->product_id,
-//					'position' => $k,
-//					'pickup_id' => $material->location_id,
-//					'quantity_total' => $material->quantity * $production_order->quantity,
-//					'quantity_processed' => 0,
-//					'status' => 'to_transfer'
-//				]);
 			}
-			dump($materialLocations);
+			foreach ($materialLocations as $id => $materialLocation) {
+				foreach ($materialLocation as $loc => $quantity) {
+					$warehouse_order_trasferimento->rows()->create([
+						'product_id' => $id,
+						'position' => $warehouse_order_trasferimento->rows()->count(),
+						'pickup_id' => $loc,
+						'quantity_total' => $quantity,
+						'quantity_processed' => 0,
+						'status' => 'to_transfer'
+					]);
+				}
+			}
 		}
 
 		public function render()

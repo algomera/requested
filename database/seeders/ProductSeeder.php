@@ -2,6 +2,7 @@
 
 	namespace Database\Seeders;
 
+	use App\Models\Location;
 	use App\Models\Product;
 	use App\Models\Unit;
 	use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -37,6 +38,16 @@
 				'description' => 'Penna Bic',
 				'unit_id' => Unit::where('abbreviation', 'pz')->first()->id,
 				'serial_management' => true,
+			]);
+
+			$tappo->locations()->attach(Location::where('code', 'RICEVIM')->first()->id, [
+				'quantity' => 5
+			]);
+			$tappo->locations()->attach(Location::where('code', 'GRANDI')->first()->id, [
+				'quantity' => 20
+			]);
+			$tubo->locations()->attach(Location::where('code', 'GRANDI')->first()->id, [
+				'quantity' => 40
 			]);
 		}
 	}
