@@ -49,5 +49,12 @@
 			$tubo->locations()->attach(Location::where('code', 'GRANDI')->first()->id, [
 				'quantity' => 40
 			]);
+
+			$tappo->locations()->attach(Location::where('code', 'PRODUZ')->first()->id, [
+				'quantity' => 50
+			]);
+			$tubo->locations()->attach(Location::where('code', 'PRODUZ')->first()->id, [
+				'quantity' => 50
+			]);
 		}
 	}
