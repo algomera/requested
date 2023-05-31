@@ -15,13 +15,7 @@ return new class extends Migration
             $table->id();
 			$table->foreignIdFor(\App\Models\ProductionOrder::class, 'production_order_id');
 			$table->foreignIdFor(\App\Models\Location::class, 'destination_id')->nullable();
-			$table->enum('type', [
-				'versamento',
-				'produzione',
-				'scarico',
-				'spedizione',
-				'ricevimento',
-			]);
+	        $table->enum('type', array_keys(config('requested.warehouse_orders.types')));
 			$table->string('reason');
 			$table->foreignIdFor(\App\Models\User::class, 'user_id')->nullable();
 			$table->boolean('system')->default(1);

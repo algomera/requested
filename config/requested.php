@@ -51,6 +51,13 @@
 			]
 		],
 		'warehouse_orders' => [
+			'types' => [
+				'versamento' => 'Versamento',
+				'scarico' => 'Scarico',
+				'trasferimento' => 'Trasferimento',
+				'spedizione' => 'Spedizione',
+				'ricevimento' => 'Ricevimento',
+			],
 			'status' => [
 				'to_transfer' => 'Da trasferire',
 				'partially_transferred' => 'Parzialmente trasferito',

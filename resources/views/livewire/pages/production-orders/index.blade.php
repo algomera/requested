@@ -51,6 +51,7 @@
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ordine di Trasferimento</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
 						</th>
@@ -89,6 +90,16 @@
 										</div>
 										@break
 								@endswitch
+							</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+								@if($production_order->warehouse_order()->where('type', 'trasferimento')->exists())
+									<div
+										class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+										Generato
+									</div>
+								@else
+									<button wire:click="createWarehouseOrderTrasferimento({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Genera</button>
+								@endif
 							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
