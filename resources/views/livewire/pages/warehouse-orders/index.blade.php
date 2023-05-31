@@ -71,7 +71,6 @@
 							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>--}}
 							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination->name }}</td>--}}
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-{{--								@dump($warehouse_order->rows)--}}
 								@switch($warehouse_order->getStatus())
 									@case('to_transfer')
 										<div
@@ -95,7 +94,7 @@
 							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
-									<a href="{{ route('production-orders.show', $warehouse_order->id) }}"
+									<a href="{{ route('warehouse-orders.show', $warehouse_order->id) }}"
 									   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</a>

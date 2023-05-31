@@ -9,6 +9,14 @@ class WarehouseOrderRow extends Model
 {
     use HasFactory;
 
+	public function product() {
+		return $this->belongsTo(Product::class);
+	}
+
+	public function pickup() {
+		return $this->belongsTo(Location::class, 'pickup_id');
+	}
+
 	public function warehouse_order() {
 		return $this->belongsTo(WarehouseOrder::class);
 	}

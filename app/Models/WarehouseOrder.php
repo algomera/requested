@@ -24,6 +24,15 @@
 			}
 		}
 
+		public function destination() {
+			return $this->belongsTo(Location::class, 'destination_id');
+		}
+
+		public function logs()
+		{
+			return $this->morphMany(Log::class, 'loggable');
+		}
+
 		public function production_order() {
 			return $this->belongsTo(ProductionOrder::class);
 		}
