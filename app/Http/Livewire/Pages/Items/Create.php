@@ -4,6 +4,7 @@
 
 	use App\Models\Item;
 	use App\Models\Product;
+	use Illuminate\Support\Str;
 	use LivewireUI\Modal\ModalComponent;
 
 	class Create extends ModalComponent
@@ -39,7 +40,6 @@
 		}
 
 		public function setProductToItem($value, $to) {
-			// TODO: non funziona molto bene
 			$this->products[$to]['id'] = $value;
 		}
 
@@ -54,7 +54,9 @@
 
 		public function addProduct()
 		{
-			$this->products[] = new Product();
+			$p = new Product();
+			$p->uuid = Str::random(10);
+			$this->products[] = $p;
 		}
 
 		public function removeProduct($index)

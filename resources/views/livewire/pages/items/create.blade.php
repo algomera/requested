@@ -29,7 +29,7 @@
 						class="divide-y divide-gray-200">
 						@foreach($products as $k => $product)
 							<x-laravel-blade-sortable::sortable-item
-								as="li" sort-key="{{ $k }}" wire:key="{{$k}}-{{$product['id']}}"
+								as="li" sort-key="{{ $k }}" wire:key="{{$product['uuid']}}"
 								class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} bg-white py-3 flex items-center justify-between">
 								<div class="bg-white flex flex-1 items-center justify-between py-3">
 									<div class="flex flex-col items-center space-y-3 pr-4 text-gray-400">
@@ -40,7 +40,7 @@
 									<div class="flex items-center w-full space-x-3">
 										<div class="flex-1">
 											<livewire:components.select wire:key="select-{{$k}}-{{$product['id']}}" return="id" model="App\\Models\\Product" title="description"
-																		subtitle="code" event="setProductToItem" to="{{ $k }}"/>
+																		subtitle="code" selected="{{$product['id']}}" event="setProductToItem" to="{{ $k }}"/>
 										</div>
 										<div class="w-[120px]">
 											<x-input wire:model="products.{{$k}}.quantity" type="number" step="1"
