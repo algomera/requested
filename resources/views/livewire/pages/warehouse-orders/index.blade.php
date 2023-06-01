@@ -35,22 +35,9 @@
 							class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
 							Codice
 						</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tipologia</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Motivo</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
-						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità--}}
-						{{--							totale--}}
-						{{--						</th>--}}
-						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità--}}
-						{{--							completata--}}
-						{{--						</th>--}}
-						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
-						{{--							creazione--}}
-						{{--						</th>--}}
-						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
-						{{--							consegna--}}
-						{{--						</th>--}}
-						{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione--}}
-						{{--						</th>--}}
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
@@ -63,13 +50,9 @@
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
 								{{ $warehouse_order->production_order->code }}
 							</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ config('requested.warehouse_orders.types.' . $warehouse_order->type) }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->reason }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->production_order->product->description }}</td>
-							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->rows->sum('quantity_total') }}</td>--}}
-							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->rows->sum('quantity_processed') }}</td>--}}
-							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>--}}
-							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>--}}
-							{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination->name }}</td>--}}
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@switch($warehouse_order->getStatus())
 									@case('to_transfer')
