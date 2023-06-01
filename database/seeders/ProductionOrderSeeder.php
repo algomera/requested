@@ -106,6 +106,7 @@
 			]);
 
 			$warehouse_order_versamento->rows()->create([
+				'product_id' => Product::where('code', 'TAPPO')->first()->id,
 				'position' => 0,
 				'pickup_id' => null,
 				'quantity_total' => $production_order_nm->quantity,
