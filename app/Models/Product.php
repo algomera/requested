@@ -10,6 +10,15 @@
 	{
 		use HasFactory, Searchable;
 
+		function decimalSteps() {
+			if ($this->unit->decimals >= 0) {
+				$value = 1 / pow(10, $this->unit->decimals);
+				return number_format($value, $this->unit->decimals, '.', '');
+			} else {
+				return 1;
+			}
+		}
+
 		public function unit() {
 			return $this->belongsTo(Unit::class);
 		}
