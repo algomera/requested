@@ -5,6 +5,7 @@
 	use App\Models\Serial;
 	use App\Models\WarehouseOrder;
 	use App\Models\WarehouseOrderRow;
+	use Illuminate\Support\Facades\DB;
 	use Livewire\WithPagination;
 	use LivewireUI\Modal\ModalComponent;
 
@@ -15,6 +16,13 @@
 		public $warehouse_order, $row;
 		public $selectAll = false;
 		public $serials_checked = [];
+		public $quantity;
+
+		protected function rules() {
+			return [
+				'quantity' => !$this->row->product->serial_management ? 'required|numeric|min:0|max:' . $this->row->quantity_total - $this->row->quantity_processed : 'nullable'
+			];
+		}
 
 		public function mount(WarehouseOrder $warehouse_order, WarehouseOrderRow $row)
 		{
@@ -33,8 +41,9 @@
 
 		public function save()
 		{
+			$this->validate();
 			// Riduco materiale ubicazione pickup
-			if($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
+			if ($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
 				$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', count($this->serials_checked));
 			} else {
 				$this->dispatchBrowserEvent('open-notification', [
@@ -54,18 +63,58 @@
 				]);
 			}
 
-			// Avanzo quantity_processed row
-			$this->row->increment('quantity_processed', count($this->serials_checked));
+			// Genero DDT e righe
+			$ddt = $this->warehouse_order->ddts()->create();
+			if ($this->row->product->serial_management) {
+				// Se matricolare
+				foreach ($this->serials_checked as $s) {
+					$serial = Serial::find($s);
 
-			// Cambio stato row
-			if ($this->row->quantity_processed > 0 && $this->row->quantity_processed < $this->row->quantity_total) {
-				$this->row->update([
-					'status' => 'partially_transferred'
+					DB::table('ddt_product')->insert([
+						'ddt_id' => $ddt->id,
+						'serial_id' => $serial->id,
+						'quantity' => 1,
+						'created_at' => now(),
+						'updated_at' => now()
+					]);
+				}
+
+				// Avanzo quantity_processed row
+				$this->row->increment('quantity_processed', count($this->serials_checked));
+
+				// Cambio stato row
+				if ($this->row->quantity_processed > 0 && $this->row->quantity_processed < $this->row->quantity_total) {
+					$this->row->update([
+						'status' => 'partially_transferred'
+					]);
+				} elseif ($this->row->quantity_processed === $this->row->quantity_total) {
+					$this->row->update([
+						'status' => 'transferred'
+					]);
+				}
+			} else {
+				// Se non matricolare
+				DB::table('ddt_product')->insert([
+					'ddt_id' => $ddt->id,
+					'product_id' => $this->row->product->id,
+					'quantity' => $this->quantity,
+					'created_at' => now(),
+					'updated_at' => now()
 				]);
-			} elseif ($this->row->quantity_processed === $this->row->quantity_total) {
-				$this->row->update([
-					'status' => 'transferred'
-				]);
+
+				// Avanzo quantity_processed row
+				$this->row->increment('quantity_processed', $this->quantity);
+
+				// Cambio stato row
+				if ($this->row->quantity_processed > 0 && $this->row->quantity_processed < $this->row->quantity_total) {
+					$this->row->update([
+						'status' => 'partially_transferred'
+					]);
+				} elseif ($this->row->quantity_processed === $this->row->quantity_total) {
+					$this->row->update([
+						'status' => 'transferred'
+					]);
+				}
 			}
 
 			$this->closeModal();

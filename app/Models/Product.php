@@ -23,6 +23,11 @@
 			return $this->belongsTo(Unit::class);
 		}
 
+		public function ddts()
+		{
+			return $this->belongsToMany(Ddt::class, 'ddt_product', 'product_id', 'ddt_id');
+		}
+
 		public function locations() {
 			return $this->belongsToMany(Location::class)->withPivot('quantity');
 		}

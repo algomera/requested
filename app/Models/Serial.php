@@ -12,6 +12,11 @@ class Serial extends Model
 
 	public $timestamps = false;
 
+	public function ddts()
+	{
+		return $this->belongsToMany(Ddt::class, 'ddt_product', 'serial_id', 'ddt_id');
+	}
+
 	public function production_order() {
 		return $this->belongsTo(ProductionOrder::class);
 	}

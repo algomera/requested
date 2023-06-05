@@ -24,6 +24,10 @@
 			}
 		}
 
+		public function ddts() {
+			return $this->hasMany(Ddt::class);
+		}
+
 		public function destination() {
 			return $this->belongsTo(Location::class, 'destination_id');
 		}
