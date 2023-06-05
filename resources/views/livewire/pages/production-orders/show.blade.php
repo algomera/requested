@@ -166,7 +166,7 @@
 				@if($production_order->status !== 'completed')
 					<x-primary-button
 						class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
-						wire:click="completeQuantity">
+						wire:click="$emit('openModal', 'pages.production-orders.complete-quantity', {{ json_encode(['production_order' => $production_order->id]) }})">
 						Completa quantità
 					</x-primary-button>
 				@endif

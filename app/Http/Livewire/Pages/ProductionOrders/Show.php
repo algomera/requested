@@ -21,6 +21,10 @@
 		public $selectAll = false;
 		public $serials_checked = [];
 
+		protected $listeners = [
+			'production_order-updated' => '$refresh',
+		];
+
 		public function mount(ProductionOrder $productionOrder)
 		{
 			$this->production_order = $productionOrder;
@@ -118,48 +122,6 @@
 			}
 			$this->serials_checked = [];
 			$this->selectAll = false;
-		}
-
-		public function completeQuantity()
-		{
-			// Aggiungo l'articolo prodotto nell'ubicazione di versamento
-			$versamento = Location::where('type', 'versamento')->first();
-			if ($versamento->products()->where('product_id', $this->production_order->product->id)->exists()) {
-				$existing_quantity = $versamento->products()->where('product_id', $this->production_order->product->id)->first()->pivot->quantity;
-				$versamento->products()->syncWithoutDetaching([
-					$this->production_order->product->id => [
-						'quantity' => $existing_quantity + $this->production_order->quantity
-					]
-				]);
-			} else {
-				$versamento->products()->attach($this->production_order->product->id, [
-					'quantity' => $this->production_order->quantity
-				]);
-			}
-			// Avanzo processo in Versamento
-			$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first();
-			// Prendo l'unica riga dell'ordine di magazzino
-			$row = $warehouse_order_versamento->rows->first();
-			// Avanzo quantity_processed
-			$row->increment('quantity_processed', $this->production_order->quantity);
-			// Cambio stato della riga
-			$row->update([
-				'status' => 'transferred'
-			]);
-
-			$this->production_order->update([
-				'status' => 'completed',
-				'finish_date' => now()
-			]);
-			$this->production_order->logs()->create([
-				'user_id' => auth()->id(),
-				'message' => "ha completato l'ordine di produzione '{$this->production_order->code}'"
-			]);
-			$this->dispatchBrowserEvent('open-notification', [
-				'title' => __('Modifica Stato'),
-				'subtitle' => __('Lo stato dell\'ordine di produzione è passato a "Completato".'),
-				'type' => 'success'
-			]);
 		}
 
 		public function unloadMaterials()
