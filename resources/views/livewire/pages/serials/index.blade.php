@@ -30,10 +30,7 @@
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di completamento</th>
-{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di spedizione</th>--}}
-{{--						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">--}}
-{{--							<span class="sr-only">Azioni</span>--}}
-{{--						</th>--}}
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di spedizione</th>
 					</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200 bg-white">
@@ -64,32 +61,7 @@
 									@endif
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->completed_at ? \Carbon\Carbon::parse($serial->completed_at)->format('d-m-Y') : '-' }}</td>
-{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->shipped_at ? \Carbon\Carbon::parse($serial->shipped_at)->format('d-m-Y') : '-' }}</td>--}}
-{{--							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">--}}
-{{--								<div class="inline-flex items-center justify-end space-x-3">--}}
-{{--									<a href="{{ route('production-orders.show', $serial->id) }}"--}}
-{{--									   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
-{{--										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>--}}
-{{--									</a>--}}
-{{--									@if(!in_array($serial->status, ['active', 'completed']))--}}
-{{--										@if($deletingId != $serial->id)--}}
-{{--											<button wire:key="deleting-{{ $serial->id }}"--}}
-{{--													wire:click.stop="$set('deletingId', '{{ $serial->id }}')"--}}
-{{--													type="button"--}}
-{{--													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
-{{--												<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>--}}
-{{--											</button>--}}
-{{--										@else--}}
-{{--											<button wire:key="confirm-{{ $serial->id }}"--}}
-{{--													x-init="setTimeout(() => $wire.deletingId = null, 5000)"--}}
-{{--													wire:click.stop="delete({{ $serial->id }})" type="button"--}}
-{{--													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
-{{--												<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>--}}
-{{--											</button>--}}
-{{--										@endif--}}
-{{--									@endif--}}
-{{--								</div>--}}
-{{--							</td>--}}
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->shipped_at ? \Carbon\Carbon::parse($serial->shipped_at)->format('d-m-Y') : '-' }}</td>
 						</tr>
 					@empty
 						<tr>
