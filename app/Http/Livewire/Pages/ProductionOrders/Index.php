@@ -61,7 +61,7 @@
 				->join('locations', 'locations.id', '=', 'location_product.location_id')
 				->select('products.id', 'location_product.location_id', 'location_product.quantity')
 				->whereIn('products.id', $production_order->materials->pluck('product_id'))
-				->whereNotIn('locations.type', ['produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])
+				->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])
 				->get();
 
 			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
