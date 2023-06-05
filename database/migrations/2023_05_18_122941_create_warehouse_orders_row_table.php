@@ -17,6 +17,7 @@ return new class extends Migration
 	        $table->foreignIdFor(\App\Models\Product::class, 'product_id')->nullable();
 			$table->integer('position');
 	        $table->foreignIdFor(\App\Models\Location::class, 'pickup_id')->nullable();
+	        $table->foreignIdFor(\App\Models\Location::class, 'destination_id')->nullable();
 			$table->double('quantity_total');
 			$table->double('quantity_processed');
 	        $table->enum('status', array_keys(config('requested.warehouse_orders.status')));

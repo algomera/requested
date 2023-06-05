@@ -5,6 +5,7 @@
 	use App\Models\Item;
 	use App\Models\Location;
 	use App\Models\Product;
+	use App\Models\WarehouseOrder;
 	use LivewireUI\Modal\ModalComponent;
 
 	class InternalTransfer extends ModalComponent
@@ -20,20 +21,25 @@
 			'itemSelected',
 			'endLocationSelected',
 		];
-		public function startLocationSelected($val) {
+
+		public function startLocationSelected($val)
+		{
 			$this->startLocation = Location::find($val);
 		}
 
-		public function endLocationSelected($val) {
+		public function endLocationSelected($val)
+		{
 			$this->endLocation = Location::find($val);
 		}
 
-		public function itemSelected($val) {
+		public function itemSelected($val)
+		{
 			$this->product = Product::find($val);
 			$this->quantity_in_location = $this->startLocation->productQuantity($this->product->id) ?? 0;
 		}
 
-		public function save() {
+		public function save()
+		{
 			if ($this->quantity > $this->quantity_in_location) {
 				$this->addError('too_many_quantity_to_transfer', 'Stai tentando di trasferire una quantità di prodotti superiore a quella disponibile.');
 			} else {
@@ -51,6 +57,25 @@
 						]
 					]);
 				}
+				// Genero Ordine di Magazzino (trasferimento)
+				$trasferimento = WarehouseOrder::create([
+					'production_order_id' => null,
+					'destination_id' => $this->endLocation->id,
+					'type' => 'trasferimento',
+					'reason' => 'Trasferimento Interno',
+					'user_id' => auth()->user()->id,
+					'system' => 0,
+				]);
+				$trasferimento->rows()->create([
+					'product_id' => $this->product->id,
+					'position' => 0,
+					'pickup_id' => $this->startLocation->id,
+					'destination_id' => $this->endLocation->id,
+					'quantity_total' => $this->quantity,
+					'quantity_processed' => $this->quantity,
+					'status' => 'transferred'
+				]);
+
 				$this->startLocation->logs()->create([
 					'user_id' => auth()->id(),
 					'message' => "ha trasferito {$this->quantity} '{$this->product->description}' dall'ubicazione '{$this->startLocation->code}' all'ubicazione '{$this->endLocation->code}'"
@@ -63,14 +88,16 @@
 				}
 				$this->closeModal();
 				$this->emit('product-transferred');
+				$this->emit('warehouse_order-created');
 				$this->emit('$refresh');
 				$this->dispatchBrowserEvent('open-notification', [
-					'title'    => __('Trasferimento Effettuato'),
+					'title' => __('Trasferimento Effettuato'),
 					'subtitle' => __('Il trasferimento è stato completato con successo!'),
-					'type'     => 'success'
+					'type' => 'success'
 				]);
 			}
 		}
+
 		public function render()
 		{
 			return view('livewire.components.internal-transfer', [

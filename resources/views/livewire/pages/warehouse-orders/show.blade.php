@@ -3,7 +3,7 @@
 		<div class="flex items-center space-x-3">
 			<div>
 				<div class="flex items-center space-x-4">
-					<span class="py-4 text-xl font-bold">Ordine: {{ $warehouse_order->production_order->code }}</span>
+					<span class="py-4 text-xl font-bold">Ordine: {{ $warehouse_order->production_order->code ?? '-' }}</span>
 				</div>
 				<div class="text-xs">
 					<p class="font-bold">Tipologia: <span class="font-light">{{ config('requested.warehouse_orders.types.' . $warehouse_order->type) }}</span></p>
@@ -15,7 +15,7 @@
 		</div>
 
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8"
-			 wire:key="{{ $warehouse_order->production_order->code }}-{{ $warehouse_order->type }}">
+			 wire:key="{{ $warehouse_order->id }}-{{ $warehouse_order->type }}">
 			<div class="inline-block min-w-full py-2 align-middle">
 				<table class="min-w-full divide-y divide-gray-300">
 					<thead>
@@ -33,6 +33,9 @@
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ubicazione di
 							prelievo
+						</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ubicazione di
+							destinazione
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
 							creazione
@@ -53,6 +56,7 @@
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $row->quantity_total }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $row->quantity_processed }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $row->pickup?->code ?: '-' }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $row->destination?->code ?: '-' }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($warehouse_order->created_at)->format('d-m-Y') }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@switch($row->status)

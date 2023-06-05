@@ -38,7 +38,7 @@
 			// Ordine di Magazzino (versamento): quando checko matricole e le completo, avanzo il processato
 			$warehouse_order_versamento = WarehouseOrder::factory()->create([
 				'production_order_id' => $production_order->id,
-				'destination_id' => Location::where('type', 'versamento')->first()->id,
+//				'destination_id' => Location::where('type', 'versamento')->first()->id,
 				'type' => 'versamento',
 				'reason' => 'Versamento di Produzione',
 				'user_id' => null,
@@ -49,6 +49,7 @@
 				'product_id' => Product::where('code', 'PENNA')->first()->id,
 				'position' => 0,
 				'pickup_id' => null,
+				'destination_id' => Location::where('type', 'versamento')->first()->id,
 				'quantity_total' => $production_order->quantity,
 				'quantity_processed' => 0,
 				'status' => 'to_transfer'
@@ -58,7 +59,7 @@
 			// del prodotto utilizzato e togliere giacenza dal magazzino (dall'ubicazione di produzione che viene segnata nella tabella della distinta base)
 			$warehouse_order_scarico = WarehouseOrder::factory()->create([
 				'production_order_id' => $production_order->id,
-				'destination_id' => null,
+//				'destination_id' => null,
 				'type' => 'scarico',
 				'reason' => 'Scarico del materiale',
 				'user_id' => null,
@@ -70,6 +71,7 @@
 					'product_id' => $material->product_id,
 					'position' => $k,
 					'pickup_id' => $material->location_id,
+					'destination_id' => null,
 					'quantity_total' => $material->quantity * $production_order->quantity,
 					'quantity_processed' => 0,
 					'status' => 'to_transfer'
@@ -98,7 +100,7 @@
 			// Ordine di Magazzino (versamento): quando checko matricole e le completo, avanzo il processato
 			$warehouse_order_versamento = WarehouseOrder::factory()->create([
 				'production_order_id' => $production_order_nm->id,
-				'destination_id' => Location::where('type', 'versamento')->first()->id,
+//				'destination_id' => Location::where('type', 'versamento')->first()->id,
 				'type' => 'versamento',
 				'reason' => 'Versamento di Produzione',
 				'user_id' => null,
@@ -109,6 +111,7 @@
 				'product_id' => Product::where('code', 'TAPPO')->first()->id,
 				'position' => 0,
 				'pickup_id' => null,
+				'destination_id' => Location::where('type', 'versamento')->first()->id,
 				'quantity_total' => $production_order_nm->quantity,
 				'quantity_processed' => 0,
 				'status' => 'to_transfer'
@@ -118,7 +121,7 @@
 			// del prodotto utilizzato e togliere giacenza dal magazzino (dall'ubicazione di produzione che viene segnata nella tabella della distinta base)
 			$warehouse_order_scarico = WarehouseOrder::factory()->create([
 				'production_order_id' => $production_order_nm->id,
-				'destination_id' => null,
+//				'destination_id' => null,
 				'type' => 'scarico',
 				'reason' => 'Scarico del materiale',
 				'user_id' => null,
@@ -130,6 +133,7 @@
 					'product_id' => $material->product_id,
 					'position' => $k,
 					'pickup_id' => $material->location_id,
+					'destination_id' => null,
 					'quantity_total' => $material->quantity * $production_order_nm->quantity,
 					'quantity_processed' => 0,
 					'status' => 'to_transfer'

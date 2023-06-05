@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('warehouse_orders', function (Blueprint $table) {
             $table->id();
-			$table->foreignIdFor(\App\Models\ProductionOrder::class, 'production_order_id');
+			$table->foreignIdFor(\App\Models\ProductionOrder::class, 'production_order_id')->nullable();
 			$table->foreignIdFor(\App\Models\Location::class, 'destination_id')->nullable();
 	        $table->enum('type', array_keys(config('requested.warehouse_orders.types')));
 			$table->string('reason');

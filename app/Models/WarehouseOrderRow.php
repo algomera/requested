@@ -17,6 +17,10 @@ class WarehouseOrderRow extends Model
 		return $this->belongsTo(Location::class, 'pickup_id');
 	}
 
+	public function destination() {
+		return $this->belongsTo(Location::class, 'destination_id');
+	}
+
 	public function warehouse_order() {
 		return $this->belongsTo(WarehouseOrder::class);
 	}
