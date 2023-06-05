@@ -193,6 +193,12 @@
 					}
 				}
 			}
+
+			$this->dispatchBrowserEvent('open-notification', [
+				'title' => __('Scarico Materiale'),
+				'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
+				'type' => 'success'
+			]);
 		}
 
 		public function render()

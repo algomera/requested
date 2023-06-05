@@ -65,7 +65,7 @@
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->product->description }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->product->serial_management ? $production_order->serials()->where('completed', 1)->count() : 'Non Matricolare' }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->warehouse_order()->where('type', 'versamento')->first()->rows()->first()->quantity_processed ?? 0 }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination?->code }}</td>
