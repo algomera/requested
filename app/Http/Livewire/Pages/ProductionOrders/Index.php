@@ -115,6 +115,7 @@
 						'product_id' => $id,
 						'position' => $warehouse_order_trasferimento->rows()->count(),
 						'pickup_id' => $loc,
+						'destination_id' => Location::where('type', 'produzione')->first()->id,
 						'quantity_total' => $quantity,
 						'quantity_processed' => 0,
 						'status' => 'to_transfer'
