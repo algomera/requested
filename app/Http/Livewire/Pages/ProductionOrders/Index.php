@@ -126,7 +126,7 @@
 		public function render()
 		{
 			$production_orders = ProductionOrder::query();
-			if ($this->status === null) {
+			if ($this->status == null) {
 				$production_orders->whereIn('status', ['created', 'active']);
 			} else {
 				$production_orders->where('status', $this->status);
