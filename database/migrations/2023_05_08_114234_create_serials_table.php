@@ -16,7 +16,8 @@
 				$table->string('code');
 				$table->boolean('completed')->default(false);
 				$table->timestamp('completed_at')->nullable();
-				$table->boolean('shipped')->nullable();
+				$table->boolean('shipped')->default(false);
+				$table->timestamp('shipped_at')->nullable();
 			});
 		}
 

@@ -27,8 +27,11 @@
 			$serials = Serial::query();
 			if ($this->status == 0) {
 				$serials->where('completed', 0);
-			} else {
+			} elseif($this->status == 1) {
 				$serials->where('completed', 1);
+			}
+			elseif($this->status == 2) {
+				$serials->where('shipped', 1);
 			}
 			return view('livewire.pages.serials.index', [
 				'serials' => $serials->search($this->search, [

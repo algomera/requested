@@ -89,6 +89,14 @@
 										Trasferisci
 									</button>
 								@endif
+									@if($warehouse_order->type === 'spedizione' && $row->status !== 'transferred')
+										<button
+											wire:click="$emit('openModal', 'pages.warehouse-orders.ship', {{ json_encode(['warehouse_order' => $warehouse_order->id, 'row' => $row->id]) }})"
+											type="button"
+											class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+											Spedisci
+										</button>
+									@endif
 							</td>
 						</tr>
 					@empty

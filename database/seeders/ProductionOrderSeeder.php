@@ -139,5 +139,25 @@
 					'status' => 'to_transfer'
 				]);
 			}
+
+			// Ordine di Magazzino (spedizione): ordine matricolare
+			$warehouse_order_spedizione = WarehouseOrder::factory()->create([
+				'production_order_id' => $production_order->id,
+				'destination_id' => Location::find(1)->id, // Baltur
+				'type' => 'spedizione',
+				'reason' => 'Spedizione a Baltur',
+				'user_id' => null,
+				'system' => 1,
+			]);
+
+			$warehouse_order_spedizione->rows()->create([
+				'product_id' => Product::where('code', 'PENNA')->first()->id,
+				'position' => 0,
+				'pickup_id' => Location::where('code', 'VERSAM')->first()->id,
+				'destination_id' => Location::find(1)->id,
+				'quantity_total' => $production_order->quantity,
+				'quantity_processed' => 0,
+				'status' => 'to_transfer'
+			]);
 		}
 	}
