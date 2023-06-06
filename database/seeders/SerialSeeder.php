@@ -21,11 +21,11 @@ class SerialSeeder extends Seeder
 	        'item_id' =>  Item::where('product_id', Product::where('code', 'PENNA')->first()->id)->first()->id,
         ]);
 
-		Serial::factory(2)->create([
-			'production_order_id' => ProductionOrder::first(),
-			'item_id' =>  Item::where('product_id', Product::where('code', 'PENNA')->first()->id)->first()->id,
-			'completed' => true,
-			'completed_at' => now()
-		]);
+//		Serial::factory(2)->create([
+//			'production_order_id' => ProductionOrder::first(),
+//			'item_id' =>  Item::where('product_id', Product::where('code', 'PENNA')->first()->id)->first()->id,
+//			'completed' => true,
+//			'completed_at' => now()
+//		]);
     }
 }

@@ -138,20 +138,25 @@
 					// Scarico prodotto dall'ubicazione
 					$location = Location::with('products')->find($row->pickup_id);
 					$p = $location->products()->where('product_id', $row->product_id)->first();
-					if ($p) {
-						$p->pivot->decrement('quantity', $this->production_order->materials()->where('product_id', $row->product_id)->first()->quantity * $diff);
-					}
-					// Avanzo quantity_processed
-					$row->increment('quantity_processed', $diff);
-					// Cambio stato della riga
-					if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
-						$row->update([
-							'status' => 'partially_transferred'
-						]);
-					} elseif ($row->quantity_processed === $row->quantity_total) {
-						$row->update([
-							'status' => 'transferred'
-						]);
+					$quantity_in_location = $location->productQuantity($row->product_id);
+//					dd($diff, $quantity_in_location);
+					$da_scaricare = min($quantity_in_location, $diff);
+					if ($p->pivot->quantity !== 0) {
+						if ($p) {
+							$p->pivot->decrement('quantity', $this->production_order->materials()->where('product_id', $row->product_id)->first()->quantity * $da_scaricare);
+						}
+						// Avanzo quantity_processed
+						$row->increment('quantity_processed', $da_scaricare);
+						// Cambio stato della riga
+						if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
+							$row->update([
+								'status' => 'partially_transferred'
+							]);
+						} elseif ($row->quantity_processed === $row->quantity_total) {
+							$row->update([
+								'status' => 'transferred'
+							]);
+						}
 					}
 				}
 			}
