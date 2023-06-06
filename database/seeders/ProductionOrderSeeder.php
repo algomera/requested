@@ -145,7 +145,7 @@
 				'production_order_id' => $production_order->id,
 				'destination_id' => Location::find(1)->id, // Baltur
 				'type' => 'spedizione',
-				'reason' => 'Spedizione a Baltur',
+				'reason' => 'Spedizione a Baltur (matricolare)',
 				'user_id' => null,
 				'system' => 1,
 			]);
@@ -153,7 +153,27 @@
 			$warehouse_order_spedizione->rows()->create([
 				'product_id' => Product::where('code', 'PENNA')->first()->id,
 				'position' => 0,
-				'pickup_id' => Location::where('code', 'VERSAM')->first()->id,
+				'pickup_id' => Location::where('code', 'SPEDIZ')->first()->id,
+				'destination_id' => Location::find(1)->id,
+				'quantity_total' => $production_order->quantity,
+				'quantity_processed' => 0,
+				'status' => 'to_transfer'
+			]);
+
+			// Ordine di Magazzino (spedizione): ordine NON matricolare
+			$warehouse_order_spedizione_nm = WarehouseOrder::factory()->create([
+				'production_order_id' => $production_order_nm->id,
+				'destination_id' => Location::find(1)->id, // Baltur
+				'type' => 'spedizione',
+				'reason' => 'Spedizione a Baltur (non matricolare)',
+				'user_id' => null,
+				'system' => 1,
+			]);
+
+			$warehouse_order_spedizione_nm->rows()->create([
+				'product_id' => Product::where('code', 'TAPPO')->first()->id,
+				'position' => 0,
+				'pickup_id' => Location::where('code', 'SPEDIZ')->first()->id,
 				'destination_id' => Location::find(1)->id,
 				'quantity_total' => $production_order->quantity,
 				'quantity_processed' => 0,

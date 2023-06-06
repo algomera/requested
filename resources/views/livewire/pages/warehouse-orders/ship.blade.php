@@ -44,7 +44,6 @@
 						<div class="mt-4">
 							{{ $unshipped_serials->links() }}
 						</div>
-						{{ $errors }}
 					</dd>
 				</div>
 			</dl>

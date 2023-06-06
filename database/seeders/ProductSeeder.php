@@ -56,5 +56,12 @@
 			$tubo->locations()->attach(Location::where('code', 'PRODUZ')->first()->id, [
 				'quantity' => 50
 			]);
+
+			$penna->locations()->attach(Location::where('code', 'SPEDIZ')->first()->id, [
+				'quantity' => 2
+			]);
+			$tappo->locations()->attach(Location::where('code', 'SPEDIZ')->first()->id, [
+				'quantity' => 10
+			]);
 		}
 	}

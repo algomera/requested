@@ -43,14 +43,26 @@
 		{
 			$this->validate();
 			// Riduco materiale ubicazione pickup
-			if ($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
-				$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', count($this->serials_checked));
+			if($this->row->product->serial_management) {
+				if ($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
+					$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', count($this->serials_checked));
+				} else {
+					$this->dispatchBrowserEvent('open-notification', [
+						'title' => __('Errore'),
+						'subtitle' => __("Nella location {$this->row->pickup->code} non c'è il prodotto da spedire!"),
+						'type' => 'error'
+					]);
+				}
 			} else {
-				$this->dispatchBrowserEvent('open-notification', [
-					'title' => __('Errore'),
-					'subtitle' => __("Nella location {$this->row->pickup->code} non c'è il prodotto da spedire!"),
-					'type' => 'error'
-				]);
+				if ($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
+					$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', $this->quantity);
+				} else {
+					$this->dispatchBrowserEvent('open-notification', [
+						'title' => __('Errore'),
+						'subtitle' => __("Nella location {$this->row->pickup->code} non c'è il prodotto da spedire!"),
+						'type' => 'error'
+					]);
+				}
 			}
 
 			// Imposto ogni matricola selezionata in "spedita"
