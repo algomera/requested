@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ddts', function (Blueprint $table) {
             $table->id();
 			$table->foreignIdFor(\App\Models\WarehouseOrder::class, 'warehouse_order_id');
+			$table->boolean('generated')->default(false);
             $table->timestamps();
         });
     }

@@ -2,10 +2,25 @@
 	<div
 		class="flow-root space-y-5 {{ $warehouse_order->type === 'spedizione' ? 'col-span-2 2xl:pr-4 2xl:border-r' : '' }}">
 		<div class="flex items-center space-x-3">
-			<div>
-				<div class="flex items-center space-x-4">
-					<span
-						class="py-4 text-xl font-bold">Ordine: {{ $warehouse_order->production_order->code ?? '-' }}</span>
+			<div class="w-full">
+				<div class="flex items-center justify-between">
+					<div class="flex items-center space-x-4">
+						<span class="py-4 text-xl font-bold">
+							Ordine: {{ $warehouse_order->production_order->code ?? '-' }}
+						</span>
+						<button
+							x-on:click="Livewire.emit('openModal', 'components.logs', {{ json_encode(['model' => 'App\Models\WarehouseOrder', 'id' => $warehouse_order->id]) }})"
+							type="button"
+							class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 2xl:hidden"
+							aria-label="Toggle logs">
+							<x-heroicon-o-queue-list class="w-4 stroke-zinc-900"/>
+						</button>
+					</div>
+					@if($warehouse_order->ddts()->where('generated', false)->first())
+						<x-primary-button wire:click="generateDDT">
+							Genera DDT
+						</x-primary-button>
+					@endif
 				</div>
 				<div class="text-xs">
 					<p class="font-bold">Tipologia: <span
@@ -146,13 +161,14 @@
 							<div class="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300"></div>
 						</div>
 						<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-							<span class="font-medium text-gray-900">DDT: {{ $ddt->id }}</span>
+							<span class="block font-medium text-gray-900">DDT: {{ $ddt->id }}</span>
 							<span x-tooltip="{{ $ddt->created_at->format('d-m-Y H:i:s') }}"
-								  class="block flex-none py-0.5 text-xs leading-5 text-gray-500">
-							{{ $ddt->created_at->diffForHumans() }}
-						</span>
+								  class="inline-block flex-none py-0.5 text-xs leading-5 text-gray-500">
+								{{ $ddt->created_at->diffForHumans() }}
+							</span>
 						</p>
-						<x-heroicon-s-printer class="w-4 h-4 hover:cursor-pointer hover:text-indigo-500"></x-heroicon-s-printer>
+						<x-heroicon-s-printer
+							class="w-4 h-4 hover:cursor-pointer hover:text-indigo-500"></x-heroicon-s-printer>
 					</li>
 				@empty
 					<p class="text-center mt-3 text-gray-500 text-xs">Al momento non c'è nessun DDT generato.</p>

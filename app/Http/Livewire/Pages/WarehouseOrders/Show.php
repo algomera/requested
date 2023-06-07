@@ -21,13 +21,19 @@
 			$this->warehouse_order = $warehouseOrder;
 		}
 
+		public function generateDDT() {
+			$this->warehouse_order->ddts()->where('generated', false)->first()->update([
+				'generated' => true
+			]);
+		}
+
 		public function render()
 		{
 			$logs = $this->warehouse_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 			return view('livewire.pages.warehouse-orders.show', [
 				'rows' => $this->warehouse_order->rows()->with('product', 'pickup')->paginate(25),
 				'logs' => $logs,
-				'ddts' => $this->warehouse_order->ddts
+				'ddts' => $this->warehouse_order->ddts()->where('generated', true)->latest()->get()
 			]);
 		}
 	}

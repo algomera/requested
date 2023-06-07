@@ -75,8 +75,14 @@
 				]);
 			}
 
+			// TODO: generare il ddt tramite un altro pulsante nell'header
 			// Genero DDT e righe
-			$ddt = $this->warehouse_order->ddts()->create();
+			if($this->warehouse_order->ddts()->where('generated', false)->latest()->first()) {
+				$ddt = $this->warehouse_order->ddts()->where('generated', false)->latest()->first();
+			} else {
+				$ddt = $this->warehouse_order->ddts()->create();
+			}
+
 			if ($this->row->product->serial_management) {
 				// Se matricolare
 				foreach ($this->serials_checked as $s) {
@@ -106,10 +112,12 @@
 				}
 			} else {
 				// Se non matricolare
-				DB::table('ddt_product')->insert([
+				$exists = DB::table('ddt_product')->where('ddt_id', $ddt->id)->where('product_id', $this->row->product->id)->first();
+				DB::table('ddt_product')->updateOrInsert([
 					'ddt_id' => $ddt->id,
 					'product_id' => $this->row->product->id,
-					'quantity' => $this->quantity,
+				],[
+					'quantity' => $exists ? $exists->quantity + $this->quantity : $this->quantity,
 					'created_at' => now(),
 					'updated_at' => now()
 				]);

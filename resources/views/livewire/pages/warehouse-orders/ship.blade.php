@@ -61,8 +61,6 @@
 	</div>
 	<div class="py-4 px-4 flex justify-end space-x-3 sm:px-6">
 		<x-secondary-button type="button" wire:click="$emit('closeModal')">Annulla</x-secondary-button>
-		<x-primary-button :disabled="$row->product->serial_management && count($serials_checked) === 0">Spedisci e
-			genera DDT
-		</x-primary-button>
+		<x-primary-button :disabled="$row->product->serial_management && count($serials_checked) === 0">Spedisci</x-primary-button>
 	</div>
 </form>
