@@ -44,4 +44,9 @@
 		public function rows() {
 			return $this->hasMany(WarehouseOrderRow::class);
 		}
+
+		public function serials()
+		{
+			return $this->hasMany(Serial::class);
+		}
 	}

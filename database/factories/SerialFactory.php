@@ -3,6 +3,7 @@
 	namespace Database\Factories;
 
 	use App\Models\Item;
+	use App\Models\Product;
 	use App\Models\ProductionOrder;
 	use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +20,7 @@
 		public function definition(): array {
 			return [
 				'production_order_id' => ProductionOrder::all()->shuffle()->first()->id,
-				'item_id' => Item::all()->shuffle()->first()->id,
+				'product_id' => Product::all()->shuffle()->first()->id,
 				'code'        => fake()->regexify('[A-Z0-9]{15}'),
 			];
 		}

@@ -3,13 +3,20 @@
 		<div class="flex items-center space-x-3">
 			<div>
 				<div class="flex items-center space-x-4">
-					<span class="py-4 text-xl font-bold">Ordine: {{ $warehouse_order->production_order->code ?? '-' }}</span>
+					<span
+						class="py-4 text-xl font-bold">Ordine: {{ $warehouse_order->production_order->code ?? '-' }}</span>
 				</div>
 				<div class="text-xs">
-					<p class="font-bold">Tipologia: <span class="font-light">{{ config('requested.warehouse_orders.types.' . $warehouse_order->type) }}</span></p>
-					<p class="font-bold">Motivo: <span class="font-light">{{ $warehouse_order->reason ?: '-' }}</span></p>
-					<p class="font-bold">Destinazione: <span class="font-light">{{ $warehouse_order->destination?->code ?: '-' }}</span></p>
-					<p class="font-bold">Stato: <span class="font-light">{{ config('requested.warehouse_orders.status.' . $warehouse_order->getStatus()) }}</span></p>
+					<p class="font-bold">Tipologia: <span
+							class="font-light">{{ config('requested.warehouse_orders.types.' . $warehouse_order->type) }}</span>
+					</p>
+					<p class="font-bold">Motivo: <span class="font-light">{{ $warehouse_order->reason ?: '-' }}</span>
+					</p>
+					<p class="font-bold">Destinazione: <span
+							class="font-light">{{ $warehouse_order->destination?->code ?: '-' }}</span></p>
+					<p class="font-bold">Stato: <span
+							class="font-light">{{ config('requested.warehouse_orders.status.' . $warehouse_order->getStatus()) }}</span>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -89,12 +96,20 @@
 										Trasferisci
 									</button>
 								@endif
-									@if($warehouse_order->type === 'spedizione' && $row->status !== 'transferred')
+								@if($warehouse_order->type === 'spedizione' && $row->status !== 'transferred')
+									<button
+										wire:click="$emit('openModal', 'pages.warehouse-orders.ship', {{ json_encode(['warehouse_order' => $warehouse_order->id, 'row' => $row->id]) }})"
+										type="button"
+										class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+										Spedisci
+									</button>
+								@endif
+									@if($warehouse_order->type === 'ricevimento' && $row->status !== 'transferred')
 										<button
-											wire:click="$emit('openModal', 'pages.warehouse-orders.ship', {{ json_encode(['warehouse_order' => $warehouse_order->id, 'row' => $row->id]) }})"
+											wire:click="$emit('openModal', 'pages.warehouse-orders.receive', {{ json_encode(['warehouse_order' => $warehouse_order->id, 'row' => $row->id]) }})"
 											type="button"
 											class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-											Spedisci
+											Ricevi
 										</button>
 									@endif
 							</td>

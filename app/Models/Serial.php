@@ -17,6 +17,10 @@ class Serial extends Model
 		return $this->belongsToMany(Ddt::class, 'ddt_product', 'serial_id', 'ddt_id');
 	}
 
+	public function product() {
+		return $this->belongsTo(Product::class);
+	}
+
 	public function production_order() {
 		return $this->belongsTo(ProductionOrder::class);
 	}
