@@ -38,7 +38,7 @@
 		</div>
 
 		<div
-			class="{{ $warehouse_order->type === 'spedizione' ? '' : '-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8' }}"
+			class="{{ $warehouse_order->type === 'spedizione' ? ' overflow-x-auto' : '-mx-4 -my-2 sm:-mx-6 lg:-mx-8' }}"
 			wire:key="{{ $warehouse_order->id }}-{{ $warehouse_order->type }}">
 			<div class="inline-block min-w-full py-2 align-middle">
 				<table class="min-w-full divide-y divide-gray-300">
