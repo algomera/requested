@@ -9,7 +9,7 @@
 							Ordine: {{ $warehouse_order->production_order->code ?? '-' }}
 						</span>
 						<button
-							x-on:click="Livewire.emit('openModal', 'components.logs', {{ json_encode(['model' => 'App\Models\WarehouseOrder', 'id' => $warehouse_order->id]) }})"
+							x-on:click="Livewire.emit('openModal', 'components.ddts', {{ json_encode(['warehouse_order' => $warehouse_order->id]) }})"
 							type="button"
 							class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 2xl:hidden"
 							aria-label="Toggle logs">
@@ -162,11 +162,11 @@
 						</div>
 						<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
 							<span class="block font-medium text-gray-900">DDT: {{ $ddt->id }}</span>
-							<span x-tooltip="{{ $ddt->created_at->format('d-m-Y H:i:s') }}"
-								  class="inline-block flex-none py-0.5 text-xs leading-5 text-gray-500">
+						</p>
+						<span x-tooltip="{{ $ddt->created_at->format('d-m-Y H:i:s') }}"
+							  class="inline-block flex-none py-0.5 text-xs leading-5 text-gray-500">
 								{{ $ddt->created_at->diffForHumans() }}
 							</span>
-						</p>
 						<x-heroicon-s-printer
 							class="w-4 h-4 hover:cursor-pointer hover:text-indigo-500"></x-heroicon-s-printer>
 					</li>
