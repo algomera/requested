@@ -26,7 +26,8 @@
 			$logs = $this->warehouse_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 			return view('livewire.pages.warehouse-orders.show', [
 				'rows' => $this->warehouse_order->rows()->with('product', 'pickup')->paginate(25),
-				'logs' => $logs
+				'logs' => $logs,
+				'ddts' => $this->warehouse_order->ddts
 			]);
 		}
 	}
