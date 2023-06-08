@@ -1,7 +1,7 @@
 <form wire:submit.prevent="save" class="overflow-hidden bg-white shadow sm:rounded-lg">
 	<div class="px-4 py-6 sm:px-6">
 		<h3 class="text-base font-semibold leading-7 text-gray-900">Trasferisci</h3>
-		<p>Da: '{{ $row->pickup->code }}' a '{{ $warehouse_order->destination->code }}'</p>
+		<p>Da: '{{ $row->pickup->code }}' a '{{ $row->destination->code }}'</p>
 	</div>
 	<div class="border-t border-gray-100">
 		<dl class="divide-y divide-gray-100">

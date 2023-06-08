@@ -8,13 +8,15 @@
 						<span class="py-4 text-xl font-bold">
 							Ordine: {{ $warehouse_order->production_order->code ?? '-' }}
 						</span>
+						@if($warehouse_order->type === 'spedizione')
 						<button
 							x-on:click="Livewire.emit('openModal', 'components.ddts', {{ json_encode(['warehouse_order' => $warehouse_order->id]) }})"
 							type="button"
 							class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 2xl:hidden"
-							aria-label="Toggle logs">
+							aria-label="Toggle ddts">
 							<x-heroicon-o-queue-list class="w-4 stroke-zinc-900"/>
 						</button>
+						@endif
 					</div>
 					@if($warehouse_order->ddts()->where('generated', false)->first())
 						<x-primary-button wire:click="generateDDT">
@@ -28,8 +30,10 @@
 					</p>
 					<p class="font-bold">Motivo: <span class="font-light">{{ $warehouse_order->reason ?: '-' }}</span>
 					</p>
+					@if($warehouse_order->destination)
 					<p class="font-bold">Destinazione: <span
 							class="font-light">{{ $warehouse_order->destination?->code ?: '-' }}</span></p>
+					@endif
 					<p class="font-bold">Stato: <span
 							class="font-light">{{ config('requested.warehouse_orders.status.' . $warehouse_order->getStatus()) }}</span>
 					</p>

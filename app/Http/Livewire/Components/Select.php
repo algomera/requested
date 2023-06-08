@@ -34,7 +34,7 @@
 			}
 			if ($this->selected) {
 				if (count($this->titleToShow) == 1) {
-					$this->oldTitle = $this->items->find($this->selected)->{$this->title};
+					$this->oldTitle = $this->items->find($this->selected)?->{$this->title};
 				} elseif (count($this->titleToShow) == 2) {
 					$relationName = $this->titleToShow[0];
 					$relationAttribute = $this->titleToShow[1];

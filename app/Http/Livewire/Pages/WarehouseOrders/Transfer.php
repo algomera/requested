@@ -31,15 +31,15 @@
 			$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', $this->quantity);
 
 			// Trasferisco materiale in ubicazione destination
-			$check = $this->warehouse_order->destination->products()->where('product_id', $this->row->product->id)->first();
+			$check = $this->row->destination->products()->where('product_id', $this->row->product->id)->first();
 			if($check) {
-				$this->warehouse_order->destination->products()->syncWithoutDetaching([
+				$this->row->destination->products()->syncWithoutDetaching([
 					$this->row->product_id => [
 						'quantity' => $check->pivot->quantity + $this->quantity
 					]
 				]);
 			} else {
-				$this->warehouse_order->destination->products()->syncWithoutDetaching([
+				$this->row->destination->products()->syncWithoutDetaching([
 					$this->row->product_id => [
 						'quantity' => $this->quantity
 					]
