@@ -22,7 +22,7 @@
 	<li>
 		<a class="{{ request()->is('items*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
 		   href="{{ route('items.index') }}">
-			<span class="truncate">Articoli</span>
+			<span class="truncate">Articoli - BOM</span>
 		</a>
 	</li>
 	<li>
