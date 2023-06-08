@@ -98,8 +98,8 @@
 				<ul x-cloak x-show="active"
 					class="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
 					tabindex="-1">
-					@if($items->count() > 0)
-						@foreach($items as $item)
+					@if($filtered && count($filtered) > 0)
+						@foreach($filtered as $item)
 							<li wire:click="selectItem('{{ getTitle($titleToShow, $item) }}', {{ $item }}, '{{ $event }}', {{ $to }})"
 								wire:key="{{ $item->id }}"
 								class="text-gray-900 relative cursor-default select-none py-2 pl-3 pr-9 hover:cursor-pointer hover:bg-gray-200">

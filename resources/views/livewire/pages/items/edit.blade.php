@@ -7,7 +7,7 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Codice</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<livewire:components.select selected="{{ $item->product_id }}" return="id" model="App\\Models\\Product" title="description" subtitle="code" />
+					<livewire:components.select selected="{{ $item->product_id }}" return="id" :items="App\Models\Product::all()" title="description" subtitle="code" />
 				</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
@@ -39,7 +39,7 @@
 									</div>
 									<div class="flex items-center w-full space-x-3">
 										<div class="flex-1">
-											<livewire:components.select selected="{{ $product['id'] }}" wire:key="select-{{$k}}-{{$product['id']}}" return="id" model="App\\Models\\Product" title="description"
+											<livewire:components.select selected="{{ $product['id'] }}" wire:key="select-{{$k}}-{{$product['id']}}" return="id" :items="App\Models\Product::all()" title="description"
 																		subtitle="code" event="setProductToItem" to="{{ $k }}"/>
 										</div>
 										<div class="w-[120px]">

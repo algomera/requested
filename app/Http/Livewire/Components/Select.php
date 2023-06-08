@@ -7,9 +7,9 @@
 
 	class Select extends Component
 	{
+		public $items;
 		public $query = null;
 		public $selected = null;
-		public $model = null;
 		public $event, $to;
 		public $title;
 		public $title2;
@@ -20,9 +20,8 @@
 		public $searchFields = [];
 		public $return, $disabled, $required, $name, $label, $hint, $append = 'heroicon-o-chevron-down', $prepend, $iconColor;
 
-		public function mount($model, $title, $subtitle = null)
+		public function mount($title, $subtitle = null, $items = null)
 		{
-			$this->model = $model;
 			$this->title = $title;
 			$this->subtitle = $subtitle;
 			$this->titleToShow = explode('.', $title);
@@ -35,12 +34,11 @@
 			}
 			if ($this->selected) {
 				if (count($this->titleToShow) == 1) {
-					$relationName = $this->titleToShow[0];
-					$this->oldTitle = $this->model::where($this->return, $this->selected)->first()->{$relationName};
+					$this->oldTitle = $this->items->find($this->selected)->{$this->title};
 				} elseif (count($this->titleToShow) == 2) {
 					$relationName = $this->titleToShow[0];
-					$relationAttribute = $this->titleToShow[0];
-					$this->oldTitle = $this->model::where($this->return, $this->selected)->first()->{$relationName}->{$relationAttribute};
+					$relationAttribute = $this->titleToShow[1];
+					$this->oldTitle = $this->items->find($this->selected)->{$relationName}->{$relationAttribute};
 				}
 			}
 		}
@@ -55,12 +53,27 @@
 
 		public function render()
 		{
-			$items = $this->model::query();
 			if ($this->query) {
-				$items->search($this->query, $this->searchFields);
+				$query = $this->query;
+				$filtered = $this->items->filter(function ($item) use ($query) {
+					if (count($this->titleToShow) == 1) {
+						$titleMatch = str_contains(strtolower($item[$this->title]), strtolower($query));
+						$subtitleMatch = str_contains(strtolower($item[$this->subtitle]), strtolower($query));
+					} elseif (count($this->titleToShow) == 2) {
+						$relationName = $this->titleToShow[0];
+						$relationAttribute = $this->titleToShow[1];
+						$titleMatch = str_contains(strtolower($item[$relationName][$relationAttribute]), strtolower($query));
+						$subtitleMatch = str_contains(strtolower($item[$relationName][$relationAttribute]), strtolower($query));
+					}
+
+					// Restituisci true se c'è una corrispondenza in uno dei campi
+					return $titleMatch || $subtitleMatch;
+				});
+			} else {
+				$filtered = $this->items;
 			}
 			return view('livewire.components.select', [
-				'items' => $items->get()
+				'filtered' => $filtered
 			]);
 		}
 	}

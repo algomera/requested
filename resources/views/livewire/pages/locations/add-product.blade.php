@@ -14,7 +14,7 @@
 	                        <li class="py-3 flex items-center justify-between">
 		                        <div class="flex items-center w-full space-x-3">
 			                        <div class="flex-1">
-										<livewire:components.select return="id" model="App\\Models\\Product" title="description" subtitle="code" />
+										<livewire:components.select return="id" :items="\App\Models\Product::all()" title="description" subtitle="code" />
 			                        </div>
 			                        <div class="w-[120px]">
 				                        <x-input wire:model="quantity" type="number" step="1" min="1"/>
