@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 			$table->foreignIdFor(\App\Models\WarehouseOrder::class, 'warehouse_order_id');
 			$table->boolean('generated')->default(false);
+	        $table->timestamp('generated_at')->nullable();
             $table->timestamps();
         });
     }
