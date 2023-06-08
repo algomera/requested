@@ -48,7 +48,7 @@
 					@forelse($warehouse_orders as $warehouse_order)
 						<tr class="hover:bg-gray-50" wire:key="{{ $warehouse_order->id }}">
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-								{{ $warehouse_order->production_order->code ?? '-' }}
+								{{ $warehouse_order->production_order->code ?? $warehouse_order->code ?? '-' }}
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ config('requested.warehouse_orders.types.' . $warehouse_order->type) }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->reason }}</td>
