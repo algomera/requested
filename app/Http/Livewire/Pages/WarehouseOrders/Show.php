@@ -23,7 +23,8 @@
 
 		public function generateDDT() {
 			$this->warehouse_order->ddts()->where('generated', false)->first()->update([
-				'generated' => true
+				'generated' => true,
+				'generated_at' => now()
 			]);
 		}
 

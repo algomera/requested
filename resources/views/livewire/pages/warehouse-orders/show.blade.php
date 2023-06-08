@@ -163,9 +163,9 @@
 						<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
 							<span class="block font-medium text-gray-900">DDT: {{ $ddt->id }}</span>
 						</p>
-						<span x-tooltip="{{ $ddt->created_at->format('d-m-Y H:i:s') }}"
+						<span x-tooltip="{{ $ddt->generated_at->format('d-m-Y H:i:s') }}"
 							  class="inline-block flex-none py-0.5 text-xs leading-5 text-gray-500">
-								{{ $ddt->created_at->diffForHumans() }}
+								{{ $ddt->generated_at->diffForHumans() }}
 							</span>
 						<x-heroicon-s-printer
 							class="w-4 h-4 hover:cursor-pointer hover:text-indigo-500"></x-heroicon-s-printer>

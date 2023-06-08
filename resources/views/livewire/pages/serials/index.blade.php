@@ -86,9 +86,9 @@
 									@endif
 								@endif
 							</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->completed_at ? \Carbon\Carbon::parse($serial->completed_at)->format('d-m-Y') : '-' }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->shipped_at ? \Carbon\Carbon::parse($serial->shipped_at)->format('d-m-Y') : '-' }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->received_at ? \Carbon\Carbon::parse($serial->received_at)->format('d-m-Y') : '-' }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->completed_at ? $serial->completed_at->format('d-m-Y H:i:s') : '-' }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->shipped_at ? $serial->shipped_at->format('d-m-Y H:i:s') : '-' }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->received_at ? $serial->received_at->format('d-m-Y H:i:s') : '-' }}</td>
 						</tr>
 					@empty
 						<tr>

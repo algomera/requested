@@ -9,6 +9,10 @@
 	{
 		use HasFactory;
 
+		protected $casts = [
+			'generated_at' => 'datetime',
+		];
+
 		public function warehouse_order() {
 			return $this->belongsTo(WarehouseOrder::class);
 		}
