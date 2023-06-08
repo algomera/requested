@@ -19,8 +19,8 @@
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
 				<dt class="flex flex-col space-y-0.5 text-sm font-medium text-gray-900">
 					<span>Prodotti</span>
-					<span wire:click="$emit('openModal', 'pages.locations.add-product', {{ json_encode(['location' => $location->id]) }})"
-					      class="text-xs font-medium text-indigo-500 hover:text-indigo-800 hover:cursor-pointer">Aggiungi</span>
+{{--					<span wire:click="$emit('openModal', 'pages.locations.add-product', {{ json_encode(['location' => $location->id]) }})"--}}
+{{--					      class="text-xs font-medium text-indigo-500 hover:text-indigo-800 hover:cursor-pointer">Aggiungi</span>--}}
 				</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					<ul role="list" class="divide-y divide-gray-200">
@@ -30,17 +30,17 @@
 									<span>{{ $product->description }}</span>
 									<p class="text-xs text-zinc-500">{{ $product->code }} &middot; <span class="text-zinc-700 font-semibold">{{ $product->pivot->quantity }} {{ $product->unit->description }}</span></p>
 								</div>
-								<div class="inline-flex items-center justify-end space-x-3">
-									<button wire:click.stop="$emit('openModal', 'pages.locations.edit-product', {{ json_encode(['product' => $product->id, 'location' => $location->id])}})"
-											type="button"
-											class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
-									</button>
-									<button wire:click="$emit('openModal', 'pages.locations.change', {{ json_encode(['product' => $product->id, 'current_location' => $location->id])}})" type="button"
-											class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-										<x-heroicon-o-arrows-right-left class="w-4 stroke-zinc-900"/>
-									</button>
-								</div>
+{{--								<div class="inline-flex items-center justify-end space-x-3">--}}
+{{--									<button wire:click.stop="$emit('openModal', 'pages.locations.edit-product', {{ json_encode(['product' => $product->id, 'location' => $location->id])}})"--}}
+{{--											type="button"--}}
+{{--											class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
+{{--										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>--}}
+{{--									</button>--}}
+{{--									<button wire:click="$emit('openModal', 'pages.locations.change', {{ json_encode(['product' => $product->id, 'current_location' => $location->id])}})" type="button"--}}
+{{--											class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
+{{--										<x-heroicon-o-arrows-right-left class="w-4 stroke-zinc-900"/>--}}
+{{--									</button>--}}
+{{--								</div>--}}
 							</li>
 						@empty
 							<li>

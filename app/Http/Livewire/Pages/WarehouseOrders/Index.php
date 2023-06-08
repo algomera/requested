@@ -27,6 +27,7 @@
 		public function delete(WarehouseOrder $warehouse_order)
 		{
 			$warehouse_order->delete();
+			$warehouse_order->rows()->delete();
 			$this->emitSelf('$refresh');
 			$warehouse_order->logs()->create([
 				'user_id' => auth()->id(),
@@ -43,11 +44,11 @@
 		{
 			if ($this->status === null || $this->status === '') {
 				$warehouse_orders = WarehouseOrder::with('production_order.product')->search($this->search, [
-					'code',
+					'production_order.code',
 				])->with('rows');
 			} else {
 				$warehouse_orders = WarehouseOrder::with('production_order.product')->search($this->search, [
-					'code',
+					'production_order.code',
 				])->with('rows')->get()->filter(function ($order) {
 					return $order->getStatus() === $this->status;
 				});

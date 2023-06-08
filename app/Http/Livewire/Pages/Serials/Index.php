@@ -15,23 +15,26 @@
 		public $status = 0;
 		public $deletingId = null;
 		protected $listeners = [
-			'production_order-updated'    => '$refresh',
-			'production_order-created'    => '$refresh',
+			'production_order-updated' => '$refresh',
+			'production_order-created' => '$refresh',
 		];
 
-		public function updatingSearch() {
+		public function updatingSearch()
+		{
 			$this->resetPage();
 		}
 
-		public function render() {
+		public function render()
+		{
 			$serials = Serial::query();
 			if ($this->status == 0) {
-				$serials->where('completed', 0);
-			} elseif($this->status == 1) {
-				$serials->where('completed', 1);
-			}
-			elseif($this->status == 2) {
-				$serials->where('shipped', 1);
+				$serials->whereNotNull('production_order_id')->where('completed', 0);
+			} elseif ($this->status == 1) {
+				$serials->whereNotNull('production_order_id')->where('completed', 1);
+			} elseif ($this->status == 2) {
+				$serials->whereNotNull('production_order_id')->where('shipped', 1);
+			} elseif ($this->status == 3) {
+				$serials->whereNotNull('warehouse_order_id')->where('received', 1);
 			}
 			return view('livewire.pages.serials.index', [
 				'serials' => $serials->search($this->search, [

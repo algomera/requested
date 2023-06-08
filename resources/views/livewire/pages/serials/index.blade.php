@@ -13,9 +13,11 @@
 				</div>
 				<div>
 					<x-select wire:model="status">
+						<option value="">Tutte</option>
 						<option value="0">Non completate</option>
 						<option value="1">Completate</option>
 						<option value="2">Spedite</option>
+						<option value="3">Ricevute</option>
 					</x-select>
 				</div>
 			</div>
@@ -29,20 +31,21 @@
 							class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
 							Codice
 						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ordine di
-							produzione
-						</th>
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ordine di--}}
+{{--							produzione--}}
+{{--						</th>--}}
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Descrizione Articolo</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
-							completamento
-						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
-							spedizione
-						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
-							ricevimento
-						</th>
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
+{{--							completamento--}}
+{{--						</th>--}}
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
+{{--							spedizione--}}
+{{--						</th>--}}
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di--}}
+{{--							ricevimento--}}
+{{--						</th>--}}
 					</tr>
 					</thead>
 					<tbody class="divide-y divide-gray-200 bg-white">
@@ -51,7 +54,8 @@
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
 								{{ $serial->code }}
 							</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->production_order->code ?? '-' }}</td>
+{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->production_order->code ?? '-' }}</td>--}}
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->production_order->product->code ?? $serial->product->code }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->production_order->product->description ?? $serial->product->description }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@if($serial->production_order_id)
@@ -86,9 +90,9 @@
 									@endif
 								@endif
 							</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->completed_at ? $serial->completed_at->format('d-m-Y H:i:s') : '-' }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->shipped_at ? $serial->shipped_at->format('d-m-Y H:i:s') : '-' }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->received_at ? $serial->received_at->format('d-m-Y H:i:s') : '-' }}</td>
+{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->completed_at ? $serial->completed_at->format('d-m-Y H:i:s') : '-' }}</td>--}}
+{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->shipped_at ? $serial->shipped_at->format('d-m-Y H:i:s') : '-' }}</td>--}}
+{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $serial->received_at ? $serial->received_at->format('d-m-Y H:i:s') : '-' }}</td>--}}
 						</tr>
 					@empty
 						<tr>

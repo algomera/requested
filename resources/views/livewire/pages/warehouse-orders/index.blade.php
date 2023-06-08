@@ -37,7 +37,7 @@
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tipologia</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Motivo</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>--}}
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
@@ -52,7 +52,7 @@
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ config('requested.warehouse_orders.types.' . $warehouse_order->type) }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->reason }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->production_order->product->description ?? $warehouse_order->rows()->first()->product->description }}</td>
+{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $warehouse_order->production_order->product->description ?? $warehouse_order->rows()->first()->product->description }}</td>--}}
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@switch($warehouse_order->getStatus())
 									@case('to_transfer')
@@ -81,7 +81,7 @@
 									   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</a>
-									@if(!$warehouse_order->system)
+									@if($warehouse_order->getStatus() === 'to_transfer' && !$warehouse_order->system)
 										@if($deletingId != $warehouse_order->id)
 											<button wire:key="deleting-{{ $warehouse_order->id }}"
 													wire:click.stop="$set('deletingId', '{{ $warehouse_order->id }}')"

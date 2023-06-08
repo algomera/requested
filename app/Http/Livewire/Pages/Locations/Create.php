@@ -20,6 +20,7 @@
 
 		public function save()
 		{
+			$this->validate();
 			$location = Location::create([
 				'code' => $this->code,
 				'description' => $this->description,
@@ -29,7 +30,7 @@
 			$this->closeModal();
 			$location->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha creato l'ubicazione '{$location->code}' (tipologia: " . config('requested.locations.types.' . $location->type) . ")"
+				'message' => "ha creato l'ubicazione '{$location->code}' (tipologia: " . config('requested.locations.types.' . $location->type . '.label') . ")"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Ubicazione Creata'),

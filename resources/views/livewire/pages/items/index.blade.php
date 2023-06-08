@@ -1,11 +1,11 @@
 <x-slot:header>
 	<div class="flex items-center justify-between">
-		Articoli
-		<div>
-			<x-primary-button x-on:click="Livewire.emit('openModal', 'pages.items.create')">
-				<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
-			</x-primary-button>
-		</div>
+		Articoli - BOM
+{{--		<div>--}}
+{{--			<x-primary-button x-on:click="Livewire.emit('openModal', 'pages.items.create')">--}}
+{{--				<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>--}}
+{{--			</x-primary-button>--}}
+{{--		</div>--}}
 	</div>
 </x-slot:header>
 <div>
@@ -40,33 +40,33 @@
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $item->product->description }}</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
-									<button
-										wire:click.stop="$emit('openModal', 'pages.items.edit', {{ json_encode(['item' => $item->id]) }})"
-										type="button"
-										class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
-									</button>
+{{--									<button--}}
+{{--										wire:click.stop="$emit('openModal', 'pages.items.edit', {{ json_encode(['item' => $item->id]) }})"--}}
+{{--										type="button"--}}
+{{--										class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
+{{--										<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>--}}
+{{--									</button>--}}
 									<button
 										wire:click.stop="$emit('openModal', 'pages.items.show', {{ json_encode(['item' => $item->id]) }})"
 										type="button"
 										class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</button>
-									@if($deletingId != $item->id)
-										<button wire:key="deleting-{{ $item->id }}"
-												wire:click.stop="$set('deletingId', '{{ $item->id }}')"
-												type="button"
-												class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-											<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>
-										</button>
-									@else
-										<button wire:key="confirm-{{ $item->id }}"
-												x-init="setTimeout(() => $wire.deletingId = null, 5000)"
-												wire:click.stop="delete({{ $item->id }})" type="button"
-												class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-											<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>
-										</button>
-									@endif
+{{--									@if($deletingId != $item->id)--}}
+{{--										<button wire:key="deleting-{{ $item->id }}"--}}
+{{--												wire:click.stop="$set('deletingId', '{{ $item->id }}')"--}}
+{{--												type="button"--}}
+{{--												class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
+{{--											<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>--}}
+{{--										</button>--}}
+{{--									@else--}}
+{{--										<button wire:key="confirm-{{ $item->id }}"--}}
+{{--												x-init="setTimeout(() => $wire.deletingId = null, 5000)"--}}
+{{--												wire:click.stop="delete({{ $item->id }})" type="button"--}}
+{{--												class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
+{{--											<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>--}}
+{{--										</button>--}}
+{{--									@endif--}}
 								</div>
 							</td>
 						</tr>

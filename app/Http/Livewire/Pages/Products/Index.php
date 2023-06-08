@@ -40,7 +40,7 @@
 			return view('livewire.pages.products.index', [
 				'products' => Product::search($this->search, [
 					'code',
-					'name'
+					'description'
 				])->paginate(25)
 			]);
 		}
