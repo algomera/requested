@@ -24,7 +24,7 @@
 							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-center justify-between">
 								<div class="flex flex-col space-y-0.5">
 									<span>{{ $location->code }}</span>
-									<p class="text-xs text-zinc-500">{{ config('requested.locations.types.' . $location->type) }} &middot; <span class="text-zinc-700 font-semibold">{{ $location->productQuantity($product->id) }} pezzi</span></p>
+									<p class="text-xs text-zinc-500">{{ config('requested.locations.types.' . $location->type . '.label') }} &middot; <span class="text-zinc-700 font-semibold">{{ $location->productQuantity($product->id) }} pezzi</span></p>
 								</div>
 								<button wire:click="$emit('openModal', 'pages.locations.change', {{ json_encode(['product' => $product->id, 'current_location' => $location->id])}})" type="button"
 								        class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
