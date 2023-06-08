@@ -126,37 +126,37 @@
 
 		public function unloadMaterials()
 		{
-			// Avanzo processo in Scarico
+			// Ordine di Scarico
 			$warehouse_order_scarico = $this->production_order->warehouse_order()->where('type', 'scarico')->first();
-			// Matricole completate
-			$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first()->rows()->first()->quantity_processed;
-			// Prendo le righe dell'ordine di magazzino
+			// Ordine di Versamento
+			$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first()->rows()->first();
+			// Prendo le righe dell'ordine di scarico
 			$rows = $warehouse_order_scarico->rows;
 			foreach ($rows as $row) {
-				if ($row->quantity_processed < $warehouse_order_versamento) {
-					$diff = $warehouse_order_versamento - $row->quantity_processed;
-					// Scarico prodotto dall'ubicazione
-					$location = Location::with('products')->find($row->pickup_id);
-					$p = $location->products()->where('product_id', $row->product_id)->first();
-					$quantity_in_location = $location->productQuantity($row->product_id);
-//					dd($diff, $quantity_in_location);
-					$da_scaricare = min($quantity_in_location, $diff);
-					if ($p->pivot->quantity !== 0) {
-						if ($p) {
-							$p->pivot->decrement('quantity', $this->production_order->materials()->where('product_id', $row->product_id)->first()->quantity * $da_scaricare);
-						}
-						// Avanzo quantity_processed
-						$row->increment('quantity_processed', $da_scaricare);
-						// Cambio stato della riga
-						if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
-							$row->update([
-								'status' => 'partially_transferred'
-							]);
-						} elseif ($row->quantity_processed === $row->quantity_total) {
-							$row->update([
-								'status' => 'transferred'
-							]);
-						}
+				// Scarico prodotto dall'ubicazione
+				$location = Location::with('products')->find($row->pickup_id);
+				$p = $location->products()->where('product_id', $row->product_id)->first();
+				$quantity_in_location = $location->productQuantity($row->product_id);
+				// (Processato versamento * quantità necessaria) - Processato riga
+				$da_scaricare = ($warehouse_order_versamento->quantity_processed * $this->production_order->materials()->where('product_id', $row->product_id)->first()->quantity) - $row->quantity_processed;
+				if($quantity_in_location <= $da_scaricare) {
+					$da_scaricare = $quantity_in_location;
+				}
+				if ($p->pivot->quantity !== 0) {
+					if ($p) {
+						$p->pivot->decrement('quantity', $da_scaricare);
+					}
+					// Avanzo quantity_processed
+					$row->increment('quantity_processed', $da_scaricare);
+					// Cambio stato della riga
+					if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
+						$row->update([
+							'status' => 'partially_transferred'
+						]);
+					} elseif ($row->quantity_processed === $row->quantity_total) {
+						$row->update([
+							'status' => 'transferred'
+						]);
 					}
 				}
 			}
