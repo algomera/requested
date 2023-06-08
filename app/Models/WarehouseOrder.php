@@ -10,6 +10,26 @@
 	{
 		use HasFactory, Searchable;
 
+		protected static function boot()
+		{
+			parent::boot();
+
+			static::creating(function ($model) {
+				switch ($model->type) {
+					case 'trasferimento':
+						$latestOrder = static::where('type', 'trasferimento')->latest()->first();
+						$sequence = $latestOrder ? intval(substr($latestOrder->code, 1)) + 1 : 1;
+						$model->code = 'T' . str_pad($sequence, 8, '0', STR_PAD_LEFT);
+						break;
+//					case 'scarto':
+//						$latestOrder = static::where('type', 'scarto')->latest()->first();
+//						$sequence = $latestOrder ? intval(substr($latestOrder->code, 1)) + 1 : 1;
+//						$model->code = 'S' . str_pad($sequence, 8, '0', STR_PAD_LEFT);
+//						break;
+				}
+			});
+		}
+
 		public function getStatus()
 		{
 			$rows = $this->rows;
@@ -24,11 +44,13 @@
 			}
 		}
 
-		public function ddts() {
+		public function ddts()
+		{
 			return $this->hasMany(Ddt::class);
 		}
 
-		public function destination() {
+		public function destination()
+		{
 			return $this->belongsTo(Location::class, 'destination_id');
 		}
 
@@ -37,11 +59,13 @@
 			return $this->morphMany(Log::class, 'loggable');
 		}
 
-		public function production_order() {
+		public function production_order()
+		{
 			return $this->belongsTo(ProductionOrder::class);
 		}
 
-		public function rows() {
+		public function rows()
+		{
 			return $this->hasMany(WarehouseOrderRow::class);
 		}
 
