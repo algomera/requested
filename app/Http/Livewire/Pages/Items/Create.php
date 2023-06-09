@@ -83,7 +83,7 @@
 			$this->closeModal();
 			$item->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha creato l'articolo '{$item->product->name}'"
+				'message' => "ha creato l'articolo '{$item->product->description}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Articolo Creato'),

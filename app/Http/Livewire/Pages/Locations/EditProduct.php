@@ -50,7 +50,7 @@
 			$this->emit('product-updated');
 			$this->location->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha modificato la quantità di '{$this->product->name}' da {$this->old_quantity} a {$this->quantity} nell'ubicazione {$this->location->code}"
+				'message' => "ha modificato la quantità di '{$this->product->description}' da {$this->old_quantity} a {$this->quantity} nell'ubicazione {$this->location->code}"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Quantità Modificata'),

@@ -27,7 +27,7 @@
 			$this->emitSelf('$refresh');
 			$item->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha eliminato l'articolo '{$item->product->name}'"
+				'message' => "ha eliminato l'articolo '{$item->product->description}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title'    => __('Articolo Eliminato'),
