@@ -18,7 +18,8 @@
 		public $serials_checked = [];
 		public $quantity;
 
-		protected function rules() {
+		protected function rules()
+		{
 			return [
 				'quantity' => !$this->row->product->serial_management ? 'required|numeric|min:0|max:' . $this->row->quantity_total - $this->row->quantity_processed : 'nullable'
 			];
@@ -43,7 +44,7 @@
 		{
 			$this->validate();
 			// Riduco materiale ubicazione pickup
-			if($this->row->product->serial_management) {
+			if ($this->row->product->serial_management) {
 				if ($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
 					$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', count($this->serials_checked));
 				} else {
@@ -76,10 +77,15 @@
 			}
 
 			// Genero DDT e righe
-			if($this->warehouse_order->ddts()->where('generated', false)->latest()->first()) {
+			if ($this->warehouse_order->ddts()->where('generated', false)->latest()->first()) {
 				$ddt = $this->warehouse_order->ddts()->where('generated', false)->latest()->first();
 			} else {
 				$ddt = $this->warehouse_order->ddts()->create();
+				$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+				$this->warehouse_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha creato il DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}'"
+				]);
 			}
 
 			if ($this->row->product->serial_management) {
@@ -95,6 +101,11 @@
 						'updated_at' => now()
 					]);
 				}
+				$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+				$this->warehouse_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha aggiungo al DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}', " . count($this->serials_checked) . " matricola/e"
+				]);
 
 				// Avanzo quantity_processed row
 				$this->row->increment('quantity_processed', count($this->serials_checked));
@@ -115,10 +126,16 @@
 				DB::table('ddt_product')->updateOrInsert([
 					'ddt_id' => $ddt->id,
 					'product_id' => $this->row->product->id,
-				],[
+				], [
 					'quantity' => $exists ? $exists->quantity + $this->quantity : $this->quantity,
 					'created_at' => now(),
 					'updated_at' => now()
+				]);
+
+				$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+				$this->warehouse_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha aggiunto al DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}', {$this->quantity} '{$this->row->product->code}'"
 				]);
 
 				// Avanzo quantity_processed row

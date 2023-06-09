@@ -46,6 +46,12 @@
 				]);
 			}
 
+			$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+			$this->warehouse_order->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => ", in riferimento all'ordine di magazzino '{$code}', ha trasferito {$this->quantity} '{$this->row->product->description}' dall'ubicazione '{$this->row->pickup->code}' all'ubicazione '{$this->row->destination->code}'"
+			]);
+
 			// Avanzo quantity_processed row
 			$this->row->increment('quantity_processed', $this->quantity);
 

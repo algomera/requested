@@ -114,7 +114,7 @@
 			$this->closeModal();
 			$warehouse_order_trasferimento->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha creato l'ordine di trasferimento '{$warehouse_order_trasferimento->code}'"
+				'message' => "ha creato l'ordine di magazzino '{$warehouse_order_trasferimento->code}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Ordine di Trasferimento Creato'),

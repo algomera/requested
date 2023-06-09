@@ -22,9 +22,15 @@
 		}
 
 		public function generateDDT() {
-			$this->warehouse_order->ddts()->where('generated', false)->first()->update([
+			$ddt = $this->warehouse_order->ddts()->where('generated', false)->first();
+			$ddt->update([
 				'generated' => true,
 				'generated_at' => now()
+			]);
+			$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+			$this->warehouse_order->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha impostato lo stato del DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}', su 'generato'"
 			]);
 		}
 

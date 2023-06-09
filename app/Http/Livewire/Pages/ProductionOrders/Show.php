@@ -79,7 +79,7 @@
 					]);
 				}
 				// Avanzo processo in Versamento
-				$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first();
+				$warehouse_order_versamento = $this->production_order->warehouse_orders()->where('type', 'versamento')->first();
 				// Prendo l'unica riga dell'ordine di magazzino
 				$row = $warehouse_order_versamento->rows->first();
 				// Avanzo quantity_processed
@@ -127,9 +127,9 @@
 		public function unloadMaterials()
 		{
 			// Ordine di Scarico
-			$warehouse_order_scarico = $this->production_order->warehouse_order()->where('type', 'scarico')->first();
+			$warehouse_order_scarico = $this->production_order->warehouse_orders()->where('type', 'scarico')->first();
 			// Ordine di Versamento
-			$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first()->rows()->first();
+			$warehouse_order_versamento = $this->production_order->warehouse_orders()->where('type', 'versamento')->first()->rows()->first();
 			// Prendo le righe dell'ordine di scarico
 			$rows = $warehouse_order_scarico->rows;
 			foreach ($rows as $row) {
@@ -161,6 +161,10 @@
 				}
 			}
 
+			$this->production_order->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha scaricato del materiale per l'ordine di produzione '{$this->production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $this->production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus()) ."'"
+			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Scarico Materiale'),
 				'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),

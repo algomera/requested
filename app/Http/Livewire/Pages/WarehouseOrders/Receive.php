@@ -71,6 +71,13 @@
 						]
 					]);
 				}
+
+				$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code ?? '-';
+				$this->warehouse_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha ricevuto, riferito all'ordine di magazzino '{$code}', " . count($this->serials_checked) . " matricola/e e l'ha/le ha trasferita/e nell'ubicazione '{$this->row->destination->code}'"
+				]);
+
 				// Avanzo quantity_processed row
 				$this->row->increment('quantity_processed', count($this->serials_checked));
 
@@ -101,6 +108,12 @@
 						]
 					]);
 				}
+
+				$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code ?? '-';
+				$this->warehouse_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha ricevuto, riferito all'ordine di magazzino '{$code}', {$this->quantity} '{$this->row->product->code}' e l'ha/le ha trasferita/e nell'ubicazione '{$this->row->destination->code}'"
+				]);
 				// Avanzo quantity_processed row
 				$this->row->increment('quantity_processed', $this->quantity);
 

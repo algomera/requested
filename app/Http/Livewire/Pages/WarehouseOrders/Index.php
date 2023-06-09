@@ -29,9 +29,10 @@
 			$warehouse_order->delete();
 			$warehouse_order->rows()->delete();
 			$this->emitSelf('$refresh');
+			$code = $warehouse_order->code ?? $warehouse_order->production_order->code;
 			$warehouse_order->logs()->create([
 				'user_id' => auth()->id(),
-				'message' => "ha eliminato l'ordine di magazzino '{$warehouse_order->production_order->code}'"
+				'message' => "ha eliminato l'ordine di magazzino '{$code}'"
 			]);
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Ordine Eliminato'),

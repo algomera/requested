@@ -43,7 +43,7 @@
 				]);
 			}
 			// Avanzo processo in Versamento
-			$warehouse_order_versamento = $this->production_order->warehouse_order()->where('type', 'versamento')->first();
+			$warehouse_order_versamento = $this->production_order->warehouse_orders()->where('type', 'versamento')->first();
 			// Prendo l'unica riga dell'ordine di magazzino
 			$row = $warehouse_order_versamento->rows->first();
 			// Avanzo quantity_processed
