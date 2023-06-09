@@ -1,11 +1,11 @@
 <x-slot:header>
 	<div class="flex items-center justify-between">
 		Ordini di produzione
-		<div>
-			<x-primary-button x-on:click="Livewire.emit('openModal', 'pages.production-orders.create')">
-				<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>
-			</x-primary-button>
-		</div>
+{{--		<div>--}}
+{{--			<x-primary-button x-on:click="Livewire.emit('openModal', 'pages.production-orders.create')">--}}
+{{--				<x-heroicon-o-plus class="w-4 h-4"></x-heroicon-o-plus>--}}
+{{--			</x-primary-button>--}}
+{{--		</div>--}}
 	</div>
 </x-slot:header>
 <div>
@@ -35,6 +35,7 @@
 							class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
 							Codice
 						</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Codice Articolo</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Articolo</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità
 							totale
@@ -48,10 +49,10 @@
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data di
 							consegna
 						</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione
-						</th>
+{{--						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Destinazione--}}
+{{--						</th>--}}
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
-						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Ordine di Trasferimento</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{-- Ordine di Trasferimento --}}</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
 						</th>
@@ -63,12 +64,13 @@
 							<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
 								{{ $production_order->code }}
 							</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->product->code }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->product->description }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->warehouse_orders()->where('type', 'versamento')->first()->rows()->first()->quantity_processed ?? 0 }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination?->code }}</td>
+{{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination?->code }}</td>--}}
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@switch($production_order->status)
 									@case('created')
@@ -93,12 +95,13 @@
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@if($production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
-									<div
-										class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-										Generato
-									</div>
+{{--									<div--}}
+{{--										class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">--}}
+{{--										Trasferimento generato--}}
+{{--									</div>--}}
+									<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Scarica materiale</button>
 								@else
-									<button wire:click="createWarehouseOrderTrasferimento({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Genera</button>
+									<button wire:click="createWarehouseOrderTrasferimentoScarico({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Genera trasferimento</button>
 								@endif
 							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
@@ -107,23 +110,23 @@
 									   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
 										<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
 									</a>
-									@if(!in_array($production_order->status, ['active', 'completed']))
-										@if($deletingId != $production_order->id)
-											<button wire:key="deleting-{{ $production_order->id }}"
-													wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"
-													type="button"
-													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-												<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>
-											</button>
-										@else
-											<button wire:key="confirm-{{ $production_order->id }}"
-													x-init="setTimeout(() => $wire.deletingId = null, 5000)"
-													wire:click.stop="delete({{ $production_order->id }})" type="button"
-													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
-												<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>
-											</button>
-										@endif
-									@endif
+{{--									@if(!in_array($production_order->status, ['active', 'completed']))--}}
+{{--										@if($deletingId != $production_order->id)--}}
+{{--											<button wire:key="deleting-{{ $production_order->id }}"--}}
+{{--													wire:click.stop="$set('deletingId', '{{ $production_order->id }}')"--}}
+{{--													type="button"--}}
+{{--													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
+{{--												<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>--}}
+{{--											</button>--}}
+{{--										@else--}}
+{{--											<button wire:key="confirm-{{ $production_order->id }}"--}}
+{{--													x-init="setTimeout(() => $wire.deletingId = null, 5000)"--}}
+{{--													wire:click.stop="delete({{ $production_order->id }})" type="button"--}}
+{{--													class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">--}}
+{{--												<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>--}}
+{{--											</button>--}}
+{{--										@endif--}}
+{{--									@endif--}}
 								</div>
 							</td>
 						</tr>

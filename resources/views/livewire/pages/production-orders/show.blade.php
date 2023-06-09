@@ -13,13 +13,24 @@
 					</button>
 				</div>
 				<div class="text-xs">
-					<p class="font-bold">Articolo: <span class="font-light">{{ $production_order->product->description }}</span></p>
-					<p class="font-bold">Quantità totale: <span class="font-light">{{ $production_order->quantity }}</span></p>
-					<p class="font-bold">Quantità totale: <span class="font-light">{{ $production_order->product->serial_management ? $production_order->serials()->where('completed', 1)->count() : 'Non Matricolare' }}</span></p>
-					<p class="font-bold">Data di creazione: <span class="font-light">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</span></p>
-					<p class="font-bold">Data di consegna: <span class="font-light">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</span></p>
-					<p class="font-bold">Destinazione: <span class="font-light">{{ $production_order->destination?->code }}</span></p>
-					<p class="font-bold">Stato: <span class="font-light">{{ config('requested.production_orders.status.' . $production_order->status) }}</span></p>
+					<p class="font-bold">Articolo: <span
+							class="font-light">{{ $production_order->product->code }} - {{ $production_order->product->description }}</span>
+					</p>
+					<p class="font-bold">Quantità totale: <span
+							class="font-light">{{ $production_order->quantity }}</span></p>
+					<p class="font-bold">Quantità totale prodotta: <span
+							class="font-light">{{ $production_order->warehouse_orders()->where('type', 'versamento')->first()->rows()->first()->quantity_processed ?? 0 }}</span>
+					</p>
+					<p class="font-bold">Data di creazione: <span
+							class="font-light">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</span>
+					</p>
+					<p class="font-bold">Data di consegna: <span
+							class="font-light">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</span>
+					</p>
+					{{--					<p class="font-bold">Destinazione: <span class="font-light">{{ $production_order->destination?->code }}</span></p>--}}
+					<p class="font-bold">Stato: <span
+							class="font-light">{{ config('requested.production_orders.status.' . $production_order->status) }}</span>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -27,12 +38,19 @@
 			<div class="space-x-3">
 				<x-primary-button
 					wire:click="$emit('openModal', 'pages.production-orders.materials', {{ json_encode(['production_order' => $production_order->id]) }})">
-					Distinta base
+					Distinta di produzione
 				</x-primary-button>
-				<x-primary-button
-					wire:click="unloadMaterials">
-					Scarica materiale
-				</x-primary-button>
+				@if(!$production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
+					<x-primary-button
+						wire:click="createWarehouseOrderTrasferimentoScarico">
+						Genera Trasferimento
+					</x-primary-button>
+				@else
+					<x-primary-button
+						wire:click="unloadMaterials">
+						Scarica materiale
+					</x-primary-button>
+				@endif
 			</div>
 			@if($serials_checked)
 				<x-primary-button

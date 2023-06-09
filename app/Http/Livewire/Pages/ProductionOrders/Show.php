@@ -5,6 +5,8 @@
 	use App\Models\Location;
 	use App\Models\ProductionOrder;
 	use App\Models\Serial;
+	use App\Models\WarehouseOrder;
+	use Illuminate\Support\Facades\DB;
 	use Livewire\Component;
 	use Livewire\WithPagination;
 
@@ -168,6 +170,123 @@
 			$this->dispatchBrowserEvent('open-notification', [
 				'title' => __('Scarico Materiale'),
 				'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
+				'type' => 'success'
+			]);
+		}
+
+		public function createWarehouseOrderTrasferimentoScarico()
+		{
+			// Genero Ordine di Magazzino (scarico)
+			$warehouse_order_scarico = WarehouseOrder::factory()->create([
+				'production_order_id' => $this->production_order->id,
+				'destination_id' => null,
+				'type' => 'scarico',
+				'reason' => 'Scarico del materiale',
+				'user_id' => null,
+				'system' => 1,
+			]);
+
+			foreach ($this->production_order->materials as $k => $material) {
+				$warehouse_order_scarico->rows()->create([
+					'product_id' => $material->product_id,
+					'position' => $k,
+					'pickup_id' => $material->location_id,
+					'destination_id' => null,
+					'quantity_total' => $material->quantity * $this->production_order->quantity,
+					'quantity_processed' => 0,
+					'status' => 'to_transfer'
+				]);
+			}
+
+			// Genero Ordine di Magazzino (trasferimento)
+			$warehouse_order_trasferimento = WarehouseOrder::factory()->create([
+				'production_order_id' => $this->production_order->id,
+				'destination_id' => Location::where('type', 'produzione')->first()->id,
+				'type' => 'trasferimento',
+				'reason' => 'Trasferimento del materiale',
+				'user_id' => null,
+				'system' => 1,
+			]);
+
+			// Controllo in quali locations ci sono i materiali necessari
+			$result = DB::table('products')
+				->join('location_product', 'location_product.product_id', '=', 'products.id')
+				->join('locations', 'locations.id', '=', 'location_product.location_id')
+				->select('products.id', 'location_product.location_id', 'location_product.quantity')
+				->whereIn('products.id', $this->production_order->materials->pluck('product_id'))
+				->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])
+				->get();
+
+			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
+			if ($result->count()) {
+				foreach ($result as $item) {
+					if ($item->quantity > 0) {
+						$list[$item->id][$item->location_id] = $item->quantity;
+					}
+				}
+			} else {
+				dd('Not found');
+			}
+
+			$materialLocations = [];
+
+			// Per ogni materiale, creo la lista di quale materiale, da dove e quanto devo trasferire
+			foreach ($this->production_order->materials as $k => $material) {
+				$productId = $material->product_id;
+				$requiredQuantity = $material->quantity * $this->production_order->quantity; // Quantità richiesta per ogni materiale
+
+				// Verifica se il prodotto è presente nella lista $list
+				if (isset($list[$productId])) {
+					$locations = $list[$productId];
+
+					$materialLocations[$productId] = [];
+
+					// Preleva la quantità richiesta da ogni location disponibile
+					foreach ($locations as $locationId => $quantity) {
+						if ($requiredQuantity <= 0) {
+							break;
+						}
+
+						// Verifica se la location ha abbastanza quantità disponibile
+						if ($quantity > 0) {
+							$prelevato = min($requiredQuantity, $quantity);
+							$materialLocations[$productId][$locationId] = $prelevato;
+							$list[$productId][$locationId] -= $prelevato;
+							$requiredQuantity -= $prelevato;
+						}
+					}
+
+					// Verifica se la quantità richiesta è stata soddisfatta completamente
+					if ($requiredQuantity > 0) {
+						$materialLocations[$productId] = []; // Azzeriamo l'array delle location per il materiale se la quantità richiesta non è stata soddisfatta
+					}
+				}
+			}
+			foreach ($materialLocations as $id => $materialLocation) {
+				foreach ($materialLocation as $loc => $quantity) {
+					$warehouse_order_trasferimento->rows()->create([
+						'product_id' => $id,
+						'position' => $warehouse_order_trasferimento->rows()->count(),
+						'pickup_id' => $loc,
+						'destination_id' => Location::where('type', 'produzione')->first()->id,
+						'quantity_total' => $quantity,
+						'quantity_processed' => 0,
+						'status' => 'to_transfer'
+					]);
+				}
+			}
+
+			$this->production_order->update([
+				'status' => 'active'
+			]);
+
+			$this->production_order->logs()->create([
+				'user_id' => auth()->id(),
+				'message' => "ha creato gli ordini di Trasferimento e di Scarico per l'ordine di produzione '{$this->production_order->code}'"
+			]);
+			$this->dispatchBrowserEvent('open-notification', [
+				'title' => __('Ordini generati'),
+				'subtitle' => __('Gli ordini di Trasferimento e di Scarico dell\'ordine di produzione sono stati creati con successo.'),
 				'type' => 'success'
 			]);
 		}
