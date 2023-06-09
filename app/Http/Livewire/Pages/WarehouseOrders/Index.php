@@ -13,6 +13,7 @@
 
 		public $search = '';
 		public $status = null;
+		public $type = null;
 		public $deletingId = null;
 		protected $listeners = [
 			'warehouse_order-updated' => '$refresh',
@@ -43,17 +44,18 @@
 
 		public function render()
 		{
-			if ($this->status === null || $this->status === '') {
-				$warehouse_orders = WarehouseOrder::with('production_order.product')->search($this->search, [
-					'production_order.code',
-				])->with('rows');
-			} else {
-				$warehouse_orders = WarehouseOrder::with('production_order.product')->search($this->search, [
-					'production_order.code',
-				])->with('rows')->get()->filter(function ($order) {
-					return $order->getStatus() === $this->status;
+			$warehouse_orders = WarehouseOrder::with('production_order.product', 'rows')->search($this->search, [
+				'production_order.code'
+			]);
+			if($this->status != null || $this->status != '') {
+				$warehouse_orders = $warehouse_orders->get()->filter(function ($order) {
+					return $order->getStatus() == $this->status;
 				});
 			}
+			if($this->type != null || $this->type != '') {
+				$warehouse_orders = $warehouse_orders->where('type', $this->type);
+			}
+
 			return view('livewire.pages.warehouse-orders.index', [
 				'warehouse_orders' => $warehouse_orders->paginate(25)
 			]);

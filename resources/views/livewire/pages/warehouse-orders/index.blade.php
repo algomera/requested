@@ -24,6 +24,14 @@
 						<option value="transferred">Trasferiti</option>
 					</x-select>
 				</div>
+				<div>
+					<x-select wire:model="type">
+						<option value="">Tutti</option>
+						@foreach(config('requested.warehouse_orders.types') as $k => $label)
+							<option value="{{ $k }}">{{ $label }}</option>
+						@endforeach
+					</x-select>
+				</div>
 			</div>
 		</div>
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
