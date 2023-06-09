@@ -75,7 +75,6 @@
 				]);
 			}
 
-			// TODO: generare il ddt tramite un altro pulsante nell'header
 			// Genero DDT e righe
 			if($this->warehouse_order->ddts()->where('generated', false)->latest()->first()) {
 				$ddt = $this->warehouse_order->ddts()->where('generated', false)->latest()->first();

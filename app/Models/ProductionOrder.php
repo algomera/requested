@@ -48,7 +48,7 @@
 			return $this->morphMany(Log::class, 'loggable');
 		}
 
-		public function warehouse_order()
+		public function warehouse_orders()
 		{
 			return $this->hasMany(WarehouseOrder::class);
 		}

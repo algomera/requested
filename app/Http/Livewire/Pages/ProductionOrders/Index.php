@@ -30,6 +30,7 @@
 		public function delete(ProductionOrder $production_order)
 		{
 			$production_order->delete();
+			// TODO: eliminare anche i warehouse_orders collegati?
 			$this->emitSelf('$refresh');
 			$production_order->logs()->create([
 				'user_id' => auth()->id(),

@@ -65,7 +65,7 @@
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->product->description }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->warehouse_order()->where('type', 'versamento')->first()->rows()->first()->quantity_processed ?? 0 }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->warehouse_orders()->where('type', 'versamento')->first()->rows()->first()->quantity_processed ?? 0 }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination?->code }}</td>
@@ -92,7 +92,7 @@
 								@endswitch
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-								@if($production_order->warehouse_order()->where('type', 'trasferimento')->exists())
+								@if($production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
 									<div
 										class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
 										Generato

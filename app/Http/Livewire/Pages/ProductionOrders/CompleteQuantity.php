@@ -22,7 +22,7 @@
 		public function mount(ProductionOrder $production_order)
 		{
 			$this->production_order = $production_order;
-			$this->warehouse_order_versamento = $production_order->warehouse_order()->where('type', 'versamento')->first()->rows()->first();
+			$this->warehouse_order_versamento = $production_order->warehouse_orders()->where('type', 'versamento')->first()->rows()->first();
 		}
 
 		public function save()
