@@ -110,6 +110,7 @@
 				]);
 			}
 
+			$this->emit('warehouse_order-created');
 			$this->closeModal();
 			$warehouse_order_trasferimento->logs()->create([
 				'user_id' => auth()->id(),
