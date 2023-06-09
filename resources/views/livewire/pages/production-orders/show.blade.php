@@ -47,16 +47,26 @@
 					</x-primary-button>
 				@else
 					<x-primary-button
-						wire:click="unloadMaterials">
+						wire:click="unloadMaterials"
+						:disabled="$production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus() === 'transferred'"
+					>
 						Scarica materiale
 					</x-primary-button>
 				@endif
 			</div>
-			@if($serials_checked)
+			@if($production_order->product->serial_management)
 				<x-primary-button
 					class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
-					wire:click="setAsCompleted">
-					Completa {{ count($serials_checked) }}
+					wire:click="setAsCompleted"
+					:disabled="$production_order->status === 'completed' || $production_order->warehouse_orders()->where('type', 'scarico')->first() === null || !$serials_checked">
+					Completa
+				</x-primary-button>
+			@else
+				<x-primary-button
+					class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
+					wire:click="$emit('openModal', 'pages.production-orders.complete-quantity', {{ json_encode(['production_order' => $production_order->id]) }})"
+					:disabled="$production_order->status === 'completed' || $production_order->warehouse_orders()->where('type', 'scarico')->first() === null">
+					Completa quantità
 				</x-primary-button>
 			@endif
 		</div>
@@ -179,16 +189,6 @@
 					@endif
 					@break
 			@endswitch
-		@else
-			<div class="pt-8 text-center">
-				@if($production_order->status !== 'completed')
-					<x-primary-button
-						class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
-						wire:click="$emit('openModal', 'pages.production-orders.complete-quantity', {{ json_encode(['production_order' => $production_order->id]) }})">
-						Completa quantità
-					</x-primary-button>
-				@endif
-			</div>
 		@endif
 	</div>
 	<div class="hidden 2xl:block">

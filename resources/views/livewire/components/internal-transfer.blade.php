@@ -41,7 +41,7 @@
 					<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 						<div class="flex items-center w-full space-x-3">
 							<div class="flex-1">
-								<x-input type="number" wire:model="quantity"></x-input>
+								<x-input type="number" wire:model="quantity" :hint="'Giacenza: ' . $startLocation->productQuantity($product->id) . ' ' . $product->unit->description"></x-input>
 							</div>
 						</div>
 					</dd>

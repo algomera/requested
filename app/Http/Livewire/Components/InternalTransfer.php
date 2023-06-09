@@ -42,6 +42,7 @@
 		{
 			if ($this->quantity > $this->quantity_in_location) {
 				$this->addError('too_many_quantity_to_transfer', 'Stai tentando di trasferire una quantità di prodotti superiore a quella disponibile.');
+				return false;
 			} else {
 				$exists = $this->endLocation->products()->where('product_id', $this->product->id)->first()?->pivot->exists();
 				if ($exists) {

@@ -99,9 +99,13 @@
 {{--										class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">--}}
 {{--										Trasferimento generato--}}
 {{--									</div>--}}
-									<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Scarica materiale</button>
+									<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-25"
+											  {{ $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus() === 'transferred' ? 'disabled' : ''}}
+									>
+										Scarica materiale
+									</button>
 								@else
-									<button wire:click="createWarehouseOrderTrasferimentoScarico({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Genera trasferimento</button>
+									<button wire:click="createWarehouseOrderTrasferimentoScarico({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-25">Genera trasferimento</button>
 								@endif
 							</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">

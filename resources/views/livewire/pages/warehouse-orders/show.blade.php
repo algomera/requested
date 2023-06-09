@@ -6,7 +6,7 @@
 				<div class="flex items-center justify-between">
 					<div class="flex items-center space-x-4">
 						<span class="py-4 text-xl font-bold">
-							Ordine: {{ $warehouse_order->production_order->code ?? '-' }}
+							Ordine: {{ $warehouse_order->production_order->code ?? $warehouse_order->code ?? '-' }}
 						</span>
 						@if($warehouse_order->type === 'spedizione')
 						<button
