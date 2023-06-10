@@ -2,7 +2,9 @@
 
 	namespace App\Http\Livewire\Pages\WarehouseOrders;
 
+	use App\Models\Serial;
 	use App\Models\WarehouseOrder;
+	use Illuminate\Support\Facades\DB;
 	use Livewire\Component;
 	use Livewire\WithPagination;
 
@@ -19,6 +21,28 @@
 		public function mount(WarehouseOrder $warehouseOrder)
 		{
 			$this->warehouse_order = $warehouseOrder;
+		}
+
+		public function shipAll() {
+			dd("Spedisci tutto");
+
+			$this->emit('product-transferred');
+			$this->dispatchBrowserEvent('open-notification', [
+				'title' => __('Spedizione Effettuata'),
+				'subtitle' => __('La spedizione è stata completata con successo!'),
+				'type' => 'success'
+			]);
+		}
+
+		public function receiveAll() {
+			dd("Ricevi tutto");
+
+			$this->emit('product-transferred');
+			$this->dispatchBrowserEvent('open-notification', [
+				'title' => __('Ricezione Effettuata'),
+				'subtitle' => __('La ricezione è stata completata con successo!'),
+				'type' => 'success'
+			]);
 		}
 
 		public function generateDDT() {

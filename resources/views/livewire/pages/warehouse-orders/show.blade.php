@@ -40,6 +40,30 @@
 				</div>
 			</div>
 		</div>
+		<div class="flex flex-col items-stretch space-y-4 lg:flex-row lg:items-center lg:justify-between">
+			@if($warehouse_order->type === 'spedizione')
+				<div class="flex space-x-3">
+					<div class="flex-1">
+						<x-primary-button wire:click="shipAll"
+										  class="w-full justify-center whitespace-nowrap"
+										  :disabled="!$this->warehouse_order->production_order->serials()->where('completed', 1)->where('shipped', 0)->count()"
+						>
+							Spedisci tutto
+						</x-primary-button>
+					</div>
+				</div>
+			@endif
+			@if($warehouse_order->type === 'ricevimento')
+				<div class="flex space-x-3">
+					<div class="flex-1">
+						<x-primary-button wire:click="receiveAll"
+										  class="w-full justify-center whitespace-nowrap">
+							Ricevi tutto
+						</x-primary-button>
+					</div>
+				</div>
+			@endif
+		</div>
 
 		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
 			@forelse($rows as $row)
@@ -110,8 +134,8 @@
 						@endif
 					</div>
 				</div>
-				@empty
-					<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
+			@empty
+				<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
 			@endforelse
 		</div>
 		<div

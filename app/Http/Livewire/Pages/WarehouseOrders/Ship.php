@@ -53,6 +53,7 @@
 						'subtitle' => __("Nella location {$this->row->pickup->code} non c'è il prodotto da spedire!"),
 						'type' => 'error'
 					]);
+					return false;
 				}
 			} else {
 				if ($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
@@ -63,6 +64,7 @@
 						'subtitle' => __("Nella location {$this->row->pickup->code} non c'è il prodotto da spedire!"),
 						'type' => 'error'
 					]);
+					return false;
 				}
 			}
 
