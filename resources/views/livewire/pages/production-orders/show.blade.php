@@ -34,30 +34,39 @@
 				</div>
 			</div>
 		</div>
-		<div class="flex items-center justify-between">
+		<div class="flex flex-col items-stretch space-y-4 lg:flex-row lg:items-center lg:justify-between">
 			@php($warehouse_order_scarico = $production_order->warehouse_orders()->where('type', 'scarico')->first())
-			<div class="space-x-3">
-				<x-primary-button
-					wire:click="$emit('openModal', 'pages.production-orders.materials', {{ json_encode(['production_order' => $production_order->id]) }})">
-					Distinta di produzione
-				</x-primary-button>
-				@if(!$production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
+			<div class="flex space-x-3">
+				<div class="flex-1">
 					<x-primary-button
-						wire:click="createWarehouseOrderTrasferimentoScarico">
-						Genera Trasferimento
+						wire:click="$emit('openModal', 'pages.production-orders.materials', {{ json_encode(['production_order' => $production_order->id]) }})"
+						class="w-full justify-center whitespace-nowrap">
+						Distinta di produzione
 					</x-primary-button>
+				</div>
+				@if(!$production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
+					<div class="flex-1">
+						<x-primary-button
+							wire:click="createWarehouseOrderTrasferimentoScarico"
+							class="w-full justify-center whitespace-nowrap">
+							Genera Trasferimento
+						</x-primary-button>
+					</div>
 				@else
+					<div class="flex-1">
 					<x-primary-button
 						wire:click="unloadMaterials"
+						class="w-full justify-center whitespace-nowrap"
 						:disabled="$warehouse_order_scarico->getStatus() === 'transferred'"
 					>
 						Scarica materiale
 					</x-primary-button>
+					</div>
 				@endif
 			</div>
 			@if($production_order->product->serial_management)
 				<x-primary-button
-					class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
+					class="justify-center bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
 					wire:click="setAsCompleted"
 					:disabled="$production_order->status === 'completed' || $warehouse_order_scarico === null || !$serials_checked">
 					Completa

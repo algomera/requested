@@ -22,7 +22,57 @@
 				</div>
 			</div>
 		</div>
-		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
+			@forelse($serials as $serial)
+				<div class="flex items-center justify-between">
+					<div class="text-xs py-3 sm:px-0 space-y-0.5">
+						<p class="font-bold">Codice: <span
+								class="font-light">{{ $serial->code }}</span>
+						</p>
+						<p class="font-bold">Articolo: <span
+								class="font-light">{{ $serial->production_order->product->code ?? $serial->product->code }} - {{ $serial->production_order->product->description ?? $serial->product->description }}</span>
+						</p>
+						<div class="font-bold inline-flex">
+							<span class="mr-2">Stato:</span>
+							@if($serial->production_order_id)
+								@if($serial->completed)
+									<div
+										class="inline-flex items-center rounded-md bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+										Completato
+									</div>
+								@else
+									<div
+										class="inline-flex items-center rounded-md bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+										Non Completato
+									</div>
+								@endif
+								@if($serial->shipped)
+									<div
+										class="inline-flex items-center rounded-md bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+										Spedito
+									</div>
+								@endif
+							@else
+								@if($serial->received)
+									<div
+										class="inline-flex items-center rounded-md bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+										Ricevuto
+									</div>
+								@else
+									<div
+										class="inline-flex items-center rounded-md bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+										Non Ricevuto
+									</div>
+								@endif
+							@endif
+						</div>
+					</div>
+				</div>
+			@empty
+				<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
+			@endforelse
+		</div>
+		<div class="hidden lg:block -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
 				<table class="min-w-full divide-y divide-gray-300">
 					<thead>

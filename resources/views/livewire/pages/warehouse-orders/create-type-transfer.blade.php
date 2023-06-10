@@ -25,30 +25,32 @@
 										</div>
 									</div>
 									<div class="flex items-center w-full space-x-3">
-										<div class="flex-1">
-											<livewire:components.select label="Ubicazione di Prelievo" wire:key="pickup-{{$k}}-{{$product['uuid']}}" return="id" :items="App\Models\Location::whereNotIn('type', ['fornitore', 'destinazione'])->get()" title="code"
-																		subtitle="description" selected="{{$product['pickup_id']}}" event="setPickupToItem" to="{{ $k }}"/>
-											@error('products.'. $k .'.pickup_id')
+										<div class="flex-1 grid grid-cols-4 gap-x-4 gap-y-2">
+											<div class="w-full flex-1 col-span-4 lg:col-span-1">
+												<livewire:components.select label="Ubicazione di Prelievo" wire:key="pickup-{{$k}}-{{$product['uuid']}}" return="id" :items="App\Models\Location::whereNotIn('type', ['fornitore', 'destinazione'])->get()" title="code"
+																			subtitle="description" selected="{{$product['pickup_id']}}" event="setPickupToItem" to="{{ $k }}"/>
+												@error('products.'. $k .'.pickup_id')
 												<span class="text-sm text-red-600 space-y-1">{{ $message }}</span>
-											@enderror
-										</div>
-										<div class="flex-1">
-											<livewire:components.select label="Articolo" wire:key="item-{{$k}}-{{$product['uuid']}}" return="id" :items="App\Models\Product::all()" title="description"
-																		subtitle="code" selected="{{$product['id']}}" event="setProductToItem" to="{{ $k }}"/>
-											@error('products.'. $k .'.id')
+												@enderror
+											</div>
+											<div class="w-full flex-1 col-span-4 lg:col-span-1">
+												<livewire:components.select label="Articolo" wire:key="item-{{$k}}-{{$product['uuid']}}" return="id" :items="App\Models\Product::all()" title="description"
+																			subtitle="code" selected="{{$product['id']}}" event="setProductToItem" to="{{ $k }}"/>
+												@error('products.'. $k .'.id')
 												<span class="text-sm text-red-600 space-y-1">{{ $message }}</span>
-											@enderror
-										</div>
-										<div class="w-[120px]">
-											<x-input label="Quantità" wire:model="products.{{$k}}.quantity" type="number" step="{{ $ref ? $ref->decimalSteps() : 1 }}"
-													 min="1" />
-										</div>
-										<div class="flex-1">
-											<livewire:components.select label="Ubicazione di Destinazione" wire:key="destination-{{$k}}-{{$product['uuid']}}" return="id" :items="App\Models\Location::whereNotIn('type', ['fornitore', 'destinazione'])->get()" title="code"
-																		subtitle="description" selected="{{$product['destination_id']}}" event="setDestinationToItem" to="{{ $k }}"/>
-											@error('products.'. $k .'.destination_id')
+												@enderror
+											</div>
+											<div class="w-full col-span-4 lg:col-span-1">
+												<x-input label="Quantità" wire:model="products.{{$k}}.quantity" type="number" step="{{ $ref ? $ref->decimalSteps() : 1 }}"
+														 min="1" />
+											</div>
+											<div class="w-full flex-1 col-span-4 lg:col-span-1">
+												<livewire:components.select label="Ubicazione di Destinazione" wire:key="destination-{{$k}}-{{$product['uuid']}}" return="id" :items="App\Models\Location::whereNotIn('type', ['fornitore', 'destinazione'])->get()" title="code"
+																			subtitle="description" selected="{{$product['destination_id']}}" event="setDestinationToItem" to="{{ $k }}"/>
+												@error('products.'. $k .'.destination_id')
 												<span class="text-sm text-red-600 space-y-1">{{ $message }}</span>
-											@enderror
+												@enderror
+											</div>
 										</div>
 										<div wire:click="removeProduct({{$k}})"
 											 class="p-2 rounded-md hover:bg-red-100 hover:cursor-pointer @error('products.' . $k . '.quantity') transform -translate-y-[0.6rem] @enderror">

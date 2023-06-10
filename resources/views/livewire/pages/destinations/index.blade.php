@@ -16,7 +16,23 @@
 						 append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 			</div>
 		</div>
-		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
+			@forelse($locations as $location)
+				<div class="flex items-center justify-between">
+					<div class="text-xs py-3 sm:px-0 space-y-0.5">
+						<p class="font-bold">Codice: <span
+								class="font-light">{{ $location->code }}</span>
+						</p>
+						<p class="font-bold">Descrizione: <span
+								class="font-light">{{ $location->description }}</span>
+						</p>
+					</div>
+				</div>
+			@empty
+				<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
+			@endforelse
+		</div>
+		<div class="hidden lg:block -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
 				<table class="min-w-full divide-y divide-gray-300">
 					<thead>

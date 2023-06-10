@@ -16,7 +16,28 @@
 						 append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 			</div>
 		</div>
-		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
+			@forelse($items as $item)
+				<div class="flex items-center justify-between">
+					<div class="text-xs py-3 sm:px-0 space-y-0.5">
+						<p class="font-bold">Articolo: <span
+								class="font-light">{{ $item->product->code }} - {{ $item->product->description }}</span>
+						</p>
+					</div>
+					<div class="inline-flex items-center justify-end space-x-3">
+						<button
+							wire:click.stop="$emit('openModal', 'pages.items.show', {{ json_encode(['item' => $item->id]) }})"
+							type="button"
+							class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+							<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
+						</button>
+					</div>
+				</div>
+			@empty
+				<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
+			@endforelse
+		</div>
+		<div class="hidden lg:block -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
 				<table class="min-w-full divide-y divide-gray-300">
 					<thead>

@@ -42,7 +42,7 @@
 		</div>
 
 		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
-			@foreach($rows as $row)
+			@forelse($rows as $row)
 				<div class="flex items-center justify-between">
 					<div class="text-xs py-3 sm:px-0 space-y-0.5">
 						<p class="font-bold">Articolo: <span
@@ -110,7 +110,9 @@
 						@endif
 					</div>
 				</div>
-			@endforeach
+				@empty
+					<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
+			@endforelse
 		</div>
 		<div
 			class="hidden lg:block {{ $warehouse_order->type === 'spedizione' ? 'overflow-x-auto' : '-mx-4 -my-2 sm:-mx-6 lg:-mx-8' }}"

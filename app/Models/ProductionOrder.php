@@ -10,6 +10,10 @@
 	{
 		use HasFactory, Searchable;
 
+		protected $casts = [
+			'delivery_date' => 'datetime',
+		];
+
 //		public function getMaxItemsProduciblesAttribute()
 //		{
 //			$products = $this->item->products()->with('locations')->get();

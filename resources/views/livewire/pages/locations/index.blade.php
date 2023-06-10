@@ -16,7 +16,58 @@
 				         append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 			</div>
 		</div>
-		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
+			@forelse($locations as $location)
+				<div class="flex items-center justify-between">
+					<div class="text-xs py-3 sm:px-0 space-y-0.5">
+						<p class="font-bold">Codice: <span
+								class="font-light">{{ $location->code }}</span>
+						</p>
+						<p class="font-bold">Descrizione: <span
+								class="font-light">{{ $location->description }}</span>
+						</p>
+						<p class="font-bold">Tipologia: <span
+								class="font-light">{{ config('requested.locations.types.' . $location->type . '.label') }}</span>
+						</p>
+						<p class="font-bold">N. Prodotti: <span
+								class="font-light">{{ $location->products()->count() }}</span>
+						</p>
+					</div>
+					<div>
+						<div class="inline-flex items-center justify-end space-x-3">
+							<button wire:click.stop="$emit('openModal', 'pages.locations.edit', {{ json_encode(['location' => $location->id]) }})"
+									type="button"
+									class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+								<x-heroicon-o-pencil class="w-4 stroke-zinc-900"/>
+							</button>
+							<button wire:click.stop="$emit('openModal', 'pages.locations.show', {{ json_encode(['location' => $location->id]) }})"
+									type="button"
+									class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+								<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
+							</button>
+							@if($deletingId != $location->id)
+								<button wire:key="mobile-deleting-{{ $location->id }}"
+										wire:click.stop="$set('deletingId', '{{ $location->id }}')"
+										type="button"
+										class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+									<x-heroicon-o-trash class="w-4 stroke-zinc-900"/>
+								</button>
+							@else
+								<button wire:key="mobile-confirm-{{ $location->id }}"
+										x-init="setTimeout(() => $wire.deletingId = null, 5000)"
+										wire:click.stop="delete({{ $location->id }})" type="button"
+										class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+									<x-heroicon-o-question-mark-circle class="w-4 stroke-orange-400"/>
+								</button>
+							@endif
+						</div>
+					</div>
+				</div>
+				@empty
+				<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
+			@endforelse
+		</div>
+		<div class="hidden lg:block -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
 				<table class="min-w-full divide-y divide-gray-300">
 					<thead>

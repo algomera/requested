@@ -26,7 +26,75 @@
 				</div>
 			</div>
 		</div>
-		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
+			@forelse($production_orders as $production_order)
+				<div class="flex items-center justify-between">
+					<div class="text-xs py-3 sm:px-0 space-y-0.5">
+						<p class="font-bold">Codice: <span
+								class="font-light">{{ $production_order->code }}</span>
+						</p>
+						<p class="font-bold">Articolo: <span
+								class="font-light">{{ $production_order->product->code }} - {{ $production_order->product->description }}</span>
+						</p>
+						<p class="font-bold">Quantità totale: <span
+								class="font-light">{{ $production_order->quantity }}</span>
+						</p>
+						<p class="font-bold">Quantità completata: <span
+								class="font-light">{{ $production_order->warehouse_orders()->where('type', 'versamento')->first()->rows()->first()->quantity_processed ?? 0 }}</span>
+						</p>
+						<p class="font-bold">Data di creazione: <span
+								class="font-light">{{ $production_order->created_at->format('d-m-Y') }}</span>
+						</p>
+						<p class="font-bold">Data di creazione: <span
+								class="font-light">{{ $production_order->delivery_date->format('d-m-Y') }}</span>
+						</p>
+						<div class="font-bold inline-flex">
+							<span class="mr-2">Stato:</span>
+							@switch($production_order->status)
+								@case('created')
+									<div
+										class="inline-flex items-center rounded-md bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+										{{ config('requested.production_orders.status.' . $production_order->status) }}
+									</div>
+									@break
+								@case('active')
+									<div
+										class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-0.5 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
+										{{ config('requested.production_orders.status.' . $production_order->status) }}
+									</div>
+									@break
+								@case('completed')
+									<div
+										class="inline-flex items-center rounded-md bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+										{{ config('requested.production_orders.status.' . $production_order->status) }}
+									</div>
+									@break
+							@endswitch
+						</div>
+						<div class="!mt-3">
+							@if($production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
+								<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-0.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-25"
+									{{ $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus() === 'transferred' ? 'disabled' : ''}}
+								>
+									Scarica materiale
+								</button>
+							@else
+								<button wire:click="createWarehouseOrderTrasferimentoScarico({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-0.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-25">Genera trasferimento</button>
+							@endif
+						</div>
+					</div>
+					<div class="inline-flex items-center justify-end space-x-3">
+						<a href="{{ route('production-orders.show', $production_order->id) }}"
+						   class="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5">
+							<x-heroicon-o-eye class="w-4 stroke-zinc-900"/>
+						</a>
+					</div>
+				</div>
+			@empty
+				<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
+			@endforelse
+		</div>
+		<div class="hidden lg:block -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
 				<table class="min-w-full divide-y divide-gray-300">
 					<thead>
@@ -68,8 +136,8 @@
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->product->description }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->quantity }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->warehouse_orders()->where('type', 'versamento')->first()->rows()->first()->quantity_processed ?? 0 }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->created_at)->format('d-m-Y') }}</td>
-							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Carbon\Carbon::parse($production_order->delivery_date)->format('d-m-Y') }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->created_at->format('d-m-Y') }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->delivery_date->format('d-m-Y') }}</td>
 {{--							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $production_order->destination?->code }}</td>--}}
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@switch($production_order->status)
@@ -95,10 +163,6 @@
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@if($production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
-{{--									<div--}}
-{{--										class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">--}}
-{{--										Trasferimento generato--}}
-{{--									</div>--}}
 									<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }})" type="button" class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-25"
 											  {{ $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus() === 'transferred' ? 'disabled' : ''}}
 									>

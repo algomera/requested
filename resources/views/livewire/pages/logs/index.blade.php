@@ -9,18 +9,34 @@
 					<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."
 							 append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 				</div>
-				<div class="w-full sm:w-56">
-					<x-flatpickr wire:model="selectedDateRange" for="selectedDate"/>
+				<div class="md:w-56">
+					<x-flatpickr wire:model="selectedDateRange" for="selectedDate" placeholder="Data"/>
 				</div>
 			</div>
 		</div>
-		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
+			@forelse($logs as $log)
+				<div class="flex items-center justify-between">
+					<div class="text-xs py-3 sm:px-0 space-y-0.5">
+						<p class="font-bold">Creazione: <span
+								class="font-light">{{ $log->created_at->format('d-m-Y H:i:s') }}</span>
+						</p>
+						<p class="font-bold">Messaggio: <span
+								class="font-light">{{ $log->user->fullName }} {{ $log->message }}</span>
+						</p>
+					</div>
+				</div>
+			@empty
+				<p class="text-center text-sm mt-3 text-zinc-500">Nessun elemento trovato</p>
+			@endforelse
+		</div>
+		<div class="hidden lg:block -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle">
 				<table class="min-w-full divide-y divide-gray-300">
 					<thead>
 					<tr>
 						<th scope="col"
-						    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
+							class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
 							Messaggio
 						</th>
 						<th scope="col" class="relative py-3.5 pl-3 text-sm text-right pr-4 sm:pr-6 lg:pr-8">

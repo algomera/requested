@@ -1,11 +1,11 @@
-@props(['disabled' => false, 'for' => '', 'label' => ''])
+@props(['disabled' => false, 'for' => '', 'label' => '', 'placeholder' => ''])
 <div>
 	@if($for && $label)
 		<x-input-label for="{{ $for }}" class="block text-sm font-medium text-gray-700">{{ $label }}</x-input-label>
 	@endif
 	<div
-			wire:ignore
-			x-data="{
+		wire:ignore
+		x-data="{
 				value: @entangle($attributes->wire('model')),
 				init() {
 				    let picker = flatpickr(this.$refs.picker, {
@@ -22,8 +22,9 @@
 {{--				    this.$watch('value', () => picker.setDate(this.value))--}}
 				},
 			}"
-			class="min-w-max w-full @if($for && $label) mt-1 @endif">
-		<input class="w-52 min-w-full rounded-md border border-gray-200 px-3 py-2 sm:text-sm" x-ref="picker" type="text">
+		class="min-w-max w-full @if($for && $label) mt-1 @endif">
+		<input class="w-52 min-w-full rounded border border-gray-300 px-3 py-2 sm:text-sm" x-ref="picker" type="text"
+			   placeholder="{{$placeholder}}">
 		<x-input-error :messages="$errors->get($for)"></x-input-error>
 	</div>
 </div>
