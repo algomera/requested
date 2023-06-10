@@ -81,15 +81,24 @@
 				}
 			}
 
-			$production_order->logs()->create([
-				'user_id' => auth()->id(),
-				'message' => "ha scaricato del materiale per l'ordine di produzione '{$production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus()) ."'"
-			]);
-			$this->dispatchBrowserEvent('open-notification', [
-				'title' => __('Scarico Materiale'),
-				'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
-				'type' => 'success'
-			]);
+			// Se scarico qualcosa creo un log altrimenti faccio visualizzare una notifica
+			if ($da_scaricare != 0) {
+				$production_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha scaricato del materiale per l'ordine di produzione '{$production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus()) ."'"
+				]);
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Scarico Materiale'),
+					'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
+					'type' => 'success'
+				]);
+			} else {
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Scarico Materiale'),
+					'subtitle' => __('Attualmente non ci sono prodotti da scaricare.'),
+					'type' => 'warning'
+				]);
+			}
 		}
 
 		public function createWarehouseOrderTrasferimentoScarico($id)

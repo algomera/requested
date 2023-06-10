@@ -141,7 +141,7 @@
 				$quantity_in_location = $location->productQuantity($row->product_id);
 				// (Processato versamento * quantità necessaria) - Processato riga
 				$da_scaricare = ($warehouse_order_versamento->quantity_processed * $this->production_order->materials()->where('product_id', $row->product_id)->first()->quantity) - $row->quantity_processed;
-				if($quantity_in_location <= $da_scaricare) {
+				if ($quantity_in_location <= $da_scaricare) {
 					$da_scaricare = $quantity_in_location;
 				}
 				if ($p->pivot->quantity !== 0) {
@@ -162,16 +162,24 @@
 					}
 				}
 			}
-
-			$this->production_order->logs()->create([
-				'user_id' => auth()->id(),
-				'message' => "ha scaricato del materiale per l'ordine di produzione '{$this->production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $this->production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus()) ."'"
-			]);
-			$this->dispatchBrowserEvent('open-notification', [
-				'title' => __('Scarico Materiale'),
-				'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
-				'type' => 'success'
-			]);
+			// Se scarico qualcosa creo un log altrimenti faccio visualizzare una notifica
+			if ($da_scaricare != 0) {
+				$this->production_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha scaricato del materiale per l'ordine di produzione '{$this->production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $this->production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus()) . "'"
+				]);
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Scarico Materiale'),
+					'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
+					'type' => 'success'
+				]);
+			} else {
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Scarico Materiale'),
+					'subtitle' => __('Attualmente non ci sono prodotti da scaricare.'),
+					'type' => 'warning'
+				]);
+			}
 		}
 
 		public function createWarehouseOrderTrasferimentoScarico()
