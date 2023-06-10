@@ -1,9 +1,10 @@
 <div class="overflow-hidden bg-white shadow sm:rounded-lg">
 	<div class="px-4 py-6 sm:px-6">
 		<h3 class="text-base font-semibold leading-7 text-gray-900">
-			<p>Ordine: {{ $production_order->code }}</p>
-			<p>Articolo: {{ $production_order->product->code }} - {{ $production_order->product->description }}</p>
+			Distinta di produzione
 		</h3>
+		<p class="text-xs">Ordine: {{ $production_order->code }}</p>
+		<p class="text-xs">Articolo: {{ $production_order->product->code }} - {{ $production_order->product->description }}</p>
 	</div>
 	<div class="border-t border-gray-100">
 		<table class="min-w-full divide-y divide-gray-300">
