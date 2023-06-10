@@ -18,7 +18,7 @@
 				<dt class="text-sm font-medium text-gray-900">Composizione</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
 					<ul role="list" class="divide-y divide-gray-200">
-						@forelse($item->products as $product)
+						@forelse($products as $product)
 							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-start justify-between">
 								<div class="flex flex-col space-y-0.5">
 									<span>{{ $product->code }} &middot; {{ $product->description }}</span>

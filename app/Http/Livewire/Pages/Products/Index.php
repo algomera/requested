@@ -41,7 +41,7 @@
 				'products' => Product::search($this->search, [
 					'code',
 					'description'
-				])->paginate(25)
+				])->with('unit')->paginate(25)
 			]);
 		}
 	}

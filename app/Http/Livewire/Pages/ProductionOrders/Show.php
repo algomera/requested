@@ -29,7 +29,7 @@
 
 		public function mount(ProductionOrder $productionOrder)
 		{
-			$this->production_order = $productionOrder;
+			$this->production_order = $productionOrder->load('materials', 'serials', 'warehouse_orders', 'warehouse_orders.rows');
 		}
 
 		public function updatedSelectAll($value)
@@ -81,7 +81,7 @@
 					]);
 				}
 				// Avanzo processo in Versamento
-				$warehouse_order_versamento = $this->production_order->warehouse_orders()->where('type', 'versamento')->first();
+				$warehouse_order_versamento = $this->production_order->warehouse_orders->where('type', 'versamento')->first();
 				// Prendo l'unica riga dell'ordine di magazzino
 				$row = $warehouse_order_versamento->rows->first();
 				// Avanzo quantity_processed
@@ -107,7 +107,7 @@
 				'type' => 'success'
 			]);
 			// Cambio status da "Attivo" a "Completato"
-			if ($this->production_order->status === 'active' && $this->production_order->serials()->where('completed', 0)->count() === 0) {
+			if ($this->production_order->fresh()->status === 'active' && $this->production_order->fresh()->serials->where('completed', 0)->count() == 0) {
 				$this->production_order->update([
 					'status' => 'completed',
 					'finish_date' => now()
@@ -129,22 +129,22 @@
 		public function unloadMaterials()
 		{
 			// Ordine di Scarico
-			$warehouse_order_scarico = $this->production_order->warehouse_orders()->where('type', 'scarico')->first();
+			$warehouse_order_scarico = $this->production_order->warehouse_orders->where('type', 'scarico')->first();
 			// Ordine di Versamento
-			$warehouse_order_versamento = $this->production_order->warehouse_orders()->where('type', 'versamento')->first()->rows()->first();
+			$warehouse_order_versamento = $this->production_order->warehouse_orders->where('type', 'versamento')->first()->rows->first();
 			// Prendo le righe dell'ordine di scarico
 			$rows = $warehouse_order_scarico->rows;
 			foreach ($rows as $row) {
 				// Scarico prodotto dall'ubicazione
-				$location = Location::with('products')->find($row->pickup_id);
+				$location = Location::find($row->pickup_id);
 				$p = $location->products()->where('product_id', $row->product_id)->first();
 				$quantity_in_location = $location->productQuantity($row->product_id);
 				// (Processato versamento * quantità necessaria) - Processato riga
-				$da_scaricare = ($warehouse_order_versamento->quantity_processed * $this->production_order->materials()->where('product_id', $row->product_id)->first()->quantity) - $row->quantity_processed;
+				$da_scaricare = ($warehouse_order_versamento->quantity_processed * $this->production_order->materials->where('product_id', $row->product_id)->first()->quantity) - $row->quantity_processed;
 				if ($quantity_in_location <= $da_scaricare) {
 					$da_scaricare = $quantity_in_location;
 				}
-				if ($p->pivot->quantity !== 0) {
+				if ($quantity_in_location !== 0) {
 					if ($p) {
 						$p->pivot->decrement('quantity', $da_scaricare);
 					}
@@ -161,24 +161,24 @@
 						]);
 					}
 				}
-			}
-			// Se scarico qualcosa creo un log altrimenti faccio visualizzare una notifica
-			if ($da_scaricare != 0) {
-				$this->production_order->logs()->create([
-					'user_id' => auth()->id(),
-					'message' => "ha scaricato del materiale per l'ordine di produzione '{$this->production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $this->production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus()) . "'"
-				]);
-				$this->dispatchBrowserEvent('open-notification', [
-					'title' => __('Scarico Materiale'),
-					'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
-					'type' => 'success'
-				]);
-			} else {
-				$this->dispatchBrowserEvent('open-notification', [
-					'title' => __('Scarico Materiale'),
-					'subtitle' => __('Attualmente non ci sono prodotti da scaricare.'),
-					'type' => 'warning'
-				]);
+				// Se scarico qualcosa creo un log altrimenti faccio visualizzare una notifica
+				if ($da_scaricare != 0) {
+					$this->production_order->logs()->create([
+						'user_id' => auth()->id(),
+						'message' => "ha scaricato {$da_scaricare} '{$row->product->code}' per l'ordine di produzione '{$this->production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $warehouse_order_scarico->getStatus()) . "'"
+					]);
+					$this->dispatchBrowserEvent('open-notification', [
+						'title' => __('Scarico Materiale'),
+						'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
+						'type' => 'success'
+					]);
+				} else {
+					$this->dispatchBrowserEvent('open-notification', [
+						'title' => __('Scarico Materiale'),
+						'subtitle' => __('Attualmente non ci sono prodotti da scaricare.'),
+						'type' => 'warning'
+					]);
+				}
 			}
 		}
 
