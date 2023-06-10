@@ -40,6 +40,10 @@
 
 		public function save()
 		{
+			if($this->startLocation->id == $this->endLocation->id) {
+				$this->addError('same_locations', 'Non puoi trasferire un prodotto nella stessa ubicazione di partenza.');
+				return false;
+			}
 			if ($this->quantity > $this->quantity_in_location) {
 				$this->addError('too_many_quantity_to_transfer', 'Stai tentando di trasferire una quantità di prodotti superiore a quella disponibile.');
 				return false;

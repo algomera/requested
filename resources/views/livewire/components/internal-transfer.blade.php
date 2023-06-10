@@ -6,6 +6,9 @@
 		@error('too_many_quantity_to_transfer')
 		<x-input-error :messages="$errors->get('too_many_quantity_to_transfer')"></x-input-error>
 		@enderror
+		@error('same_locations')
+		<x-input-error :messages="$errors->get('same_locations')"></x-input-error>
+		@enderror
 	</div>
 	<div class="border-t border-gray-100">
 		<dl class="divide-y divide-gray-100">
