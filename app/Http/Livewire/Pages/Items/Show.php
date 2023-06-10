@@ -8,9 +8,11 @@
 	class Show extends ModalComponent
 	{
 		public $item;
+		public $products;
 
 		public function mount(Item $item) {
 			$this->item = $item;
+			$this->products = $item->products()->with('unit')->get();
 		}
 
 		public function render() {

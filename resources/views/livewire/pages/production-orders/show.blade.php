@@ -35,6 +35,7 @@
 			</div>
 		</div>
 		<div class="flex items-center justify-between">
+			@php($warehouse_order_scarico = $production_order->warehouse_orders()->where('type', 'scarico')->first())
 			<div class="space-x-3">
 				<x-primary-button
 					wire:click="$emit('openModal', 'pages.production-orders.materials', {{ json_encode(['production_order' => $production_order->id]) }})">
@@ -48,7 +49,7 @@
 				@else
 					<x-primary-button
 						wire:click="unloadMaterials"
-						:disabled="$production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus() === 'transferred'"
+						:disabled="$warehouse_order_scarico->getStatus() === 'transferred'"
 					>
 						Scarica materiale
 					</x-primary-button>
@@ -58,14 +59,14 @@
 				<x-primary-button
 					class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
 					wire:click="setAsCompleted"
-					:disabled="$production_order->status === 'completed' || $production_order->warehouse_orders()->where('type', 'scarico')->first() === null || !$serials_checked">
+					:disabled="$production_order->status === 'completed' || $warehouse_order_scarico === null || !$serials_checked">
 					Completa
 				</x-primary-button>
 			@else
 				<x-primary-button
 					class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
 					wire:click="$emit('openModal', 'pages.production-orders.complete-quantity', {{ json_encode(['production_order' => $production_order->id]) }})"
-					:disabled="$production_order->status === 'completed' || $production_order->warehouse_orders()->where('type', 'scarico')->first() === null">
+					:disabled="$production_order->status === 'completed' || $warehouse_order_scarico === null">
 					Completa quantità
 				</x-primary-button>
 			@endif

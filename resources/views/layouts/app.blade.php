@@ -26,7 +26,7 @@
 	<body x-data="{sidebarOpen: false}" class="font-sans antialiased">
 		<div class="lg:ml-72">
 			<header class="contents lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
-				<div class="contents lg:pointer-events-auto lg:block lg:w-72 lg:overflow-y-auto lg:border-r lg:border-zinc-900/10 lg:px-6 lg:pb-8 lg:pt-4">
+				<div class="contents bg-white lg:pointer-events-auto lg:block lg:w-72 lg:overflow-y-auto lg:border-r lg:border-zinc-900/10 lg:px-6 lg:pb-8 lg:pt-4">
 					{{-- LOGO DESKTOP --}}
 					<div class="hidden lg:flex">
 						<a class="w-24" aria-label="Home" href="/">
@@ -116,7 +116,7 @@
 						</div>
 					</div>
 					{{-- NAVIGATION MENU --}}
-					<nav class="hidden lg:mt-8 lg:block">
+					<nav class="hidden lg:mt-8 lg:block bg-white">
 						@include('layouts.navigation')
 					</nav>
 					{{-- MOBILE --}}
