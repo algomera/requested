@@ -11,7 +11,7 @@
 <div>
 	<div class="flow-root space-y-5">
 		<div class="flex items-center justify-between">
-			<div class="flex-1 max-w-sm">
+			<div class="flex-1 w-full lg:max-w-sm">
 				<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."
 				         append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 			</div>

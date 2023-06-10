@@ -16,7 +16,7 @@
 					<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."
 							 append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
 				</div>
-				<div class="grid grid-cols-2 gap-4">
+				<div class="grid grid-cols-2 gap-2">
 					<div class="w-full lg:w-auto">
 						<x-select wire:model="status">
 							<option value="">Tutti</option>
