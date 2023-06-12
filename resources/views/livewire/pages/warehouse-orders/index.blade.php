@@ -20,6 +20,7 @@
 					<div class="w-full lg:w-auto">
 						<x-select wire:model="status">
 							<option value="">Tutti</option>
+							<option value="not_transferred">Non trasferiti</option>
 							<option value="to_transfer">Da trasferire</option>
 							<option value="partially_transferred">Parzialmente trasferiti</option>
 							<option value="transferred">Trasferiti</option>

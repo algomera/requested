@@ -12,7 +12,7 @@
 		use WithPagination;
 
 		public $search = '';
-		public $status = null;
+		public $status = 'not_transferred';
 		public $type = null;
 		public $deletingId = null;
 		protected $listeners = [
@@ -48,12 +48,19 @@
 				'code',
 				'production_order.code'
 			]);
-			if($this->status != null || $this->status != '') {
-				$warehouse_orders = $warehouse_orders->get()->filter(function ($order) {
-					return $order->getStatus() == $this->status;
-				});
+			if ($this->status != null || $this->status != '') {
+				if ($this->status === 'not_transferred') {
+					$warehouse_orders = $warehouse_orders->get()->filter(function ($order) {
+						return $order->getStatus() === 'to_transfer' || $order->getStatus() === 'partially_transferred';
+					});
+				} else {
+					$warehouse_orders = $warehouse_orders->get()->filter(function ($order) {
+						return $order->getStatus() == $this->status;
+					});
+				}
 			}
-			if($this->type != null || $this->type != '') {
+
+			if ($this->type != null || $this->type != '') {
 				$warehouse_orders = $warehouse_orders->where('type', $this->type);
 			}
 
