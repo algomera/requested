@@ -57,11 +57,11 @@
 			if ($this->row->product->serial_management) {
 				// Se matricolare
 				// Trasferisco materiale in ubicazione destination
-				$check = $this->warehouse_order->destination->products()->where('product_id', $this->row->product->id)->first();
-				if ($check) {
+				$check_destination = $this->warehouse_order->destination->products()->where('product_id', $this->row->product->id)->first();
+				if ($check_destination) {
 					$this->warehouse_order->destination->products()->syncWithoutDetaching([
 						$this->row->product_id => [
-							'quantity' => $check->pivot->quantity + count($this->serials_checked)
+							'quantity' => $check_destination->pivot->quantity + count($this->serials_checked)
 						]
 					]);
 				} else {

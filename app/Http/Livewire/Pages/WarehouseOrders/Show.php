@@ -23,7 +23,8 @@
 			$this->warehouse_order = $warehouseOrder;
 		}
 
-		public function shipAll() {
+		public function shipAll()
+		{
 			dd("Spedisci tutto");
 
 			$this->emit('product-transferred');
@@ -34,46 +35,93 @@
 			]);
 		}
 
-		public function receiveAll() {
-			// Se matricolare
+		public function receiveAll()
+		{
 
-			// Se non matricolare
 			$rows = $this->warehouse_order->rows;
 			foreach ($rows as $row) {
-				$da_ricevere = $row->quantity_total - $row->quantity_processed;
-				// Trasferisco materiale in ubicazione destination
-				$check_destination = $this->warehouse_order->destination->products()->where('product_id', $row->product->id)->first();
-				if ($check_destination) {
-					$this->warehouse_order->destination->products()->syncWithoutDetaching([
-						$row->product_id => [
-							'quantity' => $check_destination->pivot->quantity + $da_ricevere
-						]
+				if ($row->product->serial_management) {
+					// Se matricolare
+					$serials = $this->warehouse_order->serials;
+					foreach($serials as $serial) {
+						$serial->update([
+							'received' => true,
+							'received_at' => now()
+						]);
+					}
+
+					// Trasferisco materiale in ubicazione destination
+					$check_destination = $row->destination->products()->where('product_id', $row->product_id)->first();
+					if ($check_destination) {
+						$row->destination->products()->syncWithoutDetaching([
+							$row->product_id => [
+								'quantity' => $check_destination->pivot->quantity + $serials->count()
+							]
+						]);
+					} else {
+						$row->destination->products()->syncWithoutDetaching([
+							$row->product_id => [
+								'quantity' => $serials->count()
+							]
+						]);
+					}
+
+					$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code ?? '-';
+					$this->warehouse_order->logs()->create([
+						'user_id' => auth()->id(),
+						'message' => "ha ricevuto, riferito all'ordine di magazzino '{$code}', " . $serials->count() . " matricola/e e l'ha/le ha trasferita/e nell'ubicazione '{$row->destination->code}'"
 					]);
+
+					// Avanzo quantity_processed row
+					$row->increment('quantity_processed', $serials->count());
+
+					// Cambio stato row
+					if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
+						$row->update([
+							'status' => 'partially_transferred'
+						]);
+					} elseif ($row->quantity_processed === $row->quantity_total) {
+						$row->update([
+							'status' => 'transferred'
+						]);
+					}
 				} else {
-					$this->warehouse_order->destination->products()->syncWithoutDetaching([
-						$row->product_id => [
-							'quantity' => $da_ricevere
-						]
-					]);
-				}
+					// Se non matricolare
+					$da_ricevere = $row->quantity_total - $row->quantity_processed;
+					// Trasferisco materiale in ubicazione destination
+					$check_destination = $row->destination->products()->where('product_id', $row->product_id)->first();
+					if ($check_destination) {
+						$row->destination->products()->syncWithoutDetaching([
+							$row->product_id => [
+								'quantity' => $check_destination->pivot->quantity + $da_ricevere
+							]
+						]);
+					} else {
+						$row->destination->products()->syncWithoutDetaching([
+							$row->product_id => [
+								'quantity' => $da_ricevere
+							]
+						]);
+					}
 
-				$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code ?? '-';
-				$this->warehouse_order->logs()->create([
-					'user_id' => auth()->id(),
-					'message' => "ha ricevuto, riferito all'ordine di magazzino '{$code}', {$da_ricevere} '{$row->product->code}' e l'ha/le ha trasferita/e nell'ubicazione '{$row->destination->code}'"
-				]);
-				// Avanzo quantity_processed row
-				$row->increment('quantity_processed', $da_ricevere);
+					$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code ?? '-';
+					$this->warehouse_order->logs()->create([
+						'user_id' => auth()->id(),
+						'message' => "ha ricevuto, riferito all'ordine di magazzino '{$code}', {$da_ricevere} '{$row->product->code}' e l'ha/le ha trasferita/e nell'ubicazione '{$row->destination->code}'"
+					]);
+					// Avanzo quantity_processed row
+					$row->increment('quantity_processed', $da_ricevere);
 
-				// Cambio stato row
-				if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
-					$row->update([
-						'status' => 'partially_transferred'
-					]);
-				} elseif ($row->quantity_processed === $row->quantity_total) {
-					$row->update([
-						'status' => 'transferred'
-					]);
+					// Cambio stato row
+					if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
+						$row->update([
+							'status' => 'partially_transferred'
+						]);
+					} elseif ($row->quantity_processed === $row->quantity_total) {
+						$row->update([
+							'status' => 'transferred'
+						]);
+					}
 				}
 			}
 
@@ -85,7 +133,8 @@
 			]);
 		}
 
-		public function generateDDT() {
+		public function generateDDT()
+		{
 			$ddt = $this->warehouse_order->ddts()->where('generated', false)->first();
 			$ddt->update([
 				'generated' => true,
