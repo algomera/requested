@@ -45,8 +45,8 @@
 				<div class="flex space-x-3">
 					<div class="flex-1">
 						<x-primary-button wire:click="shipAll"
+										  :disabled="$warehouse_order->getStatus() === 'transferred'"
 										  class="w-full justify-center whitespace-nowrap"
-										  :disabled="!$this->warehouse_order->production_order->serials()->where('completed', 1)->where('shipped', 0)->count()"
 						>
 							Spedisci tutto
 						</x-primary-button>
@@ -57,6 +57,7 @@
 				<div class="flex space-x-3">
 					<div class="flex-1">
 						<x-primary-button wire:click="receiveAll"
+										  :disabled="$warehouse_order->getStatus() === 'transferred'"
 										  class="w-full justify-center whitespace-nowrap">
 							Ricevi tutto
 						</x-primary-button>

@@ -35,7 +35,47 @@
 		}
 
 		public function receiveAll() {
-			dd("Ricevi tutto");
+			// Se matricolare
+
+			// Se non matricolare
+			$rows = $this->warehouse_order->rows;
+			foreach ($rows as $row) {
+				$da_ricevere = $row->quantity_total - $row->quantity_processed;
+				// Trasferisco materiale in ubicazione destination
+				$check = $this->warehouse_order->destination->products()->where('product_id', $row->product->id)->first();
+				if ($check) {
+					$this->warehouse_order->destination->products()->syncWithoutDetaching([
+						$row->product_id => [
+							'quantity' => $check->pivot->quantity + $da_ricevere
+						]
+					]);
+				} else {
+					$this->warehouse_order->destination->products()->syncWithoutDetaching([
+						$row->product_id => [
+							'quantity' => $da_ricevere
+						]
+					]);
+				}
+
+				$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code ?? '-';
+				$this->warehouse_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => "ha ricevuto, riferito all'ordine di magazzino '{$code}', {$da_ricevere} '{$row->product->code}' e l'ha/le ha trasferita/e nell'ubicazione '{$row->destination->code}'"
+				]);
+				// Avanzo quantity_processed row
+				$row->increment('quantity_processed', $da_ricevere);
+
+				// Cambio stato row
+				if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
+					$row->update([
+						'status' => 'partially_transferred'
+					]);
+				} elseif ($row->quantity_processed === $row->quantity_total) {
+					$row->update([
+						'status' => 'transferred'
+					]);
+				}
+			}
 
 			$this->emit('product-transferred');
 			$this->dispatchBrowserEvent('open-notification', [
