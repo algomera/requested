@@ -177,7 +177,7 @@
 			foreach ($rows as $row) {
 				if ($row->product->serial_management) {
 					// Se matricolare
-					$serials = $this->warehouse_order->serials;
+					$serials = $this->warehouse_order->serials()->where('received', 0)->get();
 					foreach ($serials as $serial) {
 						$serial->update([
 							'received' => true,
