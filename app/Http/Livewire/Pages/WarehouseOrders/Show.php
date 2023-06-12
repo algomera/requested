@@ -25,7 +25,82 @@
 
 		public function shipAll()
 		{
-			dd("Spedisci tutto");
+			$rows = $this->warehouse_order->rows;
+			foreach ($rows as $row) {
+				if ($row->product->serial_management) {
+					// Se matricolare
+					if ($row->pickup->products()->where('product_id', $row->product_id)->exists()) {
+						$in_location = $row->pickup->productQuantity($row->product_id);
+						$serials = $this->warehouse_order->production_order->serials()->where('completed', 1)->where('shipped', 0)->get();
+						$da_spedire = $serials->count();
+						if ($da_spedire == $in_location) {
+							foreach ($serials as $serial) {
+								$serial->update([
+									'shipped' => true,
+									'shipped_at' => now()
+								]);
+							}
+
+							// Genero DDT e righe
+							if ($this->warehouse_order->ddts()->where('generated', false)->latest()->first()) {
+								$ddt = $this->warehouse_order->ddts()->where('generated', false)->latest()->first();
+							} else {
+								$ddt = $this->warehouse_order->ddts()->create();
+								$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+								$this->warehouse_order->logs()->create([
+									'user_id' => auth()->id(),
+									'message' => "ha creato il DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}'"
+								]);
+							}
+							foreach ($serials as $serial) {
+								DB::table('ddt_product')->insert([
+									'ddt_id' => $ddt->id,
+									'serial_id' => $serial->id,
+									'quantity' => 1,
+									'created_at' => now(),
+									'updated_at' => now()
+								]);
+							}
+							$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+							$this->warehouse_order->logs()->create([
+								'user_id' => auth()->id(),
+								'message' => "ha aggiungo al DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}', " . $serials->count() . " matricola/e"
+							]);
+
+							// Riduco materiale ubicazione pickup
+							$row->pickup->products()->where('product_id', $row->product_id)->first()->pivot->decrement('quantity', $da_spedire);
+							// Avanzo quantity_processed row
+							$row->increment('quantity_processed', $da_spedire);
+							// Cambio stato row
+							if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
+								$row->update([
+									'status' => 'partially_transferred'
+								]);
+							} elseif ($row->quantity_processed === $row->quantity_total) {
+								$row->update([
+									'status' => 'transferred'
+								]);
+							}
+						} else {
+							$this->dispatchBrowserEvent('open-notification', [
+								'title' => __('Errore'),
+								'subtitle' => __("Nella location '{$row->pickup->code}' non ci sono abbastanza '{$row->product->code}' da spedire!"),
+								'type' => 'error'
+							]);
+							return false;
+						}
+					} else {
+						$this->dispatchBrowserEvent('open-notification', [
+							'title' => __('Errore'),
+							'subtitle' => __("Nella location '{$row->pickup->code}' non c'è il prodotto da spedire!"),
+							'type' => 'error'
+						]);
+						return false;
+					}
+				} else {
+					// Se non matricolare
+				}
+			}
 
 			$this->emit('product-transferred');
 			$this->dispatchBrowserEvent('open-notification', [
@@ -37,13 +112,12 @@
 
 		public function receiveAll()
 		{
-
 			$rows = $this->warehouse_order->rows;
 			foreach ($rows as $row) {
 				if ($row->product->serial_management) {
 					// Se matricolare
 					$serials = $this->warehouse_order->serials;
-					foreach($serials as $serial) {
+					foreach ($serials as $serial) {
 						$serial->update([
 							'received' => true,
 							'received_at' => now()
