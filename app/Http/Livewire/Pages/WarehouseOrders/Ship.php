@@ -56,12 +56,22 @@
 					return false;
 				}
 			} else {
-				if ($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
-					$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', $this->quantity);
+				$in_location = $this->row->pickup->productQuantity($this->row->product_id);
+				if($in_location >= $this->quantity) {
+					if ($this->row->pickup->products()->where('product_id', $this->row->product_id)->exists()) {
+						$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', $this->quantity);
+					} else {
+						$this->dispatchBrowserEvent('open-notification', [
+							'title' => __('Errore'),
+							'subtitle' => __("Nella location {$this->row->pickup->code} non c'è il prodotto da spedire!"),
+							'type' => 'error'
+						]);
+						return false;
+					}
 				} else {
 					$this->dispatchBrowserEvent('open-notification', [
 						'title' => __('Errore'),
-						'subtitle' => __("Nella location {$this->row->pickup->code} non c'è il prodotto da spedire!"),
+						'subtitle' => __("Nella location '{$this->row->pickup->code}' non ci sono abbastanza '{$this->row->product->code}' da spedire!"),
 						'type' => 'error'
 					]);
 					return false;
