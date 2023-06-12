@@ -129,6 +129,8 @@
 								'user_id' => auth()->id(),
 								'message' => "ha aggiunto al DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}', {$da_spedire} '{$row->product->code}'"
 							]);
+							// Riduco materiale ubicazione pickup
+							$row->pickup->products()->where('product_id', $row->product_id)->first()->pivot->decrement('quantity', $da_spedire);
 							// Avanzo quantity_processed row
 							$row->increment('quantity_processed', $da_spedire);
 
