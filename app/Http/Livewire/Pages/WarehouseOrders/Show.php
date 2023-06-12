@@ -33,7 +33,7 @@
 						$in_location = $row->pickup->productQuantity($row->product_id);
 						$serials = $this->warehouse_order->production_order->serials()->where('completed', 1)->where('shipped', 0)->get();
 						$da_spedire = $serials->count();
-						if ($da_spedire == $in_location) {
+						if ($in_location >= $da_spedire) {
 							foreach ($serials as $serial) {
 								$serial->update([
 									'shipped' => true,
@@ -99,6 +99,65 @@
 					}
 				} else {
 					// Se non matricolare
+					if ($row->pickup->products()->where('product_id', $row->product_id)->exists()) {
+						$in_location = $row->pickup->productQuantity($row->product_id);
+						$da_spedire = $row->quantity_total - $row->quantity_processed;
+						if ($in_location >= $da_spedire) {
+							// Genero DDT e righe
+							if ($this->warehouse_order->ddts()->where('generated', false)->latest()->first()) {
+								$ddt = $this->warehouse_order->ddts()->where('generated', false)->latest()->first();
+							} else {
+								$ddt = $this->warehouse_order->ddts()->create();
+								$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+								$this->warehouse_order->logs()->create([
+									'user_id' => auth()->id(),
+									'message' => "ha creato il DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}'"
+								]);
+							}
+							// Se non matricolare
+							$exists = DB::table('ddt_product')->where('ddt_id', $ddt->id)->where('product_id', $row->product_id)->first();
+							DB::table('ddt_product')->updateOrInsert([
+								'ddt_id' => $ddt->id,
+								'product_id' => $row->product_id,
+							], [
+								'quantity' => $exists ? $exists->quantity + $da_spedire : $da_spedire,
+								'created_at' => now(),
+								'updated_at' => now()
+							]);
+							$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+							$this->warehouse_order->logs()->create([
+								'user_id' => auth()->id(),
+								'message' => "ha aggiunto al DDT n. '{$ddt->id}', riferito all'ordine di magazzino '{$code}', {$da_spedire} '{$row->product->code}'"
+							]);
+							// Avanzo quantity_processed row
+							$row->increment('quantity_processed', $da_spedire);
+
+							// Cambio stato row
+							if ($row->quantity_processed > 0 && $row->quantity_processed < $row->quantity_total) {
+								$row->update([
+									'status' => 'partially_transferred'
+								]);
+							} elseif ($row->quantity_processed === $row->quantity_total) {
+								$row->update([
+									'status' => 'transferred'
+								]);
+							}
+						} else {
+							$this->dispatchBrowserEvent('open-notification', [
+								'title' => __('Errore'),
+								'subtitle' => __("Nella location '{$row->pickup->code}' non ci sono abbastanza '{$row->product->code}' da spedire!"),
+								'type' => 'error'
+							]);
+							return false;
+						}
+					} else {
+						$this->dispatchBrowserEvent('open-notification', [
+							'title' => __('Errore'),
+							'subtitle' => __("Nella location '{$row->pickup->code}' non c'è il prodotto da spedire!"),
+							'type' => 'error'
+						]);
+						return false;
+					}
 				}
 			}
 

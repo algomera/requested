@@ -124,10 +124,10 @@
 				}
 			} else {
 				// Se non matricolare
-				$exists = DB::table('ddt_product')->where('ddt_id', $ddt->id)->where('product_id', $this->row->product->id)->first();
+				$exists = DB::table('ddt_product')->where('ddt_id', $ddt->id)->where('product_id', $this->row->product_id)->first();
 				DB::table('ddt_product')->updateOrInsert([
 					'ddt_id' => $ddt->id,
-					'product_id' => $this->row->product->id,
+					'product_id' => $this->row->product_id,
 				], [
 					'quantity' => $exists ? $exists->quantity + $this->quantity : $this->quantity,
 					'created_at' => now(),
