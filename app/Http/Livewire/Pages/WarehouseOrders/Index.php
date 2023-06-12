@@ -45,6 +45,7 @@
 		public function render()
 		{
 			$warehouse_orders = WarehouseOrder::with('production_order.product', 'rows')->search($this->search, [
+				'code',
 				'production_order.code'
 			]);
 			if($this->status != null || $this->status != '') {
