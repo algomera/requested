@@ -42,11 +42,11 @@
 			foreach ($rows as $row) {
 				$da_ricevere = $row->quantity_total - $row->quantity_processed;
 				// Trasferisco materiale in ubicazione destination
-				$check = $this->warehouse_order->destination->products()->where('product_id', $row->product->id)->first();
-				if ($check) {
+				$check_destination = $this->warehouse_order->destination->products()->where('product_id', $row->product->id)->first();
+				if ($check_destination) {
 					$this->warehouse_order->destination->products()->syncWithoutDetaching([
 						$row->product_id => [
-							'quantity' => $check->pivot->quantity + $da_ricevere
+							'quantity' => $check_destination->pivot->quantity + $da_ricevere
 						]
 					]);
 				} else {

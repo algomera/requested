@@ -28,51 +28,59 @@
 		{
 			$this->validate();
 			// Riduco materiale ubicazione pickup
-			$this->row->pickup->products()->where('product_id', $this->row->product_id)->first()->pivot->decrement('quantity', $this->quantity);
+			$check_pickup = $this->row->pickup->products()->where('product_id', $this->row->product_id)->first();
+			if($check_pickup) {
+				$check_pickup->pivot->decrement('quantity', $this->quantity);
+				// Trasferisco materiale in ubicazione destination
+				$check_destination = $this->row->destination->products()->where('product_id', $this->row->product->id)->first();
+				if($check_destination) {
+					$this->row->destination->products()->syncWithoutDetaching([
+						$this->row->product_id => [
+							'quantity' => $check_destination->pivot->quantity + $this->quantity
+						]
+					]);
+				} else {
+					$this->row->destination->products()->syncWithoutDetaching([
+						$this->row->product_id => [
+							'quantity' => $this->quantity
+						]
+					]);
+				}
 
-			// Trasferisco materiale in ubicazione destination
-			$check = $this->row->destination->products()->where('product_id', $this->row->product->id)->first();
-			if($check) {
-				$this->row->destination->products()->syncWithoutDetaching([
-					$this->row->product_id => [
-						'quantity' => $check->pivot->quantity + $this->quantity
-					]
+				$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
+				$this->warehouse_order->logs()->create([
+					'user_id' => auth()->id(),
+					'message' => ", in riferimento all'ordine di magazzino '{$code}', ha trasferito {$this->quantity} '{$this->row->product->description}' dall'ubicazione '{$this->row->pickup->code}' all'ubicazione '{$this->row->destination->code}'"
+				]);
+
+				// Avanzo quantity_processed row
+				$this->row->increment('quantity_processed', $this->quantity);
+
+				// Cambio stato row
+				if ($this->row->quantity_processed > 0 && $this->row->quantity_processed < $this->row->quantity_total) {
+					$this->row->update([
+						'status' => 'partially_transferred'
+					]);
+				} elseif ($this->row->quantity_processed === $this->row->quantity_total) {
+					$this->row->update([
+						'status' => 'transferred'
+					]);
+				}
+
+				$this->closeModal();
+				$this->emit('product-transferred');
+				$this->dispatchBrowserEvent('open-notification', [
+					'title'    => __('Trasferimento Effettuato'),
+					'subtitle' => __('Il trasferimento è stato completato con successo!'),
+					'type'     => 'success'
 				]);
 			} else {
-				$this->row->destination->products()->syncWithoutDetaching([
-					$this->row->product_id => [
-						'quantity' => $this->quantity
-					]
+				$this->dispatchBrowserEvent('open-notification', [
+					'title'    => __('Errore di trasferimento'),
+					'subtitle' => __("Il prodotto che si sta trasferendo non è presente nell'ubicazione '{$this->row->pickup->code}'!"),
+					'type'     => 'error'
 				]);
 			}
-
-			$code = $this->warehouse_order->code ?? $this->warehouse_order->production_order->code;
-			$this->warehouse_order->logs()->create([
-				'user_id' => auth()->id(),
-				'message' => ", in riferimento all'ordine di magazzino '{$code}', ha trasferito {$this->quantity} '{$this->row->product->description}' dall'ubicazione '{$this->row->pickup->code}' all'ubicazione '{$this->row->destination->code}'"
-			]);
-
-			// Avanzo quantity_processed row
-			$this->row->increment('quantity_processed', $this->quantity);
-
-			// Cambio stato row
-			if ($this->row->quantity_processed > 0 && $this->row->quantity_processed < $this->row->quantity_total) {
-				$this->row->update([
-					'status' => 'partially_transferred'
-				]);
-			} elseif ($this->row->quantity_processed === $this->row->quantity_total) {
-				$this->row->update([
-					'status' => 'transferred'
-				]);
-			}
-
-			$this->closeModal();
-			$this->emit('product-transferred');
-			$this->dispatchBrowserEvent('open-notification', [
-				'title'    => __('Trasferimento Effettuato'),
-				'subtitle' => __('Il trasferimento è stato completato con successo!'),
-				'type'     => 'success'
-			]);
 		}
 
 		public function render()
