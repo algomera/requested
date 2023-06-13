@@ -14,28 +14,42 @@
 					<span class="italic">{{ $item->product->description }}</span>
 				</dd>
 			</div>
-			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+			<div class="px-4 py-6 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6">
 				<dt class="text-sm font-medium text-gray-900">Composizione</dt>
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-					<ul role="list" class="divide-y divide-gray-200">
-						@forelse($products as $product)
-							<li class="{{ $loop->iteration === 1 ? 'pt-0' : '' }} py-3 flex items-start justify-between">
-								<div class="flex flex-col space-y-0.5">
-									<span>{{ $product->code }} &middot; {{ $product->description }}</span>
-{{--									<p class="text-xs text-zinc-500">--}}
-{{--										<span class="text-zinc-400 font-semibold">In magazzino: {{ $product->locations()->sum('quantity') }}</span>--}}
-{{--									</p>--}}
-								</div>
-								<div class="flex flex-col text-right space-y-0.5">
-									<p class="text-xs text-zinc-700 font-semibold leading-7">{{ $product->pivot->quantity }} {{ $product->unit->description }}</span></p>
-								</div>
-							</li>
+					<table class="min-w-full divide-y divide-gray-300">
+						<thead>
+						<tr>
+							<th scope="col"
+								class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
+								Codice Prodotto
+							</th>
+							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Descrizione</th>
+							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quantità</th>
+							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								Unità di misura
+							</th>
+						</tr>
+						</thead>
+						<tbody class="divide-y divide-gray-200 bg-white">
+						@forelse($products->load('unit') as $product)
+							<tr class="hover:bg-gray-50" wire:key="{{ $product->id }}">
+								<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+									{{ $product->code }}
+								</td>
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->description }}</td>
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->pivot->quantity }}</td>
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $product->unit->description }}</td>
+							</tr>
 						@empty
-							<li>
-								<span>Nessun prodotto.</span>
-							</li>
+							<tr>
+								<td colspan="100%" class="text-center whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<span>Nessun prodotto.</span>
+								</td>
+							</tr>
+						</tbody>
 						@endforelse
-					</ul>
+					</table>
 				</dd>
 			</div>
 		</dl>
