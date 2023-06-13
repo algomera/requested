@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,8 +23,8 @@
 		@stack('styles')
 		@livewireStyles
 	</head>
-	<body x-data="{sidebarOpen: false}" class="font-sans antialiased h-full">
-		<div class="h-full lg:ml-72">
+	<body x-data="{sidebarOpen: false}" class="font-sans antialiased">
+		<div class="lg:ml-72">
 			<header class="contents lg:pointer-events-none lg:fixed lg:inset-0 lg:z-40 lg:flex">
 				<div class="contents bg-white lg:pointer-events-auto lg:block lg:w-72 lg:overflow-y-auto lg:border-r lg:border-zinc-900/10 lg:px-6 lg:pb-8 lg:pt-4">
 					{{-- LOGO DESKTOP --}}
@@ -129,7 +129,7 @@
 				</div>
 			</header>
 
-			<div class="relative h-full px-4 pt-14 sm:px-6 lg:px-8">
+			<div class="relative px-4 pt-14 sm:px-6 lg:px-8">
 				@if (isset($header))
 					<header>
 						<div class="py-4 text-xl font-bold">
@@ -137,7 +137,7 @@
 						</div>
 					</header>
 				@endif
-				<main class="h-full py-4">
+				<main class="py-4">
 					{{ $slot }}
 				</main>
 			</div>

@@ -1,4 +1,4 @@
-<div class="h-full {{ $warehouse_order->type === 'spedizione' ? 'grid grid-cols-1 2xl:grid-cols-3 gap-1' : '' }}">
+<div class="{{ $warehouse_order->type === 'spedizione' ? 'grid grid-cols-1 2xl:grid-cols-3 gap-1' : '' }}">
 	<div
 		class="flow-root space-y-5 {{ $warehouse_order->type === 'spedizione' ? 'col-span-2 2xl:pr-4 2xl:border-r' : '' }}">
 		<div class="flex items-center space-x-3">

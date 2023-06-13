@@ -1,4 +1,4 @@
-<div class="h-full grid grid-cols-1 2xl:grid-cols-3 gap-1">
+<div class="grid grid-cols-1 2xl:grid-cols-3 gap-1">
 	<div class="col-span-2 flow-root space-y-5 2xl:pr-4 2xl:border-r">
 		<div class="flex items-center space-x-3">
 			<div>
