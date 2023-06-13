@@ -18,8 +18,10 @@
 					  class="inline-block flex-none py-0.5 text-xs leading-5 text-gray-500">
 								{{ $ddt->created_at->diffForHumans() }}
 							</span>
-				<x-heroicon-s-printer
-					class="w-4 h-4 hover:cursor-pointer hover:text-indigo-500"></x-heroicon-s-printer>
+					<a href="{{ route('ddt.show', $ddt->id) }}" target="_blank">
+						<x-heroicon-s-printer
+							class="w-4 h-4 hover:cursor-pointer hover:text-indigo-500"></x-heroicon-s-printer>
+					</a>
 			</li>
 		@empty
 			<p class="text-center mt-3 text-gray-500 text-xs">Al momento non c'è nessun DDT generato.</p>

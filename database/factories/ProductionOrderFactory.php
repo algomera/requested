@@ -23,7 +23,6 @@
 				'product_id'        => Product::all()->shuffle()->first()->id,
 				'quantity'       => fake()->numberBetween(1, 7),
 				'delivery_date'  => fake()->dateTimeBetween('now', Carbon::now()->addMonth()),
-				'destination_id' => Location::where('type', 'destinazione')->get()->shuffle()->first()->id,
 				'status'         => fake()->randomElement(array_keys(config('requested.production_orders.status')))
 			];
 		}

@@ -5,3 +5,15 @@
 [x-cloak] {
     display: none !important;
 }
+
+.ddt-box {
+	@apply relative border border-gray-400 py-2 text-xs
+}
+
+.ddt-box .label {
+	@apply text-[10px] absolute top-2 px-2 w-full
+}
+
+.ddt-box .content {
+	@apply mx-2 mt-6 uppercase min-h-[18px]
+}

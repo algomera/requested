@@ -1,4 +1,4 @@
-<div class="{{ $warehouse_order->type === 'spedizione' ? 'grid grid-cols-1 2xl:grid-cols-3 gap-1' : '' }}">
+<div class="h-full {{ $warehouse_order->type === 'spedizione' ? 'grid grid-cols-1 2xl:grid-cols-3 gap-1' : '' }}">
 	<div
 		class="flow-root space-y-5 {{ $warehouse_order->type === 'spedizione' ? 'col-span-2 2xl:pr-4 2xl:border-r' : '' }}">
 		<div class="flex items-center space-x-3">
@@ -269,8 +269,10 @@
 							  class="inline-block flex-none py-0.5 text-xs leading-5 text-gray-500">
 								{{ $ddt->generated_at->diffForHumans() }}
 							</span>
-						<x-heroicon-s-printer
-							class="w-4 h-4 hover:cursor-pointer hover:text-indigo-500"></x-heroicon-s-printer>
+						<a href="{{ route('ddt.show', $ddt->id) }}" target="_blank">
+							<x-heroicon-s-printer
+								class="w-4 h-4 hover:cursor-pointer hover:text-indigo-500"></x-heroicon-s-printer>
+						</a>
 					</li>
 				@empty
 					<p class="text-center mt-3 text-gray-500 text-xs">Al momento non c'è nessun DDT generato.</p>

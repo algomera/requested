@@ -19,7 +19,7 @@
 
 		public function products()
 		{
-			return $this->belongsToMany(Product::class, 'ddt_product', 'ddt_id', 'product_id');
+			return $this->belongsToMany(Product::class, 'ddt_product', 'ddt_id', 'product_id')->withPivot('quantity');
 		}
 		public function serials()
 		{
