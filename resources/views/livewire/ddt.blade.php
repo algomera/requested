@@ -34,9 +34,7 @@
 		</div>
 		<div class="w-36 ddt-box !border-x-0 col-span-2">
 			<span class="label">data e n. conferma</span>
-			<div class="content">
-				XXX
-			</div>
+			<div class="content"></div>
 		</div>
 		<div class="w-36 ddt-box !border-x-0 col-span-2">
 			<p class="label flex justify-between">Data <span
@@ -94,7 +92,9 @@
 		@if($serials->count())
 			<div class="flex !border-x border-x-gray-400 !divide-x !divide-x-gray-400 h-9">
 				<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">
-					<div class="content !mt-0">{{ $serials->first()->product->code }} - {{ $serials->first()->product->description }}</div>
+					<div class="content !mt-0">
+						{{ $serials->first()->product->code }} - {{ $serials->first()->product->description }}
+					</div>
 				</div>
 				<div class="w-40 ddt-box !border-t-0 !border-x-0">
 					<div class="content !mt-0">{{ $serials->count() }}</div>
@@ -221,12 +221,14 @@
 			</div>
 		</div>
 	</div>
-	<div class="grid grid-cols-2 gap-6 mt-6">
+	<div class="items-center grid grid-cols-2 gap-6 mt-6">
 		<div>
-			logo
+			<img src="{{ asset('images/ddt-logo.png') }}" class="h-14 w-full"/>
 		</div>
-		<div>
-			dati
+		<div class="text-sm">
+			<p>{{ env('DDT_FOOTER_ADDRESS') }}</p>
+			<p>C.F. e P.I: {{ env('DDT_FOOTER_CF_VAT') }} - Tel. {{ env('DDT_FOOTER_PHONE') }}</p>
+			<p>mail: {{ env('DDT_FOOTER_EMAIL') }}</p>
 		</div>
 	</div>
 </div>
