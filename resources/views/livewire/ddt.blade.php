@@ -88,7 +88,24 @@
 				<span class="label !text-center">descrizione</span>
 			</div>
 		</div>
-		{{-- foreach --}}
+		@if($products->count())
+			@foreach($products as $product)
+				<div class="flex !border-x border-x-gray-400 !divide-x !divide-x-gray-400 h-9">
+					<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">
+						<div class="content !mt-0">{{ $product->code }} - {{ $product->description }}</div>
+					</div>
+					<div class="w-40 ddt-box !border-t-0 !border-x-0">
+						<div class="content !mt-0">{{ $product->pivot->quantity }}</div>
+					</div>
+					<div class="w-24 ddt-box !border-t-0 !border-x-0">
+						<div class="content !mt-0">{{ $product->unit->description }}</div>
+					</div>
+					<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">
+						<div class="content !mt-0"></div>
+					</div>
+				</div>
+			@endforeach
+		@endif
 		@if($serials->count())
 			<div class="flex !border-x border-x-gray-400 !divide-x !divide-x-gray-400 h-9">
 				<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">
@@ -119,24 +136,6 @@
 					</div>
 					<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">
 						<div class="content !mt-0">{{ $serial->code }}</div>
-					</div>
-				</div>
-			@endforeach
-		@endif
-		@if($products->count())
-			@foreach($products as $product)
-				<div class="flex !border-x border-x-gray-400 !divide-x !divide-x-gray-400 h-9">
-					<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">
-						<div class="content !mt-0">{{ $product->code }} - {{ $product->description }}</div>
-					</div>
-					<div class="w-40 ddt-box !border-t-0 !border-x-0">
-						<div class="content !mt-0">{{ $product->pivot->quantity }}</div>
-					</div>
-					<div class="w-24 ddt-box !border-t-0 !border-x-0">
-						<div class="content !mt-0">{{ $product->unit->description }}</div>
-					</div>
-					<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">
-						<div class="content !mt-0"></div>
 					</div>
 				</div>
 			@endforeach
