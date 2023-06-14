@@ -210,7 +210,7 @@
 				}
 				foreach ($result as $item) {
 					if ($item->quantity > 0) {
-						$list[$item->product_id][$item->location_id] = $item->quantity;
+						$list[$item->id][$item->location_id] = $item->quantity;
 					}
 				}
 			} else {
