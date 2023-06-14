@@ -43,7 +43,8 @@
 			]);
 		}
 
-		public function unloadWarehouseOrderMaterials($id) {
+		public function unloadWarehouseOrderMaterials($id)
+		{
 			$production_order = ProductionOrder::find($id)->load('materials', 'serials', 'warehouse_orders', 'warehouse_orders.rows');
 
 			// Ordine di Scarico
@@ -59,7 +60,7 @@
 				$quantity_in_location = $location->productQuantity($row->product_id);
 				// (Processato versamento * quantità necessaria) - Processato riga
 				$da_scaricare = ($warehouse_order_versamento->quantity_processed * $production_order->materials->where('product_id', $row->product_id)->first()->quantity) - $row->quantity_processed;
-				if($quantity_in_location <= $da_scaricare) {
+				if ($quantity_in_location <= $da_scaricare) {
 					$da_scaricare = $quantity_in_location;
 				}
 				if ($quantity_in_location !== 0) {
@@ -83,7 +84,7 @@
 				if ($da_scaricare != 0) {
 					$production_order->logs()->create([
 						'user_id' => auth()->id(),
-						'message' => "ha scaricato {$da_scaricare} '{$row->product->code}' per l'ordine di produzione '{$production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus()) ."'"
+						'message' => "ha scaricato {$da_scaricare} '{$row->product->code}' per l'ordine di produzione '{$production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus()) . "'"
 					]);
 					$this->dispatchBrowserEvent('open-notification', [
 						'title' => __('Scarico Materiale'),
@@ -104,6 +105,16 @@
 		{
 			$production_order = ProductionOrder::find($id);
 
+			if (!$production_order->materials->count()) {
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Distinta di produzione vuota'),
+					'subtitle' => __("Mancano i prodotti all'interno della distinta di produzione."),
+					'type' => 'error'
+				]);
+
+				return false;
+			}
+
 			// Controllo in quali locations ci sono i materiali necessari
 			$result = DB::table('products')
 				->join('location_product', 'location_product.product_id', '=', 'products.id')
@@ -121,13 +132,9 @@
 					}
 				}
 			} else {
-				$this->dispatchBrowserEvent('open-notification', [
-					'title' => __('Distinta di produzione vuota'),
-					'subtitle' => __("Mancano i prodotti all'interno della distinta di produzione."),
-					'type' => 'error'
-				]);
-
-				return false;
+				foreach ($production_order->materials as $item) {
+					$list[$item->id][Location::where('type', 'grandi_quantita')->first()->id] = 9999;
+				}
 			}
 
 			// Genero Ordine di Magazzino (scarico)
