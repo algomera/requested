@@ -205,6 +205,9 @@
 
 			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
 			if ($result->count()) {
+				foreach ($this->production_order->materials as $item) {
+					$list[$item->id][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
+				}
 				foreach ($result as $item) {
 					if ($item->quantity > 0) {
 						$list[$item->id][$item->location_id] = $item->quantity;
