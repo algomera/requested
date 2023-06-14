@@ -183,58 +183,6 @@
 					@endif
 				@endforeach
 			@endif
-			{{--			@foreach($list as $item)--}}
-			{{--				@if($item instanceof App\Models\Product)--}}
-			{{--					<div class="flex !border-x border-x-gray-400 !divide-x !divide-x-gray-400 h-9">--}}
-			{{--						<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">--}}
-			{{--							<div class="content !mt-0">{{ $item->code }} - {{ $item->description }}</div>--}}
-			{{--						</div>--}}
-			{{--						<div class="w-40 ddt-box !border-t-0 !border-x-0">--}}
-			{{--							<div class="content !mt-0">{{ $item->pivot->quantity }}</div>--}}
-			{{--						</div>--}}
-			{{--						<div class="w-24 ddt-box !border-t-0 !border-x-0">--}}
-			{{--							<div class="content !mt-0">{{ $item->unit->description }}</div>--}}
-			{{--						</div>--}}
-			{{--						<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">--}}
-			{{--							<div class="content !mt-0"></div>--}}
-			{{--						</div>--}}
-			{{--					</div>--}}
-			{{--				@elseif($item instanceof \App\Models\Serial)--}}
-			{{--					@if($loop->first && $parent_iteration == 1)--}}
-			{{--						<div class="flex !border-x border-x-gray-400 !divide-x !divide-x-gray-400 h-9">--}}
-			{{--							<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">--}}
-			{{--								<div class="content !mt-0">--}}
-			{{--									{{ $list->first()->product->code }} - {{ $list->first()->product->description }}--}}
-			{{--								</div>--}}
-			{{--							</div>--}}
-			{{--							<div class="w-40 ddt-box !border-t-0 !border-x-0">--}}
-			{{--								<div class="content !mt-0">{{ $serials_count }}</div>--}}
-			{{--							</div>--}}
-			{{--							<div class="w-24 ddt-box !border-t-0 !border-x-0">--}}
-			{{--								<div class="content !mt-0">{{ $list->first()->product->unit->description }}</div>--}}
-			{{--							</div>--}}
-			{{--							<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">--}}
-			{{--								<div class="content !mt-0">{{ $list->first()->code }}</div>--}}
-			{{--							</div>--}}
-			{{--						</div>--}}
-			{{--					@else--}}
-			{{--						<div class="flex !border-x border-x-gray-400 !divide-x !divide-x-gray-400 h-9">--}}
-			{{--							<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">--}}
-			{{--								<div class="content !mt-0"></div>--}}
-			{{--							</div>--}}
-			{{--							<div class="w-40 ddt-box !border-t-0 !border-x-0">--}}
-			{{--								<div class="content !mt-0"></div>--}}
-			{{--							</div>--}}
-			{{--							<div class="w-24 ddt-box !border-t-0 !border-x-0">--}}
-			{{--								<div class="content !mt-0"></div>--}}
-			{{--							</div>--}}
-			{{--							<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">--}}
-			{{--								<div class="content !mt-0">{{ $item->code }}</div>--}}
-			{{--							</div>--}}
-			{{--						</div>--}}
-			{{--					@endif--}}
-			{{--				@endif--}}
-			{{--			@endforeach--}}
 		</div>
 		<div>
 			<div class="grid grid-cols-12 !border-x border-x-gray-400 !divide-x !divide-x-gray-400">
