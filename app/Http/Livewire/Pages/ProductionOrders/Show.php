@@ -184,6 +184,32 @@
 
 		public function createWarehouseOrderTrasferimentoScarico()
 		{
+			// Controllo in quali locations ci sono i materiali necessari
+			$result = DB::table('products')
+				->join('location_product', 'location_product.product_id', '=', 'products.id')
+				->join('locations', 'locations.id', '=', 'location_product.location_id')
+				->select('products.id', 'location_product.location_id', 'location_product.quantity')
+				->whereIn('products.id', $this->production_order->materials->pluck('product_id'))
+				->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])
+				->get();
+
+			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
+			if ($result->count()) {
+				foreach ($result as $item) {
+					if ($item->quantity > 0) {
+						$list[$item->id][$item->location_id] = $item->quantity;
+					}
+				}
+			} else {
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Distinta di produzione vuota'),
+					'subtitle' => __("Mancano i prodotti all'interno della distinta di produzione."),
+					'type' => 'error'
+				]);
+
+				return false;
+			}
+
 			// Genero Ordine di Magazzino (scarico)
 			$warehouse_order_scarico = WarehouseOrder::factory()->create([
 				'production_order_id' => $this->production_order->id,
@@ -215,26 +241,6 @@
 				'user_id' => null,
 				'system' => 1,
 			]);
-
-			// Controllo in quali locations ci sono i materiali necessari
-			$result = DB::table('products')
-				->join('location_product', 'location_product.product_id', '=', 'products.id')
-				->join('locations', 'locations.id', '=', 'location_product.location_id')
-				->select('products.id', 'location_product.location_id', 'location_product.quantity')
-				->whereIn('products.id', $this->production_order->materials->pluck('product_id'))
-				->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])
-				->get();
-
-			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
-			if ($result->count()) {
-				foreach ($result as $item) {
-					if ($item->quantity > 0) {
-						$list[$item->id][$item->location_id] = $item->quantity;
-					}
-				}
-			} else {
-				dd('Not found');
-			}
 
 			$materialLocations = [];
 
