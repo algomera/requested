@@ -2,6 +2,8 @@
 
 	namespace App\Http\Livewire;
 
+	use App\Models\Product;
+	use Illuminate\Database\Eloquent\Collection;
 	use Livewire\Component;
 	use Spatie\Browsershot\Browsershot;
 
@@ -14,21 +16,14 @@
 			$this->ddt = $ddt;
 		}
 
-//		public function print()
-//		{
-//			$path = storage_path($this->ddt->id . '.pdf');
-//			Browsershot::url(route('ddt.show', $this->ddt->id))
-//				->authenticate('admin@example.test', 'password')
-//				->format('A4')
-//				->margins(1, 1, 1, 1, 'mm')
-//				->savePdf($path);
-//		}
-
 		public function render()
 		{
+			$serials = $this->ddt->serials()->with('product.unit')->get();
+			$products = $this->ddt->products()->with('unit')->get();
+			$items = $products->concat($serials);
 			return view('livewire.ddt', [
-				'serials' => $this->ddt->serials,
-				'products' => $this->ddt->products
+				'serials_count' => $serials->count(),
+				'items' => $items->chunk(19),
 			])->layout('layouts.blank');
 		}
 	}

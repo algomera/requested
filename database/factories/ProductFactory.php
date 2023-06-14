@@ -2,6 +2,7 @@
 
 	namespace Database\Factories;
 
+	use App\Models\Unit;
 	use Illuminate\Database\Eloquent\Factories\Factory;
 
 	/**
@@ -17,13 +18,8 @@
 		public function definition(): array {
 			return [
 				'code'        => fake()->regexify('[A-Z0-9]{6}'),
-				'name'        => fake()->domainWord,
-				'description' => fake()->text(50),
-				'units'       => fake()->randomElement([
-					'l',
-					'mt',
-					'pz'
-				]),
+				'description' => fake()->domainWord,
+				'unit_id'       => Unit::all()->shuffle()->first()->id,
 			];
 		}
 	}
