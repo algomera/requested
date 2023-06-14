@@ -184,6 +184,16 @@
 
 		public function createWarehouseOrderTrasferimentoScarico()
 		{
+			if (!$this->production_order->materials->count()) {
+				$this->dispatchBrowserEvent('open-notification', [
+					'title' => __('Distinta di produzione vuota'),
+					'subtitle' => __("Mancano i prodotti all'interno della distinta di produzione."),
+					'type' => 'error'
+				]);
+
+				return false;
+			}
+
 			// Controllo in quali locations ci sono i materiali necessari
 			$result = DB::table('products')
 				->join('location_product', 'location_product.product_id', '=', 'products.id')
@@ -201,13 +211,9 @@
 					}
 				}
 			} else {
-				$this->dispatchBrowserEvent('open-notification', [
-					'title' => __('Distinta di produzione vuota'),
-					'subtitle' => __("Mancano i prodotti all'interno della distinta di produzione."),
-					'type' => 'error'
-				]);
-
-				return false;
+				foreach ($this->production_order->materials as $item) {
+					$list[$item->id][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
+				}
 			}
 
 			// Genero Ordine di Magazzino (scarico)
@@ -245,8 +251,8 @@
 			$materialLocations = [];
 
 			// Per ogni materiale, creo la lista di quale materiale, da dove e quanto devo trasferire
-			foreach ($this->production_order->materials as $k => $material) {
-				$productId = $material->product_id;
+			foreach ($this->production_order->materials as $material) {
+				$productId = $material->id;
 				$requiredQuantity = $material->quantity * $this->production_order->quantity; // Quantità richiesta per ogni materiale
 
 				// Verifica se il prodotto è presente nella lista $list

@@ -133,7 +133,7 @@
 				}
 			} else {
 				foreach ($production_order->materials as $item) {
-					$list[$item->id][Location::where('type', 'grandi_quantita')->first()->id] = 9999;
+					$list[$item->id][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
 				}
 			}
 
@@ -172,8 +172,8 @@
 			$materialLocations = [];
 
 			// Per ogni materiale, creo la lista di quale materiale, da dove e quanto devo trasferire
-			foreach ($production_order->materials as $k => $material) {
-				$productId = $material->product_id;
+			foreach ($production_order->materials as $material) {
+				$productId = $material->id;
 				$requiredQuantity = $material->quantity * $production_order->quantity; // Quantità richiesta per ogni materiale
 
 				// Verifica se il prodotto è presente nella lista $list
