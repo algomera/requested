@@ -195,32 +195,17 @@
 				return false;
 			}
 
-			// Controllo in quali locations ci sono i materiali necessari
-			$result = DB::table('products')
-				->join('location_product', 'location_product.product_id', '=', 'products.id')
-				->join('locations', 'locations.id', '=', 'location_product.location_id')
-				->select('products.id', 'location_product.location_id', 'location_product.quantity')
-				->whereIn('products.id', $this->production_order->materials->pluck('product_id'))
-				->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])
-				->get();
-
 			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
-			if ($result->count()) {
-				foreach ($this->production_order->materials as $item) {
+			foreach ($this->production_order->materials as $item) {
+				$test = Location::with('products')->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])->whereHas('products', function($q) use ($item) {
+					$q->where('id', $item->product_id);
+				})->get();
+				if($test->count()) {
+					foreach ($test as $t) {
+						$list["{$item->id}-{$item->product_id}"][$t->id] = $t->products()->find($item->product_id)->pivot->quantity;
+					}
+				} else {
 					$list["{$item->id}-{$item->product_id}"][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
-				}
-				foreach ($result as $res) {
-					if ($res->quantity > 0) {
-						$list["{$item->id}-{$res->id}"][$res->location_id] = $res->quantity;
-					}
-				}
-			} else {
-				foreach ($this->production_order->materials as $item) {
-					if (isset($list[$item->product_id])) {
-						$list["{$item->id}-{$item->product_id}-" . Str::random(10)][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
-					} else {
-						$list["{$item->id}-{$item->product_id}"][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
-					}
 				}
 			}
 
@@ -288,45 +273,13 @@
 				}
 			}
 
-			// Per ogni materiale, creo la lista di quale materiale, da dove e quanto devo trasferire
-//			foreach ($this->production_order->materials as $material) {
-//				$productId = $material->product_id;
-//				$requiredQuantity = $material->quantity * $this->production_order->quantity; // Quantità richiesta per ogni materiale
-//
-//				// Verifica se il prodotto è presente nella lista $list
-//				if (isset($list[$productId])) {
-//					$locations = $list[$productId];
-//
-//					$materialLocations[$productId] = [];
-//
-//					// Preleva la quantità richiesta da ogni location disponibile
-//					foreach ($locations as $locationId => $quantity) {
-//						if ($requiredQuantity <= 0) {
-//							break;
-//						}
-//
-//						// Verifica se la location ha abbastanza quantità disponibile
-//						if ($quantity > 0) {
-//							$prelevato = min($requiredQuantity, $quantity);
-//							$materialLocations[$productId][$locationId] = $prelevato;
-//							$list[$productId][$locationId] -= $prelevato;
-//							$requiredQuantity -= $prelevato;
-//						}
-//					}
-//
-//					// Verifica se la quantità richiesta è stata soddisfatta completamente
-//					if ($requiredQuantity > 0) {
-//						$materialLocations[$productId] = []; // Azzeriamo l'array delle location per il materiale se la quantità richiesta non è stata soddisfatta
-//					}
-//				}
-//			}
 			foreach ($materialLocations as $id => $materialLocation) {
 				foreach ($materialLocation as $loc => $quantity) {
 					$warehouse_order_trasferimento->rows()->create([
-						'product_id' => explode('-', $id)[0],
+						'product_id' => explode('-', $id)[1],
 						'position' => $warehouse_order_trasferimento->rows()->count(),
 						'pickup_id' => $loc,
-						'destination_id' => Location::where('type', 'produzione')->first()->id,
+						'destination_id' => $this->production_order->materials()->find(explode('-', $id)[0])->location_id,
 						'quantity_total' => $quantity,
 						'quantity_processed' => 0,
 						'status' => 'to_transfer'
