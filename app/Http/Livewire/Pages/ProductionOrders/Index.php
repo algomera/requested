@@ -44,7 +44,7 @@
 			]);
 		}
 
-		public function unloadWarehouseOrderMaterials($id)
+		public function unloadWarehouseOrderMaterials($id, $i)
 		{
 			$production_order = ProductionOrder::find($id)->load('materials', 'serials', 'warehouse_orders', 'warehouse_orders.rows');
 

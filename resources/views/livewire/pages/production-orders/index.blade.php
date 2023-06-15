@@ -71,9 +71,11 @@
 									@break
 							@endswitch
 						</div>
-						<div wire:key="mobile-generate-{{$production_order->id}}-{{$loop->index}}" class="!mt-3">
+						<div class="!mt-3">
 							@if($production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
-								<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }})"
+								<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }}, {{ $loop->index }})"
+										wire:target="unloadWarehouseOrderMaterials({{ $production_order->id }}, {{ $loop->index }})"
+										wire:loading.attr="disabled"
 										type="button"
 										class="rounded bg-indigo-600 px-2 py-0.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-25"
 									{{ $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus() === 'transferred' ? 'disabled' : ''}}
@@ -175,7 +177,9 @@
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 								@if($production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
-									<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }})"
+									<button wire:click="unloadWarehouseOrderMaterials({{ $production_order->id }}, {{ $loop->index }})"
+											wire:target="unloadWarehouseOrderMaterials({{ $production_order->id }}, {{ $loop->index }})"
+											wire:loading.attr="disabled"
 											type="button"
 											class="rounded bg-indigo-600 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-25"
 										{{ $production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus() === 'transferred' ? 'disabled' : ''}}

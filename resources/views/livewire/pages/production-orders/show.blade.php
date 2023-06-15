@@ -58,6 +58,8 @@
 					<div class="flex-1">
 					<x-primary-button
 						wire:click="unloadMaterials"
+						wire:target="unloadMaterials"
+						wire:loading.attr="disabled"
 						class="w-full justify-center whitespace-nowrap"
 						:disabled="$warehouse_order_scarico->getStatus() === 'transferred'"
 					>
