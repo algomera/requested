@@ -72,6 +72,8 @@
 				<x-primary-button
 					class="justify-center bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
 					wire:click="setAsCompleted"
+					wire:target="setAsCompleted"
+					wire:loading.attr="disabled"
 					:disabled="$production_order->status === 'completed' || $warehouse_order_scarico === null || !$serials_checked">
 					Completa
 				</x-primary-button>

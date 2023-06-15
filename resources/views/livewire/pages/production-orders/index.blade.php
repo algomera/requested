@@ -18,6 +18,7 @@
 				</div>
 				<div>
 					<x-select wire:model="status">
+						<option value="all">Tutti</option>
 						<option value="">Non completati</option>
 						<option value="completed">Completati</option>
 						<option value="active">Attivi</option>

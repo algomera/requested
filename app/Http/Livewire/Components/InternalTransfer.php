@@ -25,6 +25,9 @@
 		public function startLocationSelected($val)
 		{
 			$this->startLocation = Location::find($val);
+			if($this->product) {
+				$this->itemSelected($this->product->id);
+			}
 		}
 
 		public function endLocationSelected($val)
@@ -35,7 +38,7 @@
 		public function itemSelected($val)
 		{
 			$this->product = Product::find($val);
-			$this->quantity_in_location = $this->startLocation->productQuantity($this->product->id) ?? 0;
+			$this->quantity_in_location = $this->startLocation->productQuantity($this->product->id);
 		}
 
 		public function save()

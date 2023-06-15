@@ -108,7 +108,7 @@
 				'type' => 'success'
 			]);
 			// Cambio status da "Attivo" a "Completato"
-			if ($this->production_order->fresh()->status === 'active' && $this->production_order->fresh()->serials->where('completed', 0)->count() == 0) {
+			if ($this->production_order->warehouse_orders()->where('type', 'scarico')->first()->getStatus() === 'transferred' && $this->production_order->fresh()->status === 'active' && $this->production_order->fresh()->serials->where('completed', 0)->count() == 0) {
 				$this->production_order->update([
 					'status' => 'completed',
 					'finish_date' => now()
@@ -173,12 +173,14 @@
 						'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
 						'type' => 'success'
 					]);
+					return false;
 				} else {
 					$this->dispatchBrowserEvent('open-notification', [
 						'title' => __('Scarico Materiale'),
 						'subtitle' => __('Attualmente non ci sono prodotti da scaricare.'),
 						'type' => 'warning'
 					]);
+					return false;
 				}
 			}
 		}
@@ -197,10 +199,10 @@
 
 			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
 			foreach ($this->production_order->materials as $item) {
-				$test = Location::with('products')->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])->whereHas('products', function($q) use ($item) {
+				$test = Location::with('products')->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])->whereHas('products', function ($q) use ($item) {
 					$q->where('id', $item->product_id);
 				})->get();
-				if($test->count()) {
+				if ($test->count()) {
 					foreach ($test as $t) {
 						$list["{$item->id}-{$item->product_id}"][$t->id] = $t->products()->find($item->product_id)->pivot->quantity;
 					}
@@ -269,7 +271,8 @@
 
 				// Verifica se la quantità richiesta è stata soddisfatta completamente
 				if ($requiredQuantity > 0) {
-					$materialLocations[$productId] = []; // Azzeriamo l'array delle location per il materiale se la quantità richiesta non è stata soddisfatta
+					// Se non è soddisfatta, vado a pescare la quantità rimanente dalla prima location "grandi_quantità"
+					$materialLocations[$k][Location::where('type', 'grandi_quantita')->first()->id] = $requiredQuantity;
 				}
 			}
 

@@ -16,7 +16,7 @@
 		use WithPagination;
 
 		public $search = '';
-		public $status = null;
+		public $status = '';
 		public $deletingId = null;
 		protected $listeners = [
 			'production_order-updated' => '$refresh',
@@ -92,12 +92,14 @@
 						'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
 						'type' => 'success'
 					]);
+					return false;
 				} else {
 					$this->dispatchBrowserEvent('open-notification', [
 						'title' => __('Scarico Materiale'),
 						'subtitle' => __('Attualmente non ci sono prodotti da scaricare.'),
 						'type' => 'warning'
 					]);
+					return false;
 				}
 			}
 		}
@@ -118,10 +120,10 @@
 
 			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
 			foreach ($production_order->materials as $item) {
-				$test = Location::with('products')->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])->whereHas('products', function($q) use ($item) {
+				$test = Location::with('products')->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])->whereHas('products', function ($q) use ($item) {
 					$q->where('id', $item->product_id);
 				})->get();
-				if($test->count()) {
+				if ($test->count()) {
 					foreach ($test as $t) {
 						$list["{$item->id}-{$item->product_id}"][$t->id] = $t->products()->find($item->product_id)->pivot->quantity;
 					}
@@ -190,7 +192,8 @@
 
 				// Verifica se la quantità richiesta è stata soddisfatta completamente
 				if ($requiredQuantity > 0) {
-					$materialLocations[$productId] = []; // Azzeriamo l'array delle location per il materiale se la quantità richiesta non è stata soddisfatta
+					// Se non è soddisfatta, vado a pescare la quantità rimanente dalla prima location "grandi_quantità"
+					$materialLocations[$k][Location::where('type', 'grandi_quantita')->first()->id] = $requiredQuantity;
 				}
 			}
 			foreach ($materialLocations as $id => $materialLocation) {
@@ -225,7 +228,10 @@
 		public function render()
 		{
 			$production_orders = ProductionOrder::query();
-			if ($this->status == null) {
+
+			if ($this->status == 'all') {
+				$production_orders;
+			} elseif ($this->status == null) {
 				$production_orders->whereIn('status', ['created', 'active']);
 			} else {
 				$production_orders->where('status', $this->status);
