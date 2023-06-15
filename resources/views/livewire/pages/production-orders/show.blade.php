@@ -41,7 +41,7 @@
 					<x-primary-button
 						wire:click="$emit('openModal', 'pages.production-orders.materials', {{ json_encode(['production_order' => $production_order->id]) }})"
 						class="w-full justify-center whitespace-nowrap">
-						Distinta di produzione
+						Distinta <br class="sm:hidden">di produzione
 					</x-primary-button>
 				</div>
 				@if(!$production_order->warehouse_orders()->where('type', 'trasferimento')->exists())
@@ -51,7 +51,7 @@
 							wire:target="createWarehouseOrderTrasferimentoScarico"
 							wire:loading.attr="disabled"
 							class="w-full justify-center whitespace-nowrap">
-							Genera Trasferimento
+							Genera <br class="sm:hidden">Trasferimento
 						</x-primary-button>
 					</div>
 				@else
@@ -63,7 +63,7 @@
 						class="w-full justify-center whitespace-nowrap"
 						:disabled="$warehouse_order_scarico->getStatus() === 'transferred'"
 					>
-						Scarica materiale
+						Scarica <br class="sm:hidden">materiale
 					</x-primary-button>
 					</div>
 				@endif
@@ -77,7 +77,7 @@
 				</x-primary-button>
 			@else
 				<x-primary-button
-					class="bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
+					class="justify-center bg-green-500 hover:bg-green-600 focus:bg-green-700 active:bg-green-700"
 					wire:click="$emit('openModal', 'pages.production-orders.complete-quantity', {{ json_encode(['production_order' => $production_order->id]) }})"
 					:disabled="$production_order->status === 'completed' || $warehouse_order_scarico === null">
 					Completa quantità
