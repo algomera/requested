@@ -7,6 +7,7 @@
 	use App\Models\Serial;
 	use App\Models\WarehouseOrder;
 	use Illuminate\Support\Facades\DB;
+	use Illuminate\Support\Str;
 	use Livewire\Component;
 	use Livewire\WithPagination;
 
@@ -206,16 +207,20 @@
 			// Creo un array per distribuire, per ogni materiale, la quantità in ogni location
 			if ($result->count()) {
 				foreach ($this->production_order->materials as $item) {
-					$list[$item->product_id][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
+					$list["{$item->id}-{$item->product_id}"][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
 				}
-				foreach ($result as $item) {
-					if ($item->quantity > 0) {
-						$list[$item->id][$item->location_id] = $item->quantity;
+				foreach ($result as $res) {
+					if ($res->quantity > 0) {
+						$list["{$item->id}-{$res->id}"][$res->location_id] = $res->quantity;
 					}
 				}
 			} else {
 				foreach ($this->production_order->materials as $item) {
-					$list[$item->product_id][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
+					if (isset($list[$item->product_id])) {
+						$list["{$item->id}-{$item->product_id}-" . Str::random(10)][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
+					} else {
+						$list["{$item->id}-{$item->product_id}"][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
+					}
 				}
 			}
 
@@ -253,42 +258,72 @@
 
 			$materialLocations = [];
 
-			// Per ogni materiale, creo la lista di quale materiale, da dove e quanto devo trasferire
-			foreach ($this->production_order->materials as $material) {
-				$productId = $material->product_id;
-				$requiredQuantity = $material->quantity * $this->production_order->quantity; // Quantità richiesta per ogni materiale
+			foreach ($list as $k => $item) {
+				$id = explode('-', $k)[0];
+				$productId = explode('-', $k)[1];
+				$requiredQuantity = $this->production_order->materials()->find($id)->quantity * $this->production_order->quantity;
 
-				// Verifica se il prodotto è presente nella lista $list
-				if (isset($list[$productId])) {
-					$locations = $list[$productId];
+				$locations = $list[$k];
 
-					$materialLocations[$productId] = [];
+				$materialLocations[$k] = [];
 
-					// Preleva la quantità richiesta da ogni location disponibile
-					foreach ($locations as $locationId => $quantity) {
-						if ($requiredQuantity <= 0) {
-							break;
-						}
-
-						// Verifica se la location ha abbastanza quantità disponibile
-						if ($quantity > 0) {
-							$prelevato = min($requiredQuantity, $quantity);
-							$materialLocations[$productId][$locationId] = $prelevato;
-							$list[$productId][$locationId] -= $prelevato;
-							$requiredQuantity -= $prelevato;
-						}
+				// Preleva la quantità richiesta da ogni location disponibile
+				foreach ($locations as $locationId => $quantity) {
+					if ($requiredQuantity <= 0) {
+						break;
 					}
 
-					// Verifica se la quantità richiesta è stata soddisfatta completamente
-					if ($requiredQuantity > 0) {
-						$materialLocations[$productId] = []; // Azzeriamo l'array delle location per il materiale se la quantità richiesta non è stata soddisfatta
+					// Verifica se la location ha abbastanza quantità disponibile
+					if ($quantity > 0) {
+						$prelevato = min($requiredQuantity, $quantity);
+						$materialLocations[$k][$locationId] = $prelevato;
+						$list[$k][$locationId] -= $prelevato;
+						$requiredQuantity -= $prelevato;
 					}
 				}
+
+				// Verifica se la quantità richiesta è stata soddisfatta completamente
+				if ($requiredQuantity > 0) {
+					$materialLocations[$productId] = []; // Azzeriamo l'array delle location per il materiale se la quantità richiesta non è stata soddisfatta
+				}
 			}
+
+			// Per ogni materiale, creo la lista di quale materiale, da dove e quanto devo trasferire
+//			foreach ($this->production_order->materials as $material) {
+//				$productId = $material->product_id;
+//				$requiredQuantity = $material->quantity * $this->production_order->quantity; // Quantità richiesta per ogni materiale
+//
+//				// Verifica se il prodotto è presente nella lista $list
+//				if (isset($list[$productId])) {
+//					$locations = $list[$productId];
+//
+//					$materialLocations[$productId] = [];
+//
+//					// Preleva la quantità richiesta da ogni location disponibile
+//					foreach ($locations as $locationId => $quantity) {
+//						if ($requiredQuantity <= 0) {
+//							break;
+//						}
+//
+//						// Verifica se la location ha abbastanza quantità disponibile
+//						if ($quantity > 0) {
+//							$prelevato = min($requiredQuantity, $quantity);
+//							$materialLocations[$productId][$locationId] = $prelevato;
+//							$list[$productId][$locationId] -= $prelevato;
+//							$requiredQuantity -= $prelevato;
+//						}
+//					}
+//
+//					// Verifica se la quantità richiesta è stata soddisfatta completamente
+//					if ($requiredQuantity > 0) {
+//						$materialLocations[$productId] = []; // Azzeriamo l'array delle location per il materiale se la quantità richiesta non è stata soddisfatta
+//					}
+//				}
+//			}
 			foreach ($materialLocations as $id => $materialLocation) {
 				foreach ($materialLocation as $loc => $quantity) {
 					$warehouse_order_trasferimento->rows()->create([
-						'product_id' => $id,
+						'product_id' => explode('-', $id)[0],
 						'position' => $warehouse_order_trasferimento->rows()->count(),
 						'pickup_id' => $loc,
 						'destination_id' => Location::where('type', 'produzione')->first()->id,
