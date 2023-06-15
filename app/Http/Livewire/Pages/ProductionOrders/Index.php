@@ -102,7 +102,7 @@
 			}
 		}
 
-		public function createWarehouseOrderTrasferimentoScarico($id)
+		public function createWarehouseOrderTrasferimentoScarico($id, $i)
 		{
 			$production_order = ProductionOrder::find($id);
 

@@ -48,6 +48,8 @@
 					<div class="flex-1">
 						<x-primary-button
 							wire:click="createWarehouseOrderTrasferimentoScarico"
+							wire:target="createWarehouseOrderTrasferimentoScarico"
+							wire:loading.attr="disabled"
 							class="w-full justify-center whitespace-nowrap">
 							Genera Trasferimento
 						</x-primary-button>
