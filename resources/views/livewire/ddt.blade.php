@@ -96,7 +96,7 @@
 			@if($list instanceof \Illuminate\Database\Eloquent\Collection)
 				@foreach($list as $i => $item)
 					@if($item instanceof \App\Models\Serial)
-						@if((isset($list[$i-1]) && $list[$i-1] instanceof \App\Models\Serial && $list[$i-1]->product->id !== $item->product_id) || (isset($list[$i-1]) && $list[$i-1] instanceof \App\Models\Product && $list[$i-1]->id !== $item->product_id))
+						@if(!(isset($list[$i-1])) || (isset($list[$i-1]) && $list[$i-1] instanceof \App\Models\Serial && $list[$i-1]->product->id !== $item->product_id) || (isset($list[$i-1]) && $list[$i-1] instanceof \App\Models\Product && $list[$i-1]->id !== $item->product_id))
 							@php($count = $items->flatten()->where('product_id', $item->product->id)->count())
 							<div class="flex !border-x border-x-gray-400 !divide-x !divide-x-gray-400 h-9">
 								<div class="flex-1 print:w-96 ddt-box !border-t-0 !border-x-0">
