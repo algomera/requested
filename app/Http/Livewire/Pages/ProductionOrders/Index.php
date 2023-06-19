@@ -92,14 +92,12 @@
 						'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
 						'type' => 'success'
 					]);
-					return false;
 				} else {
 					$this->dispatchBrowserEvent('open-notification', [
 						'title' => __('Scarico Materiale'),
 						'subtitle' => __('Attualmente non ci sono prodotti da scaricare.'),
 						'type' => 'warning'
 					]);
-					return false;
 				}
 			}
 		}

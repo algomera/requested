@@ -11,7 +11,7 @@
 		public function up(): void {
 			Schema::create('locations', function (Blueprint $table) {
 				$table->id();
-				$table->string('code');
+				$table->string('code')->unique();
 				$table->text('description');
 				$table->enum('type', array_keys(config('requested.locations.types')));
 				$table->timestamps();

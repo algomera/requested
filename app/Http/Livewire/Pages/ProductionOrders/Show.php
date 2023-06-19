@@ -168,19 +168,17 @@
 						'user_id' => auth()->id(),
 						'message' => "ha scaricato {$da_scaricare} '{$row->product->code}' per l'ordine di produzione '{$this->production_order->code}'. Lo stato attuale dello scarico è '" . config('requested.warehouse_orders.status.' . $warehouse_order_scarico->getStatus()) . "'"
 					]);
-					$this->dispatchBrowserEvent('open-notification', [
-						'title' => __('Scarico Materiale'),
-						'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
-						'type' => 'success'
-					]);
-					return false;
+//					$this->dispatchBrowserEvent('open-notification', [
+//						'title' => __('Scarico Materiale'),
+//						'subtitle' => __('Lo scarico del materiale dell\'ordine di produzione è avvenuto con successo.'),
+//						'type' => 'success'
+//					]);
 				} else {
 					$this->dispatchBrowserEvent('open-notification', [
 						'title' => __('Scarico Materiale'),
 						'subtitle' => __('Attualmente non ci sono prodotti da scaricare.'),
 						'type' => 'warning'
 					]);
-					return false;
 				}
 			}
 		}
