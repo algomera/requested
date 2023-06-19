@@ -15,15 +15,20 @@
 			$this->call([
 				RolesPermissionsSeeder::class,
 				UserSeeder::class,
-				UnitSeeder::class,
-				DestinationSeeder::class,
-				SupplierSeeder::class,
-				LocationSeeder::class,
-				ProductSeeder::class,
-				ItemSeeder::class,
-				ProductionOrderSeeder::class,
-				SerialSeeder::class,
 			]);
+
+			if(app()->environment() === 'local') {
+				$this->call([
+					UnitSeeder::class,
+					DestinationSeeder::class,
+					SupplierSeeder::class,
+					LocationSeeder::class,
+					ProductSeeder::class,
+					ItemSeeder::class,
+					ProductionOrderSeeder::class,
+					SerialSeeder::class,
+				]);
+			}
 //			$sql = 'app/database/test_data.sql';
 //			DB::unprepared(file_get_contents($sql));
 		}

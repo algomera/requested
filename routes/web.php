@@ -21,7 +21,7 @@
 		Route::get('/serials', \App\Http\Livewire\Pages\Serials\Index::class)->name('serials.index');
 		Route::get('/warehouse-orders', \App\Http\Livewire\Pages\WarehouseOrders\Index::class)->name('warehouse-orders.index');
 		Route::get('/warehouse-orders/{warehouseOrder}', \App\Http\Livewire\Pages\WarehouseOrders\Show::class)->name('warehouse-orders.show');
-		Route::get('/users', \App\Http\Livewire\Pages\Users\Index::class)->name('users.index');
+		Route::get('/users', \App\Http\Livewire\Pages\Users\Index::class)->middleware('role:admin')->name('users.index');
 		Route::get('/suppliers', \App\Http\Livewire\Pages\Suppliers\Index::class)->name('suppliers.index');
 		Route::get('/destinations', \App\Http\Livewire\Pages\Destinations\Index::class)->name('destinations.index');
 		Route::get('/logs', \App\Http\Livewire\Pages\Logs\Index::class)->name('logs.index');

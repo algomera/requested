@@ -49,12 +49,14 @@
 			Trasferimento interno
 		</span>
 	</li>
+	@role('admin')
 	<li>
 		<a class="{{ request()->is('users*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
 		   href="{{ route('users.index') }}">
 			<span class="truncate">Utenti</span>
 		</a>
 	</li>
+	@endif
 	<li>
 		<a class="{{ request()->is('suppliers*') ? 'text-emerald-500 font-medium' : 'text-zinc-600 hover:text-zinc-900' }} block py-1 text-sm transition"
 		   href="{{ route('suppliers.index') }}">

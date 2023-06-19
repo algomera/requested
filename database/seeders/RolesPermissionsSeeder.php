@@ -23,15 +23,15 @@
 				'label' => 'Magazziniere'
 			]);
 			// PERMISSIONS
-			$permissions = [
-				'Permesso 1',
-				'Permesso 2'
-			];
-			foreach ($permissions as $permission) {
-				Permission::create([
-					'name' => $permission
-				]);
-			}
+//			$permissions = [
+//				'Permesso 1',
+//				'Permesso 2'
+//			];
+//			foreach ($permissions as $permission) {
+//				Permission::create([
+//					'name' => $permission
+//				]);
+//			}
 
 			// ASSIGN PERMISSIONS TO ROLE
 //			$warehousemanRole->givePermissionTo([]);
