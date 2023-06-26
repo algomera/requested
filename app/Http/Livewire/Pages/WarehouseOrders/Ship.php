@@ -34,7 +34,7 @@
 		public function updatedSelectAll($value)
 		{
 			if ($value) {
-				$this->serials_checked = $this->warehouse_order->production_order->serials()->where('completed', 1)->where('shipped', 0)->pluck('id')->toArray();
+				$this->serials_checked = $this->warehouse_order->production_order ? $this->warehouse_order->production_order->serials()->where('product_id', $this->row->product_id)->where('completed', 1)->where('shipped', 0)->pluck('id')->toArray() : $this->warehouse_order->serials()->where('product_id', $this->row->product_id)->where('completed', 1)->where('shipped', 0)->pluck('id')->toArray();
 			} else {
 				$this->serials_checked = [];
 			}
@@ -177,7 +177,7 @@
 		public function render()
 		{
 			return view('livewire.pages.warehouse-orders.ship', [
-				'unshipped_serials' => $this->warehouse_order->production_order->serials()->where('completed', 1)->where('shipped', 0)->paginate(25),
+				'unshipped_serials' => $this->row->product->serial_management ? $this->warehouse_order->production_order ? $this->warehouse_order->production_order->serials()->where('product_id', $this->row->product_id)->where('completed', 1)->where('shipped', 0)->paginate(25) : $this->warehouse_order->serials()->where('product_id', $this->row->product_id)->where('completed', 1)->where('shipped', 0)->paginate(25) : [],
 			]);
 		}
 	}
