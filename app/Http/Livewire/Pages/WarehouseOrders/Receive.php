@@ -34,7 +34,7 @@
 		public function updatedSelectAll($value)
 		{
 			if ($value) {
-				$this->serials_checked = $this->warehouse_order->serials()->where('received', 0)->pluck('id')->toArray();
+				$this->serials_checked = $this->warehouse_order->serials()->where('product_id', $this->row->product_id)->where('received', 0)->pluck('id')->toArray();
 			} else {
 				$this->serials_checked = [];
 			}
@@ -141,7 +141,7 @@
 		public function render()
 		{
 			return view('livewire.pages.warehouse-orders.receive', [
-				'unreceived_serials' => $this->warehouse_order->serials()->where('received', 0)->paginate(25),
+				'unreceived_serials' => $this->warehouse_order->serials()->where('product_id', $this->row->product_id)->where('received', 0)->paginate(25),
 			]);
 		}
 	}
