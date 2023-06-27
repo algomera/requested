@@ -37,6 +37,12 @@
 					</x-select>
 				</dd>
 			</div>
+			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:px-6">
+				<dt class="text-sm font-medium text-gray-900">Priorità d'uscita</dt>
+				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+					<x-input wire:model.defer="location.out_priority" type="number" step="1"></x-input>
+				</dd>
+			</div>
 		</dl>
 	</div>
 	<div class="py-4 px-4 flex justify-end space-x-3 sm:px-6">

@@ -199,13 +199,13 @@
 			foreach ($this->production_order->materials as $item) {
 				$test = Location::with('products')->whereNotIn('locations.type', ['ricevimento', 'produzione', 'scarto', 'fornitore', 'destinazione', 'spedizione'])->whereHas('products', function ($q) use ($item) {
 					$q->where('id', $item->product_id);
-				})->get();
+				})->orderBy('out_priority')->get();
 				if ($test->count()) {
 					foreach ($test as $t) {
 						$list["{$item->id}-{$item->product_id}"][$t->id] = $t->products()->find($item->product_id)->pivot->quantity;
 					}
 				} else {
-					$list["{$item->id}-{$item->product_id}"][Location::where('type', 'grandi_quantita')->first()->id] = 99999;
+					$list["{$item->id}-{$item->product_id}"][Location::where('type', 'grandi_quantita')->orderBy('out_priority')->first()->id] = 99999;
 				}
 			}
 
@@ -270,7 +270,7 @@
 				// Verifica se la quantità richiesta è stata soddisfatta completamente
 				if ($requiredQuantity > 0) {
 					// Se non è soddisfatta, vado a pescare la quantità rimanente dalla prima location "grandi_quantità"
-					$materialLocations[$k][Location::where('type', 'grandi_quantita')->first()->id] = $requiredQuantity;
+					$materialLocations[$k][Location::where('type', 'grandi_quantita')->orderBy('out_priority')->first()->id] = $requiredQuantity;
 				}
 			}
 

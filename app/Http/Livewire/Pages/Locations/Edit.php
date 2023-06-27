@@ -14,6 +14,7 @@
 				'location.code'        => 'required|unique:locations,code,' . $this->location->id,
 				'location.description' => 'required|unique:locations,description,' . $this->location->id,
 				'location.type'        => 'required|in:' . implode(',', array_keys(config('requested.locations.types'))),
+				'location.out_priority' => 'nullable|min:0'
 			];
 		}
 

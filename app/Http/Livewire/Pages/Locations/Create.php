@@ -7,7 +7,7 @@
 
 	class Create extends ModalComponent
 	{
-		public $code, $description, $type;
+		public $code, $description, $type, $out_priority;
 
 		protected function rules()
 		{
@@ -15,6 +15,7 @@
 				'code' => 'required|unique:locations,code',
 				'description' => 'required|unique:locations,description',
 				'type' => 'required|in:' . implode(',', array_keys(config('requested.locations.types'))),
+				'out_priority' => 'nullable|numeric|min:0'
 			];
 		}
 
@@ -24,7 +25,8 @@
 			$location = Location::create([
 				'code' => $this->code,
 				'description' => $this->description,
-				'type' => $this->type
+				'type' => $this->type,
+				'out_priority' => $this->out_priority ?? 99999,
 			]);
 			$this->emitTo('pages.locations.index', 'location-created');
 			$this->closeModal();

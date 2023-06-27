@@ -17,6 +17,10 @@
 				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ config('requested.locations.types.' . $location->type .'.label') }}</dd>
 			</div>
 			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+				<dt class="text-sm font-medium text-gray-900">Priorità d'uscita</dt>
+				<dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $location->out_priority ?: '-' }}</dd>
+			</div>
+			<div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
 				<dt class="flex flex-col space-y-0.5 text-sm font-medium text-gray-900">
 					<span>Prodotti</span>
 {{--					<span wire:click="$emit('openModal', 'pages.locations.add-product', {{ json_encode(['location' => $location->id]) }})"--}}

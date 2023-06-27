@@ -29,6 +29,9 @@
 						<p class="font-bold">Tipologia: <span
 								class="font-light">{{ config('requested.locations.types.' . $location->type . '.label') }}</span>
 						</p>
+						<p class="font-bold">Priorità d'uscita: <span
+								class="font-light">{{ $location->out_priority ?: '-' }}</span>
+						</p>
 						<p class="font-bold">N. Prodotti: <span
 								class="font-light">{{ $location->products()->count() }}</span>
 						</p>
@@ -77,6 +80,7 @@
 						</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Descrizione</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tipologia</th>
+						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Priorità d'uscita</th>
 						<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">N. Prodotti</th>
 						<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8">
 							<span class="sr-only">Azioni</span>
@@ -91,6 +95,7 @@
 							</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $location->description }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ config('requested.locations.types.' . $location->type . '.label') }}</td>
+							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $location->out_priority ?: '-' }}</td>
 							<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $location->products()->count() }}</td>
 							<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
 								<div class="inline-flex items-center justify-end space-x-3">
