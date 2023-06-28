@@ -265,7 +265,7 @@
 		</div>
 		<div class="items-center grid grid-cols-2 gap-6 mt-6">
 			<div>
-				<img src="{{ asset('images/ddt-logo.png') }}" class="h-14 w-full"/>
+				<img src="{{ asset('images/' . env('DDT_FOOTER_LOGO')) }}" class="h-14 w-full"/>
 			</div>
 			<div class="text-sm">
 				<p>{{ env('DDT_FOOTER_ADDRESS') }}</p>
