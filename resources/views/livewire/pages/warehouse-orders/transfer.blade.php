@@ -4,6 +4,7 @@
 		<p class="text-xs">Ordine: '{{ $warehouse_order->production_order->code ?? $warehouse_order->code ?? '-' }}'</p>
 		<p class="text-xs">Articolo: {{ $row->product->code }} - {{ $row->product->description }}</p>
 		<p class="text-xs">Da: '{{ $row->pickup->code }}' a '{{ $row->destination->code }}'</p>
+		<p class="text-xs font-semibold">Quantità da trasferire: {{ $row->quantity_total - $row->quantity_processed }}</p>
 	</div>
 	<div class="border-t border-gray-100">
 		<dl class="divide-y divide-gray-100">
