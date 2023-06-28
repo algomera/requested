@@ -65,7 +65,14 @@
 				</div>
 			@endif
 		</div>
-
+		<div class="flex items-center justify-between">
+			<div class="flex flex-1 space-x-3 items-center">
+				<div class="flex-1 max-w-sm">
+					<x-input wire:model.debounce.500ms="search" type="search" placeholder="Cerca.."
+							 append="heroicon-o-magnifying-glass" iconColor="text-zinc-500"></x-input>
+				</div>
+			</div>
+		</div>
 		<div class="block border-t-2 pt-1 divide-y divide-gray-200 lg:hidden">
 			@forelse($rows as $row)
 				<div class="flex items-center justify-between">

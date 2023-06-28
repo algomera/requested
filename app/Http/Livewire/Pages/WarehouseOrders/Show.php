@@ -13,10 +13,16 @@
 		use WithPagination;
 
 		public $warehouse_order;
+		public $search = '';
 
 		protected $listeners = [
 			'product-transferred' => '$refresh',
 		];
+
+		public function updatingSearch()
+		{
+			$this->resetPage();
+		}
 
 		public function mount(WarehouseOrder $warehouseOrder)
 		{
@@ -286,7 +292,10 @@
 		{
 			$logs = $this->warehouse_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 			return view('livewire.pages.warehouse-orders.show', [
-				'rows' => $this->warehouse_order->rows()->with('product', 'pickup', 'destination')->paginate(25),
+				'rows' => $this->warehouse_order->rows()->search($this->search, [
+					'product.code',
+					'product.description'
+				])->with('product', 'pickup', 'destination')->paginate(25),
 				'logs' => $logs,
 				'ddts' => $this->warehouse_order->ddts()->where('generated', true)->latest()->get()
 			]);
