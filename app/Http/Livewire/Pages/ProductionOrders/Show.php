@@ -23,10 +23,22 @@
 		public $currentTab = 0;
 		public $selectAll = false;
 		public $serials_checked = [];
+		public $search = '';
 
 		protected $listeners = [
 			'production_order-updated' => '$refresh',
 		];
+
+		public function updatingSearch()
+		{
+			$this->resetPage();
+		}
+
+		public function changeTab($tab) {
+			$this->currentTab = $tab;
+			$this->search = '';
+			$this->resetPage();
+		}
 
 		public function mount(ProductionOrder $productionOrder)
 		{
@@ -307,8 +319,12 @@
 		{
 			$logs = $this->production_order->logs()->with('user')->latest()->orderBy('id', 'desc')->get();
 			return view('livewire.pages.production-orders.show', [
-				'incompleted_serials' => $this->production_order->serials()->where('completed', 0)->paginate(25),
-				'completed_serials' => $this->production_order->serials()->where('completed', 1)->paginate(25),
+				'incompleted_serials' => $this->production_order->serials()->where('completed', 0)->search($this->search, [
+					'code'
+				])->paginate(25),
+				'completed_serials' => $this->production_order->serials()->where('completed', 1)->search($this->search, [
+					'code'
+				])->paginate(25),
 				'logs' => $logs
 			]);
 		}

@@ -12,7 +12,7 @@
 					<div class="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300"></div>
 				</div>
 				<p class="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-					<span class="block font-medium text-gray-900">DDT: {{ $ddt->id }}</span>
+					<span class="block font-medium text-gray-900">DDT: {{ $ddt->code }}</span>
 				</p>
 				<span x-tooltip="{{ $ddt->created_at->format('d-m-Y H:i:s') }}"
 					  class="inline-block flex-none py-0.5 text-xs leading-5 text-gray-500">

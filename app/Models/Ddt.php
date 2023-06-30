@@ -13,6 +13,17 @@
 			'generated_at' => 'datetime',
 		];
 
+		protected static function boot()
+		{
+			parent::boot();
+
+			static::creating(function ($model) {
+				$latestDdt = static::latest()->first();
+				$sequence = $latestDdt ? static::count() + 1 : 1;
+				$model->code = env('DDT_PREFIX') . $sequence . env('DDT_SUFFIX');
+			});
+		}
+
 		public function warehouse_order() {
 			return $this->belongsTo(WarehouseOrder::class);
 		}

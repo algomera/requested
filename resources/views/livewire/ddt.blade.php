@@ -44,7 +44,7 @@
 			<div class="w-36 ddt-box !border-x-0 col-span-2">
 				<p class="label flex justify-between">Data <span
 						class="font-bold">{{ $ddt->generated_at->format('d-m-Y') }}</span></p>
-				<p class="label flex justify-between !top-6">D.D.T <span class="font-bold">{{ $ddt->id }}</span></p>
+				<p class="label flex justify-between !top-6">D.D.T <span class="font-bold">{{ $ddt->code }}</span></p>
 			</div>
 			<div class="w-20 ddt-box !border-x-0 col-span-1">
 				<span class="label">n. pagina {{ $loop->iteration }}</span>
